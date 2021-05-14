@@ -2,9 +2,6 @@ import express = require('express');
 import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 
-
-
-
 const app = express();
 const database : Connection = mysql.createConnection( {
     host: 'localhost',
