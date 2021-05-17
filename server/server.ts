@@ -1,6 +1,9 @@
 import express = require('express');
 import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
+import { Request, Response } from 'express';
+
+
 
 const app = express();
 const database : Connection = mysql.createConnection( {
