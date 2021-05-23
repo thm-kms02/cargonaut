@@ -81,7 +81,7 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
             };
             chain
                 .request("http://localhost:8080")
-                .post("/create/Personenbefoerderung")
+                .post("/create/Lieferung")
                 .send(lieferung)
                 .end(function (err, response) {
                 console.log(response.status);

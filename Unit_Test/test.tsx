@@ -44,7 +44,7 @@ describe("Post /create/Anzeige", async () => {
         };
         chain
             .request("http://localhost:8080")
-            .post("/create/Personenbefoerderung")
+            .post("/create/Lieferung")
             .send(lieferung)
             .end((err, response) => {
                 console.log(response.status);
