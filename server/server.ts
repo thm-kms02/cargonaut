@@ -166,7 +166,7 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
 
     const data = [anz_ID,b_id]
 
-    const cQuery: string = "INSERT INTO bild (anz_ID, b_id ) VALUES (?, ?);";
+    const cQuery: string = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
     database.query(cQuery, data, (err) => {
         if (err === null) {
             res.status(201);
