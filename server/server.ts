@@ -2,11 +2,10 @@ import express = require('express');
 import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
-
 class Anzeige {
     userId: number;
     angges: boolean;
-    datum: Date;
+
     beschreibung: string;
     preis: number;
     start: string;
@@ -16,10 +15,9 @@ class Anzeige {
     ladungsgewicht: number;
     ladehoehe: number;
 
-    constructor(userId: number, angges: boolean, datum: Date, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
+    constructor(userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
         this.userId = userId;
         this.angges = angges;
-        this.datum = datum;
         this.beschreibung = beschreibung;
         this.preis = preis;
         this.start = start;
@@ -30,6 +28,7 @@ class Anzeige {
         this.ladehoehe = ladehoehe;
     }
 }
+
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -77,9 +76,9 @@ app.get('/create/anzeige', (req: Request, res: Response) => {
 app.post('/create/anzeige', (req: Request, res: Response) => {
    const anzeige: Anzeige = req.body.anzeige;
 
-    let data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
+    let data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
 
-    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
+    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
     database.query(cQuery, data, (err, rows: any) => {
         if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
             data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];

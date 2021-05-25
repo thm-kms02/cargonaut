@@ -1,7 +1,7 @@
 class Anzeige {
     userId: number;
     angges: boolean;
-    datum: Date;
+
     beschreibung: string;
     preis: number;
     start: string;
@@ -11,10 +11,9 @@ class Anzeige {
     ladungsgewicht: number;
     ladehoehe: number;
 
-    constructor(userId: number, angges: boolean, datum: Date, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
+    constructor(userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
         this.userId = userId;
         this.angges = angges;
-        this.datum = datum;
         this.beschreibung = beschreibung;
         this.preis = preis;
         this.start = start;

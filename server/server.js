@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var mysql = require("mysql");
 var Anzeige = /** @class */ (function () {
-    function Anzeige(userId, angges, datum, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe) {
+    function Anzeige(userId, angges, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe) {
         this.userId = userId;
         this.angges = angges;
-        this.datum = datum;
         this.beschreibung = beschreibung;
         this.preis = preis;
         this.start = start;
@@ -58,8 +57,8 @@ app.get('/create/anzeige', function (req, res) {
 });
 app.post('/create/anzeige', function (req, res) {
     var anzeige = req.body.anzeige;
-    var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
-    var cQuery = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
+    var data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
+    var cQuery = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
     database.query(cQuery, data, function (err, rows) {
         if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
             data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
