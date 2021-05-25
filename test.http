@@ -11,3 +11,21 @@ Content-Type: application/json
   "beschreibung": "TestTestTestTest",
   "bild": "test_path_irgendwas"
 }
+
+####
+
+POST http://localhost:8080/create/anzeige
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "angges": 1,
+  "beschreibung": "TestTestTestTest",
+  "preis": 300,
+  "start": "Gießen",
+  "ziel": "Hamburg",
+  "personen": 4,
+  "ladeflaeche": 0,
+  "ladungsgewicht":0,
+  "ladehoehe": 0
+}

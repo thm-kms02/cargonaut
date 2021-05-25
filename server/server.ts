@@ -2,11 +2,10 @@ import express = require('express');
 import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
-
 class Anzeige {
     userId: number;
     angges: boolean;
-    datum: Date;
+
     beschreibung: string;
     preis: number;
     start: string;
@@ -16,10 +15,9 @@ class Anzeige {
     ladungsgewicht: number;
     ladehoehe: number;
 
-    constructor(userId: number, angges: boolean, datum: Date, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
+    constructor(userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
         this.userId = userId;
         this.angges = angges;
-        this.datum = datum;
         this.beschreibung = beschreibung;
         this.preis = preis;
         this.start = start;
@@ -31,20 +29,6 @@ class Anzeige {
     }
 }
 
-
-class Anzeige_bild{
-    anz_ID:number;
-    b_id:number;
-    bild_id:number;
-    pfad: string;
-    constructor(anz_ID:number,b_id:number,bild_id:number,pfad:string){
-        this.anz_ID=anz_ID;
-        this.bild_id=bild_id;
-        this.b_id=b_id;
-        this.pfad=pfad;
-    }
-
-}
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -90,24 +74,21 @@ app.get('/anzeige', (req: Request, res: Response) => {
 
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-   const anzeige: Anzeige = req.body.anzeige;
-   const anzeige_bild :Anzeige_bild =req.body.anzeige;
+   const anzeige: Anzeige = new Anzeige(req.body.anzeige.userId, req.body.anzeige.angges, req.body.anzeige.beschreibung, req.body.anzeige.preis, req.body.anzeige.start, req.body.anzeige.ziel, req.body.anzeige.personen, req.body.anzeige.ladeflaeche, req.body.anzeige.ladungsgewicht, req.body.anzeige.ladehoehe)
 
-    let data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
-    let data1 = [anzeige_bild.anz_ID,anzeige_bild.bild_id,anzeige_bild.b_id,anzeige_bild.pfad]
+    let data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
 
-    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
-    let cQuery1: string = "INSERT INTO anzeige_bild (anz_ID,b_id) VALUES (?, ?);";
-
-    database.query(cQuery, data, (err, rows: any) => {
+    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
+    database.query(cQuery, data, (err, results: any) => {
+            console.log(results.insertId)
         if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
-            data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
+            data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         } else if(anzeige.personen!=0&&anzeige.ladeflaeche==0&&anzeige.ladehoehe==0&&anzeige.ladungsgewicht==0){
-            data = [rows[0].id, anzeige.personen];
+            data = [results.insertId, anzeige.personen];
             cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         } else {
-            data = [rows[0].id];
+            data = [results.insertId];
             cQuery = "DELETE from anzeige WHERE id=?)";
         }
         database.query(cQuery, data, (err) => {
@@ -125,67 +106,48 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
 
     });
 
-    database.query(cQuery1, data1, (err, rows: any) => {
-        if(anzeige_bild.anz_ID==0&&anzeige_bild.bild_id!=0&&anzeige_bild.pfad!==null){
-            data = [rows[0].id, anzeige_bild.bild_id, anzeige_bild.pfad];
-            cQuery = "INSERT INTO bild (bild_id,pfad) VALUES (?,?)";
-        } else if(anzeige_bild.anz_ID!=0&&anzeige_bild.bild_id==0&&anzeige_bild.pfad==null){
-            data = [rows[0].id, anzeige_bild.bild_id];
-            cQuery = "INSERT INTO anzeige_bild(anz_ID, bild_id) VALUES (?,?)";
-        } else {
-            data = [rows[0].id];
-            cQuery1 = "DELETE from anzeige_bilder WHERE id=?)";
-        }
-        database.query(cQuery1, data1, (err) => {
-            if (err === null) {
-                res.status(201);
-                res.send(" anzeige von bilder wurde erstellt");
-            } else if (err.errno === 1062) {
-                res.status(500);
-                res.send("Fehler");
-            } else {
-                console.log(err);
-                res.sendStatus(500);
-            }
-        });
+});
 
+
+
+app.post('/create/bild', (req: Request, res: Response) => {
+    const bild_ID: string = req.body.bild_ID;
+    const pfad: string = req.body.pfad;
+    const data = [bild_ID,pfad]
+
+    const cQuery: string = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" bild wurde hinzugefügt");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
     });
 
 });
 
 
 app.post('/create/anzeige_bild', (req: Request, res: Response) => {
-    const anzeige: Anzeige_bild = req.body.anzeige;
-
-    let data = [anzeige.anz_ID,anzeige.bild_id,anzeige.b_id,anzeige.pfad]
-
-    let cQuery: string = "INSERT INTO anzeige_bild (anz_ID,b_id) VALUES (?, ?);";
-    database.query(cQuery, data, (err, rows: any) => {
-        if(anzeige.anz_ID==0&&anzeige.bild_id!=0&&anzeige.pfad!==null){
-            data = [rows[0].id, anzeige.bild_id, anzeige.pfad];
-            cQuery = "INSERT INTO bild (bild_id,pfad) VALUES (?,?)";
-        } else if(anzeige.anz_ID!=0&&anzeige.bild_id==0&&anzeige.pfad==null){
-            data = [rows[0].id, anzeige.bild_id];
-            cQuery = "INSERT INTO anzeige_bild(anz_ID, bild_id) VALUES (?,?)";
+    const anz_ID: string = req.body.anz_ID;
+    const b_id: string = req.body.b_id;
+    const data = [anz_ID,b_id]
+    const cQuery: string = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" anzeige von Bilder  wurde erstellt");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
         } else {
-            data = [rows[0].id];
-            cQuery = "DELETE from anzeige_bilder WHERE id=?)";
+            console.log(err);
+            res.sendStatus(500);
         }
-        database.query(cQuery, data, (err) => {
-            if (err === null) {
-                res.status(201);
-                res.send(" anzeige von bilder wurde erstellt");
-            } else if (err.errno === 1062) {
-                res.status(500);
-                res.send("Fehler");
-            } else {
-                console.log(err);
-                res.sendStatus(500);
-            }
-        });
-
     });
 
 });
-
-
