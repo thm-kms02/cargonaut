@@ -31,6 +31,7 @@ class Anzeige {
     }
 }
 
+
 const app = express();
 const database : Connection = mysql.createConnection( {
     host: 'localhost',
