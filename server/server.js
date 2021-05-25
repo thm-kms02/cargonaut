@@ -56,11 +56,10 @@ app.get('/anzeige', function (req, res) {
     });
 });
 app.post('/create/anzeige', function (req, res) {
-    var anzeige = new Anzeige(req.body.anzeige.userId, req.body.anzeige.angges, req.body.anzeige.beschreibung, req.body.anzeige.preis, req.body.anzeige.start, req.body.anzeige.ziel, req.body.anzeige.personen, req.body.anzeige.ladeflaeche, req.body.anzeige.ladungsgewicht, req.body.anzeige.ladehoehe);
+    var anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
     var data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
     var cQuery = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
-        console.log(results.insertId);
         if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
             data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
