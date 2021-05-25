@@ -46,20 +46,22 @@ chain.use(chaiHttps);
 describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
-            var Personbefoerderung = {
-                user_ID: 1,
-                anzahlPersonen: 4,
+            var anzeige = {
+                userId: 1,
+                angges: 1,
+                beschreibung: "TestTestTestTest",
                 preis: 300,
-                ang_ges: 1,
                 start: "Gießen",
                 ziel: "Hamburg",
-                beschreibung: "TestTestTestTest",
-                bild: "test_path_irgendwas"
+                personen: 4,
+                ladeflaeche: 0,
+                ladungsgewicht: 0,
+                ladehoehe: 0,
             };
             chain
                 .request("http://localhost:8080")
                 .post("/create/Personenbefoerderung")
-                .send(Personbefoerderung)
+                .send(anzeige)
                 .end(function (err, response) {
                 console.log(response.status);
                 response.should.have.status(201);

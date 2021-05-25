@@ -31,6 +31,21 @@ class Anzeige {
     }
 }
 
+
+class Anzeige_bild{
+    anz_ID:number;
+    b_id:number;
+    bild_id:number;
+    pfad: string;
+    constructor(anz_ID:number,b_id:number,bild_id:number,pfad:string){
+        this.anz_ID=anz_ID;
+        this.bild_id=bild_id;
+        this.b_id=b_id;
+        this.pfad=pfad;
+    }
+
+}
+
 const app = express();
 const database : Connection = mysql.createConnection( {
     host: 'localhost',
@@ -102,6 +117,41 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
                      console.log(err);
                      res.sendStatus(500);
                  }
+        });
+
+    });
+
+});
+
+
+app.post('/create/anzeige_bild', (req: Request, res: Response) => {
+    const anzeige: Anzeige_bild = req.body.anzeige;
+
+    let data = [anzeige.anz_ID,anzeige.bild_id,anzeige.b_id,anzeige.pfad]
+
+    let cQuery: string = "INSERT INTO anzeige_bild (anz_ID,b_id) VALUES (?, ?);";
+    database.query(cQuery, data, (err, rows: any) => {
+        if(anzeige.anz_ID==0&&anzeige.bild_id!=0&&anzeige.pfad!==null){
+            data = [rows[0].id, anzeige.bild_id, anzeige.pfad];
+            cQuery = "INSERT INTO bild (bild_id,pfad) VALUES (?,?)";
+        } else if(anzeige.anz_ID!=0&&anzeige.bild_id==0&&anzeige.pfad==null){
+            data = [rows[0].id, anzeige.bild_id];
+            cQuery = "INSERT INTO anzeige_bild(anz_ID, bild_id) VALUES (?,?)";
+        } else {
+            data = [rows[0].id];
+            cQuery = "DELETE from anzeige_bilder WHERE id=?)";
+        }
+        database.query(cQuery, data, (err) => {
+            if (err === null) {
+                res.status(201);
+                res.send(" anzeige von bilder wurde erstellt");
+            } else if (err.errno === 1062) {
+                res.status(500);
+                res.send("Fehler");
+            } else {
+                console.log(err);
+                res.sendStatus(500);
+            }
         });
 
     });
