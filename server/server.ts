@@ -72,7 +72,7 @@ database.connect( (err: MysqlError) => {
     }
 });
 
-app.get('/create/anzeige', (req: Request, res: Response) => {
+app.get('/anzeige', (req: Request, res: Response) => {
 
     const query: string = 'SELECT * FROM anzeige';
     database.query(query, (err: MysqlError, rows: any) => {
@@ -159,52 +159,3 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
 });
 
 
-
-app.post('/create/bild', (req: Request, res: Response) => {
-    const bild_ID: string = req.body.bild_ID;
-    const pfad: string = req.body.pfad;
-
-
-
-    const data = [bild_ID,pfad]
-
-    const cQuery: string = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
-    database.query(cQuery, data, (err) => {
-        if (err === null) {
-            res.status(201);
-            res.send(" bild wurde hinzugefügt");
-        } else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        } else {
-            console.log(err);
-            res.sendStatus(500);
-        }
-    });
-
-});
-
-
-app.post('/create/anzeige_bild', (req: Request, res: Response) => {
-    const anz_ID: string = req.body.anz_ID;
-    const b_id: string = req.body.b_id;
-
-
-
-    const data = [anz_ID,b_id]
-
-    const cQuery: string = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
-    database.query(cQuery, data, (err) => {
-        if (err === null) {
-            res.status(201);
-            res.send(" anzeige von Bilder  wurde erstellt");
-        } else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        } else {
-            console.log(err);
-            res.sendStatus(500);
-        }
-    });
-
-});
