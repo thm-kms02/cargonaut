@@ -91,10 +91,14 @@ app.get('/anzeige', (req: Request, res: Response) => {
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
    const anzeige: Anzeige = req.body.anzeige;
+   const anzeige_bild :Anzeige_bild =req.body.anzeige;
 
     let data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
+    let data1 = [anzeige_bild.anz_ID,anzeige_bild.bild_id,anzeige_bild.b_id,anzeige_bild.pfad]
 
     let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
+    let cQuery1: string = "INSERT INTO anzeige_bild (anz_ID,b_id) VALUES (?, ?);";
+
     database.query(cQuery, data, (err, rows: any) => {
         if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
             data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
@@ -117,6 +121,32 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
                      console.log(err);
                      res.sendStatus(500);
                  }
+        });
+
+    });
+
+    database.query(cQuery1, data1, (err, rows: any) => {
+        if(anzeige_bild.anz_ID==0&&anzeige_bild.bild_id!=0&&anzeige_bild.pfad!==null){
+            data = [rows[0].id, anzeige_bild.bild_id, anzeige_bild.pfad];
+            cQuery = "INSERT INTO bild (bild_id,pfad) VALUES (?,?)";
+        } else if(anzeige_bild.anz_ID!=0&&anzeige_bild.bild_id==0&&anzeige_bild.pfad==null){
+            data = [rows[0].id, anzeige_bild.bild_id];
+            cQuery = "INSERT INTO anzeige_bild(anz_ID, bild_id) VALUES (?,?)";
+        } else {
+            data = [rows[0].id];
+            cQuery1 = "DELETE from anzeige_bilder WHERE id=?)";
+        }
+        database.query(cQuery1, data1, (err) => {
+            if (err === null) {
+                res.status(201);
+                res.send(" anzeige von bilder wurde erstellt");
+            } else if (err.errno === 1062) {
+                res.status(500);
+                res.send("Fehler");
+            } else {
+                console.log(err);
+                res.sendStatus(500);
+            }
         });
 
     });

@@ -50,7 +50,7 @@ database.connect(function (err) {
         console.log('Database is connected');
     }
 });
-app.get('/create/anzeige', function (req, res) {
+app.get('/anzeige', function (req, res) {
     var query = 'SELECT * FROM anzeige';
     database.query(query, function (err, rows) {
         if (err) {
@@ -67,8 +67,11 @@ app.get('/create/anzeige', function (req, res) {
 });
 app.post('/create/anzeige', function (req, res) {
     var anzeige = req.body.anzeige;
+    var anzeige_bild = req.body.anzeige;
     var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
+    var data1 = [anzeige_bild.anz_ID, anzeige_bild.bild_id, anzeige_bild.b_id, anzeige_bild.pfad];
     var cQuery = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
+    var cQuery1 = "INSERT INTO anzeige_bild (anz_ID,b_id) VALUES (?, ?);";
     database.query(cQuery, data, function (err, rows) {
         if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
             data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
@@ -86,6 +89,34 @@ app.post('/create/anzeige', function (req, res) {
             if (err === null) {
                 res.status(201);
                 res.send(" anzeige wurde erstellt");
+            }
+            else if (err.errno === 1062) {
+                res.status(500);
+                res.send("Fehler");
+            }
+            else {
+                console.log(err);
+                res.sendStatus(500);
+            }
+        });
+    });
+    database.query(cQuery1, data1, function (err, rows) {
+        if (anzeige_bild.anz_ID == 0 && anzeige_bild.bild_id != 0 && anzeige_bild.pfad !== null) {
+            data = [rows[0].id, anzeige_bild.bild_id, anzeige_bild.pfad];
+            cQuery = "INSERT INTO bild (bild_id,pfad) VALUES (?,?)";
+        }
+        else if (anzeige_bild.anz_ID != 0 && anzeige_bild.bild_id == 0 && anzeige_bild.pfad == null) {
+            data = [rows[0].id, anzeige_bild.bild_id];
+            cQuery = "INSERT INTO anzeige_bild(anz_ID, bild_id) VALUES (?,?)";
+        }
+        else {
+            data = [rows[0].id];
+            cQuery1 = "DELETE from anzeige_bilder WHERE id=?)";
+        }
+        database.query(cQuery1, data1, function (err) {
+            if (err === null) {
+                res.status(201);
+                res.send(" anzeige von bilder wurde erstellt");
             }
             else if (err.errno === 1062) {
                 res.status(500);
@@ -129,45 +160,5 @@ app.post('/create/anzeige_bild', function (req, res) {
                 res.sendStatus(500);
             }
         });
-    });
-});
-app.post('/create/bild', function (req, res) {
-    var bild_ID = req.body.bild_ID;
-    var pfad = req.body.pfad;
-    var data = [bild_ID, pfad];
-    var cQuery = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
-        if (err === null) {
-            res.status(201);
-            res.send(" bild wurde hinzugefügt");
-        }
-        else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        }
-        else {
-            console.log(err);
-            res.sendStatus(500);
-        }
-    });
-});
-app.post('/create/anzeige_bild', function (req, res) {
-    var anz_ID = req.body.anz_ID;
-    var b_id = req.body.b_id;
-    var data = [anz_ID, b_id];
-    var cQuery = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
-        if (err === null) {
-            res.status(201);
-            res.send(" anzeige von Bilder  wurde erstellt");
-        }
-        else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        }
-        else {
-            console.log(err);
-            res.sendStatus(500);
-        }
     });
 });
