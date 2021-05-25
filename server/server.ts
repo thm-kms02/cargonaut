@@ -74,8 +74,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
 
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-   const anzeige: Anzeige = new Anzeige(req.body.anzeige.userId, req.body.anzeige.angges, req.body.anzeige.beschreibung, req.body.anzeige.preis, req.body.anzeige.start, req.body.anzeige.ziel, req.body.anzeige.personen, req.body.anzeige.ladeflaeche, req.body.anzeige.ladungsgewicht, req.body.anzeige.ladehoehe)
-
+   const anzeige: Anzeige = new Anzeige(req.body.anzeige.userId, req.body.anzeige.angges, req.body.anzeige.beschreibung, req.body.anzeige.preis, req.body.anzeige.start, req.body.anzeige.ziel, req.body.anzeige.personen, req.body.anzeige.ladeflaeche, req.body.anzeige.ladungsgewicht, req.body.anzeige.ladehoehe);
     let data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
 
     let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
