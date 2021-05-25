@@ -3,7 +3,33 @@ import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
 
+class Anzeige {
+    userId: number;
+    angges: boolean;
+    datum: Date;
+    beschreibung: string;
+    preis: number;
+    start: string;
+    ziel: string;
+    personen: number;
+    ladeflaeche: number;
+    ladungsgewicht: number;
+    ladehoehe: number;
 
+    constructor(userId: number, angges: boolean, datum: Date, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
+        this.userId = userId;
+        this.angges = angges;
+        this.datum = datum;
+        this.beschreibung = beschreibung;
+        this.preis = preis;
+        this.start = start;
+        this.ziel = ziel;
+        this.personen = personen;
+        this.ladeflaeche = ladeflaeche;
+        this.ladungsgewicht = ladungsgewicht;
+        this.ladehoehe = ladehoehe;
+    }
+}
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -49,90 +75,40 @@ app.get('/create/anzeige', (req: Request, res: Response) => {
 
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-    const user_ID: string = req.body.user_ID;
-    const preis: string = req.body.preis;
-    const ang_ges: string = req.body.ang_ges;
-    const start: string = req.body.start;
-    const ziel: string = req.body.ziel;
-    const datum:string =req.body.datum;
-    const beschreibung: string = req.body.beschreibung;
+   const anzeige: Anzeige = req.body.anzeige;
 
+    let data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
 
-
-    const data = [user_ID, ang_ges,datum, preis ,start,ziel,beschreibung];
-
-    const cQuery: string = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
-    database.query(cQuery, data, (err) => {
-        if (err === null) {
-            res.status(201);
-            res.send(" anzeige wurde erstellt");
-        } else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
+    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
+    database.query(cQuery, data, (err, rows: any) => {
+        if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
+            data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
+            cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
+        } else if(anzeige.personen!=0&&anzeige.ladeflaeche==0&&anzeige.ladehoehe==0&&anzeige.ladungsgewicht==0){
+            data = [rows[0].id, anzeige.personen];
+            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         } else {
-            console.log(err);
-            res.sendStatus(500);
+            data = [rows[0].id];
+            cQuery = "DELETE from anzeige WHERE id=?)";
         }
-    });
-
-});
-
-
-
-app.post('/create/Personenbefoerderung', (req: Request, res: Response) => {
-    const user_ID: string = req.body.user_ID;
-    const anzahlPersonen: string = req.body.anzahlPersonen;
-    const preis: string = req.body.preis;
-    const ang_ges: string = req.body.ang_ges;
-    const start: string = req.body.start;
-    const ziel: string = req.body.ziel;
-    const beschreibung: string = req.body.beschreibung;
-    const bild: string = req.body.beschreibung;
-
-
-    const data = [user_ID, ang_ges, preis ,start,ziel,beschreibung];
-
-        const cQuery: string = "INSERT INTO anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
         database.query(cQuery, data, (err) => {
-            if (err === null) {
-                res.status(201);
-                res.send(" Anzeige wurde erstellt");
-            } else if (err.errno === 1062) {
-                res.status(500);
-                res.send("Fehler");
-            } else {
-                console.log(err);
-                res.sendStatus(500);
-            }
+             if (err === null) {
+                     res.status(201);
+                     res.send(" anzeige wurde erstellt");
+                 } else if (err.errno === 1062) {
+                     res.status(500);
+                     res.send("Fehler");
+                 } else {
+                     console.log(err);
+                     res.sendStatus(500);
+                 }
         });
 
-});
-
-app.post('/create/lieferung', (req: Request, res: Response) => {
-    const anz_ID: string = req.body.anz_ID;
-    const ladefläche: string = req.body.ladefläche;
-    const ladungsgewicht: string = req.body.ladungsgewicht;
-    const ladehoehe: string = req.body.ladehoehe;
-
-
-
-    const data = [anz_ID,ladefläche,ladungsgewicht,ladehoehe]
-
-    const cQuery: string = "INSERT INTO lieferung (anz_ID,ladeflaeche,ladungsgewicht,ladehoehe ) VALUES (?, ?, ?, ?);";
-    database.query(cQuery, data, (err) => {
-        if (err === null) {
-            res.status(201);
-            res.send(" Lieferung wurde erstellt");
-        } else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        } else {
-            console.log(err);
-            res.sendStatus(500);
-        }
     });
 
 });
+
+
 
 app.post('/create/bild', (req: Request, res: Response) => {
     const bild_ID: string = req.body.bild_ID;

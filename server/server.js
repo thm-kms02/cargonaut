@@ -2,6 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var mysql = require("mysql");
+var Anzeige = /** @class */ (function () {
+    function Anzeige(userId, angges, datum, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe) {
+        this.userId = userId;
+        this.angges = angges;
+        this.datum = datum;
+        this.beschreibung = beschreibung;
+        this.preis = preis;
+        this.start = start;
+        this.ziel = ziel;
+        this.personen = personen;
+        this.ladeflaeche = ladeflaeche;
+        this.ladungsgewicht = ladungsgewicht;
+        this.ladehoehe = ladehoehe;
+    }
+    return Anzeige;
+}());
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -41,76 +57,36 @@ app.get('/create/anzeige', function (req, res) {
     });
 });
 app.post('/create/anzeige', function (req, res) {
-    var user_ID = req.body.user_ID;
-    var preis = req.body.preis;
-    var ang_ges = req.body.ang_ges;
-    var start = req.body.start;
-    var ziel = req.body.ziel;
-    var datum = req.body.datum;
-    var beschreibung = req.body.beschreibung;
-    var data = [user_ID, ang_ges, datum, preis, start, ziel, beschreibung];
+    var anzeige = req.body.anzeige;
+    var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
     var cQuery = "INSERT INTO anzeige (user_id, ang_ges, datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?,?);";
-    database.query(cQuery, data, function (err) {
-        if (err === null) {
-            res.status(201);
-            res.send(" anzeige wurde erstellt");
+    database.query(cQuery, data, function (err, rows) {
+        if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
+            data = [rows[0].id, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
+            cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         }
-        else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        }
-        else {
-            console.log(err);
-            res.sendStatus(500);
-        }
-    });
-});
-app.post('/create/Personenbefoerderung', function (req, res) {
-    var user_ID = req.body.user_ID;
-    var anzahlPersonen = req.body.anzahlPersonen;
-    var preis = req.body.preis;
-    var ang_ges = req.body.ang_ges;
-    var start = req.body.start;
-    var ziel = req.body.ziel;
-    var beschreibung = req.body.beschreibung;
-    var bild = req.body.beschreibung;
-    var data = [user_ID, ang_ges, preis, start, ziel, beschreibung];
-    var cQuery = "INSERT INTO anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
-    database.query(cQuery, data, function (err) {
-        if (err === null) {
-            res.status(201);
-            res.send(" Anzeige wurde erstellt");
-        }
-        else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
+        else if (anzeige.personen != 0 && anzeige.ladeflaeche == 0 && anzeige.ladehoehe == 0 && anzeige.ladungsgewicht == 0) {
+            data = [rows[0].id, anzeige.personen];
+            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         }
         else {
-            console.log(err);
-            res.sendStatus(500);
+            data = [rows[0].id];
+            cQuery = "DELETE from anzeige WHERE id=?)";
         }
-    });
-});
-app.post('/create/lieferung', function (req, res) {
-    var anz_ID = req.body.anz_ID;
-    var ladefläche = req.body.ladefläche;
-    var ladungsgewicht = req.body.ladungsgewicht;
-    var ladehoehe = req.body.ladehoehe;
-    var data = [anz_ID, ladefläche, ladungsgewicht, ladehoehe];
-    var cQuery = "INSERT INTO lieferung (anz_ID,ladeflaeche,ladungsgewicht,ladehoehe ) VALUES (?, ?, ?, ?);";
-    database.query(cQuery, data, function (err) {
-        if (err === null) {
-            res.status(201);
-            res.send(" Lieferung wurde erstellt");
-        }
-        else if (err.errno === 1062) {
-            res.status(500);
-            res.send("Fehler");
-        }
-        else {
-            console.log(err);
-            res.sendStatus(500);
-        }
+        database.query(cQuery, data, function (err) {
+            if (err === null) {
+                res.status(201);
+                res.send(" anzeige wurde erstellt");
+            }
+            else if (err.errno === 1062) {
+                res.status(500);
+                res.send("Fehler");
+            }
+            else {
+                console.log(err);
+                res.sendStatus(500);
+            }
+        });
     });
 });
 app.post('/create/bild', function (req, res) {
