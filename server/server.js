@@ -55,7 +55,6 @@ app.get('/anzeige', function (req, res) {
         }
     });
 });
-
 app.post('/create/anzeige', function (req, res) {
     var anzeige = new Anzeige(req.body.anzeige.userId, req.body.anzeige.angges, req.body.anzeige.beschreibung, req.body.anzeige.preis, req.body.anzeige.start, req.body.anzeige.ziel, req.body.anzeige.personen, req.body.anzeige.ladeflaeche, req.body.anzeige.ladungsgewicht, req.body.anzeige.ladehoehe);
     var data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
