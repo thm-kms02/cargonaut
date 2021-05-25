@@ -92,7 +92,7 @@ app.post('/create/Personenbefoerderung', (req: Request, res: Response) => {
 
     const data = [user_ID, ang_ges, preis ,start,ziel,beschreibung];
 
-        const cQuery: string = "INSERT INTO Anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
+        const cQuery: string = "INSERT INTO anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
         database.query(cQuery, data, (err) => {
             if (err === null) {
                 res.status(201);

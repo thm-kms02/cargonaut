@@ -75,7 +75,7 @@ app.post('/create/Personenbefoerderung', function (req, res) {
     var beschreibung = req.body.beschreibung;
     var bild = req.body.beschreibung;
     var data = [user_ID, ang_ges, preis, start, ziel, beschreibung];
-    var cQuery = "INSERT INTO Anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
+    var cQuery = "INSERT INTO anzeige (user_ID, ang_ges, preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err) {
         if (err === null) {
             res.status(201);
