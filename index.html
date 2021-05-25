@@ -41,16 +41,16 @@
                     <span>Service</span>
                 </div>
                 <div class="col-2"></div>
-                <div class="col-3 form-check">
+                <div class="col-3">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option1">
+                        <input class="form-check-input" data-bs-toggle="modal" data-bs-target="#personenbefoerderungModal" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option1">
                         <label class="form-check-label" for="inlineRadio3">Personenbeförderung</label>
                     </div>
                 </div>
                 <div class="col-1"></div>
                 <div class="col-3">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option2">
+                        <input class="form-check-input" data-bs-toggle="modal" data-bs-target="#transportModal" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option2">
                         <label class="form-check-label" for="inlineRadio4">Lieferung</label>
                     </div>
                 </div>
@@ -89,6 +89,102 @@
             </div>
             <div class="contentCenter">
                 <button class="btn btn-dark">Abschicken</button>
+            </div>
+
+            <!-- Modalfenster für Personenbeförderung -->
+            <div class="modal fade" id="personenbefoerderungModal" tabindex="-1" aria-labelledby="personenbefoerderungModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="personenbefoerderungModalLabel">Personenbeförderung</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div>
+                                        <label for="inputPersonenzahl" class="form-label">Personenanzahl</label>
+                                        <input type="number" class="form-control" id="inputPersonenzahl">
+                                    </div>
+                                    <div>
+                                        <label for="inputVon" class="form-label">Von*</label>
+                                        <input type="text" class="form-control" id="inputVon">
+                                    </div>
+                                    <div>
+                                        <label for="inputAuto" class="form-label">Fahrzeug</label>
+                                        <input type="text" class="form-control" id="inputAuto">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <label for="inputDate" class="form-label">Datum</label>
+                                        <input type="date" class="form-control" id="inputDate">
+                                    </div>
+                                    <div>
+                                        <label for="inputNach" class="form-label">Nach*</label>
+                                        <input type="text" class="form-control" id="inputNach">
+                                    </div>
+                                    <div>
+                                        <label for="inputMarke" class="form-label">Marke</label>
+                                        <input type="text" class="form-control" id="inputMarke">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                            <button type="button" class="btn btn-primary">Speichern</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modalfenster für Transporte -->
+            <div class="modal fade" id="transportModal" tabindex="-1" aria-labelledby="transportModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="transportModalLabel">Lieferung</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div>
+                                        <label for="inputGesamtgewicht" class="form-label">Gesamtgewicht*</label>
+                                        <input type="number" class="form-control" id="inputGesamtgewicht">
+                                    </div>
+                                    <div>
+                                        <label for="inputVon2" class="form-label">Von*</label>
+                                        <input type="text" class="form-control" id="inputVon2">
+                                    </div>
+                                    <div>
+                                        <label for="inputLadeflaeche" class="form-label">Ladefläche*</label>
+                                        <input type="text" class="form-control" id="inputLadeflaeche">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <label for="inputDate2" class="form-label">Datum</label>
+                                        <input type="date" class="form-control" id="inputDate2">
+                                    </div>
+                                    <div>
+                                        <label for="inputNach2" class="form-label">Nach*</label>
+                                        <input type="text" class="form-control" id="inputNach2">
+                                    </div>
+                                    <div>
+                                        <label for="inputHoehe" class="form-label">Marke</label>
+                                        <input type="text" class="form-control" id="inputHoehe">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                            <button type="button" class="btn btn-primary">Speichern</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-3"></div>
