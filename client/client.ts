@@ -42,7 +42,9 @@ $(() => {
         addOfferArea.show();
     })
 })
+function addAnzeige() {
 
+}
 function renderOffersList() {
     const offersListBody: JQuery = $("#offersTableBody");
 }
