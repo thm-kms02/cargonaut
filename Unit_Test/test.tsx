@@ -29,7 +29,7 @@ describe("Post /create/Anzeige", async () => {
                 done()
             });
     });
-    it("Soll eine Anzeige für Lieferung erstellen", (done) => {
+   /* it("Soll eine Anzeige für Lieferung erstellen", (done) => {
         const lieferung = {
             user_ID: 1,
             ladungsgewicht: 4,
@@ -52,4 +52,6 @@ describe("Post /create/Anzeige", async () => {
                 done()
             });
     });
+
+    */
 });
