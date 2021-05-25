@@ -89,9 +89,9 @@ app.get('/anzeige', function (req, res) {
                         }
                     }
                 }
-            });
-            res.status(200).send({
-                result: offerslist
+                res.status(200).send({
+                    result: offerslist
+                });
             });
         }
     });

@@ -100,10 +100,11 @@ app.get('/anzeige', (req: Request, res: Response) => {
                         offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0 ));
                     }}
                 }
+                res.status(200).send({
+                    result: offerslist
+                });
             });
-            res.status(200).send({
-                result: offerslist
-            });
+
         }
     })
 });

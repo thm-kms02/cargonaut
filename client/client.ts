@@ -41,9 +41,11 @@ $(() => {
     addOfferArea.hide();
 
     createOfferBTN.on('click', () => {
-        mainarea.hide();
-        addOfferArea.show();
+       /* mainarea.hide();
+        addOfferArea.show();*/
+        getAll();
     })
+
 })
 function getAll() {
     $.ajax({
@@ -59,7 +61,7 @@ function getAll() {
     });
 }
 
-function addAnzeige(anz: Anzeige) {
+function renderAnzeige(anz: Anzeige) {
     let ueberschrift: string;
     let menge: string;
     if(anz.personen==0){
@@ -70,6 +72,8 @@ function addAnzeige(anz: Anzeige) {
         menge = anz.personen.toString();
     }
     let card: JQuery = $(`
+<tr>
+        <td>
      <div class="card">
     <div class="card-body">
     <h5 class="card-title">${ueberschrift}</h5>
@@ -93,6 +97,8 @@ function addAnzeige(anz: Anzeige) {
     </div>
     </div>
     </div>
+     </td>
+        </tr>
     `);
 return card;
 }
@@ -100,8 +106,8 @@ return card;
 function renderOffersList(offerList: Anzeige[]) {
     const offersListBody: JQuery = $("#offersTableBody");
     offersListBody.empty();
-    for (const anz of offerList) {
-        offersListBody.append(addAnzeige(anz));
+    for (let anz of offerList) {
+        offersListBody.append(renderAnzeige(anz));
     }
 
 }
