@@ -29,27 +29,31 @@
                     </div>
                 </div>
                 <div class="col-1"></div>
-                <div class="col-3"><div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">Suchen</label>
-                </div></div>
+                <div class="col-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <label class="form-check-label" for="inlineRadio2">Suchen</label>
+                    </div>
+                </div>
             </div>
             <div class="row createFiledParts">
                 <div class="col-3">
                     <span>Service</span>
                 </div>
                 <div class="col-2"></div>
-                <div class="col-3">
+                <div class="col-3 form-check">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option1">
                         <label class="form-check-label" for="inlineRadio3">Personenbeförderung</label>
                     </div>
                 </div>
                 <div class="col-1"></div>
-                <div class="col-3"><div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
-                    <label class="form-check-label" for="inlineRadio4">Lieferung</label>
-                </div></div>
+                <div class="col-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option2">
+                        <label class="form-check-label" for="inlineRadio4">Lieferung</label>
+                    </div>
+                </div>
             </div>
             <div class="row createFiledParts">
                 <div class="col-3">
@@ -102,15 +106,18 @@
         <!--Liste mit allen Aufträgen-->
         <div class="col-5">
             <table class="table table-borderless">
-                <tr>
-                    <th>
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <button id="createOfferBTN" class="btn btn-dark">Angebot erstellen</button>
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <button id="createOfferBTN" class="btn btn-dark">Angebot erstellen</button>
+                                </div>
                             </div>
-                        </div>
-                    </th>
-                </tr>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="offersTableBody">
                 <tr>
                     <td>
                         <div class="card">
@@ -165,6 +172,7 @@
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
         </div>
         <div class="col-1"></div>
