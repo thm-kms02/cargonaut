@@ -66,6 +66,23 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
                 done();
             });
         });
+        it("Soll eine Anzeige für Lieferung erstellen", function (done) {
+            var lieferung = {
+                anz_ID: 1,
+                ladefläche: 2,
+                ladungsgewicht: 4,
+                ladehoehe: 3,
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/create/lieferung")
+                .send(lieferung)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
         return [2 /*return*/];
     });
 }); });
