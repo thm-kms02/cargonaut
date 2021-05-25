@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var mysql = require("mysql");
 var Anzeige = /** @class */ (function () {
-    function Anzeige(userId, angges, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe) {
+    function Anzeige(userId, angges, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe, id) {
         this.userId = userId;
         this.angges = angges;
         this.beschreibung = beschreibung;
@@ -14,6 +14,7 @@ var Anzeige = /** @class */ (function () {
         this.ladeflaeche = ladeflaeche;
         this.ladungsgewicht = ladungsgewicht;
         this.ladehoehe = ladehoehe;
+        this.id = id;
     }
     return Anzeige;
 }());
@@ -41,6 +42,10 @@ database.connect(function (err) {
     }
 });
 app.get('/anzeige', function (req, res) {
+    var offerslist = [];
+    var offers;
+    var taxi;
+    var cargo;
     var query = 'SELECT * FROM anzeige';
     database.query(query, function (err, rows) {
         if (err) {
@@ -49,12 +54,57 @@ app.get('/anzeige', function (req, res) {
             });
         }
         else {
+            offers = rows;
+            var query2 = 'SELECT * FROM personenbefoerderung';
+            var query3 = 'SELECT * FROM lieferung';
+            database.query(query2, function (err, rows) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                }
+                else {
+                    taxi = rows;
+                }
+            });
+            database.query(query3, function (err, rows) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                }
+                else {
+                    cargo = rows;
+                }
+                for (var _i = 0, offers_1 = offers; _i < offers_1.length; _i++) {
+                    var offer = offers_1[_i];
+                    var store = findbyId(offer.id, cargo);
+                    if (store != false) {
+                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe));
+                    }
+                    else {
+                        store = findbyId(offer.id, taxi);
+                        if (store != false) {
+                            offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0));
+                        }
+                    }
+                }
+            });
             res.status(200).send({
-                result: rows
+                result: offerslist
             });
         }
     });
 });
+function findbyId(id, list) {
+    for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+        var elem = list_1[_i];
+        if (elem.anz_ID == id) {
+            return elem;
+        }
+    }
+    return false;
+}
 app.post('/create/anzeige', function (req, res) {
     var anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
     var data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];

@@ -3,6 +3,7 @@ import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
 class Anzeige {
+    id: number;
     userId: number;
     angges: boolean;
 
@@ -15,7 +16,7 @@ class Anzeige {
     ladungsgewicht: number;
     ladehoehe: number;
 
-    constructor(userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number) {
+    constructor( userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number, id?: number) {
         this.userId = userId;
         this.angges = angges;
         this.beschreibung = beschreibung;
@@ -26,6 +27,7 @@ class Anzeige {
         this.ladeflaeche = ladeflaeche;
         this.ladungsgewicht = ladungsgewicht;
         this.ladehoehe = ladehoehe;
+        this.id = id;
     }
 }
 
@@ -57,7 +59,10 @@ database.connect( (err: MysqlError) => {
 });
 
 app.get('/anzeige', (req: Request, res: Response) => {
-
+    let offerslist: Anzeige[] = [];
+    let offers: any[];
+    let taxi: any[];
+    let cargo: any[];
     const query: string = 'SELECT * FROM anzeige';
     database.query(query, (err: MysqlError, rows: any) => {
         if (err) {
@@ -65,13 +70,51 @@ app.get('/anzeige', (req: Request, res: Response) => {
                 message: 'Database request failed: ' + err
             });
         } else {
+            offers = rows;
+           const query2 = 'SELECT * FROM personenbefoerderung';
+            const query3 ='SELECT * FROM lieferung';
+            database.query(query2, (err: MysqlError, rows: any) => {
+                if(err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                } else {
+                    taxi = rows;
+                }
+            });
+            database.query(query3, (err: MysqlError, rows: any) => {
+                if(err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                } else {
+                    cargo = rows;
+                }
+                for(let offer of offers) {
+                    let store = findbyId(offer.id, cargo);
+                    if (store!=false) {
+                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe ));
+                    } else {
+                        store = findbyId(offer.id, taxi);
+                        if(store!=false) {
+                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0 ));
+                    }}
+                }
+            });
             res.status(200).send({
-                result: rows
+                result: offerslist
             });
         }
     })
 });
-
+function findbyId(id: number, list: any[]) {
+    for(let elem of list) {
+        if (elem.anz_ID == id) {
+            return elem;
+        }
+    }
+    return false;
+}
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
    const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
