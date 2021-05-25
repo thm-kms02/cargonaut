@@ -30,22 +30,27 @@ class Anzeige {
 let mainarea: JQuery;
 let addOfferArea: JQuery;
 let createOfferBTN: JQuery;
+let submitOfferBtn: JQuery;
 
 $(() => {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
     createOfferBTN = $("#createOfferBTN");
+    submitOfferBtn = $("#submitOfferBtn");
 
-
+    getAll();
 
     addOfferArea.hide();
 
     createOfferBTN.on('click', () => {
-       /* mainarea.hide();
-        addOfferArea.show();*/
-        getAll();
-    })
+       mainarea.hide();
+        addOfferArea.show();
 
+    });
+
+    submitOfferBtn.on('click', () => {
+        addAnzeige();
+    })
 })
 function getAll() {
     $.ajax({
@@ -53,7 +58,7 @@ function getAll() {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-            renderOffersList(response);
+            renderOffersList(response.result);
         },
         error: (response) => {
 
@@ -61,7 +66,52 @@ function getAll() {
     });
 }
 
+function addAnzeige() {
+    let rad1: JQuery = $('#inlineRadio1:checked');
+    let rad2: JQuery = $('#inlineRadio2:checked');
+    let beschIn: JQuery = $('#beschreibunginput');
+    let priceIn: JQuery = $('#priceIn');
+    let userId: number = 1;
+    let angebot: boolean= true;
+    let beschreibung: string = '';
+    let price: number = Number(priceIn.val());
+    let start: string="";
+    let ziel: string="";
+    let personen: number=2;
+    let ladeflaeche: number=0;
+    let ladegewicht: number=0;
+    let ladehoehe: number=0;
+    if (rad1.val()=="option1") {
+        angebot = true;
+    } else if (rad2.val()=="option2") {
+        angebot = false;
+    }
+
+    $.ajax({
+        url: '/create/anzeige',
+        type: 'POST',
+        dataType: 'json',
+        data: JSON.stringify({
+            userId,
+            angebot,
+            beschreibung,
+            price,
+            start,
+            ziel,
+            personen,
+            ladeflaeche, ladegewicht, ladehoehe
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+          console.log("error");
+        },
+    });
+}
+
 function renderAnzeige(anz: Anzeige) {
+    const offersListBody: JQuery = $("#offersTableBody");
     let ueberschrift: string;
     let menge: string;
     if(anz.personen==0){
@@ -100,14 +150,15 @@ function renderAnzeige(anz: Anzeige) {
      </td>
         </tr>
     `);
-return card;
+offersListBody.append(card);
 }
 
 function renderOffersList(offerList: Anzeige[]) {
     const offersListBody: JQuery = $("#offersTableBody");
     offersListBody.empty();
-    for (let anz of offerList) {
-        offersListBody.append(renderAnzeige(anz));
-    }
+    offerList.forEach((anz) => {
+        renderAnzeige(anz);
+    })
+
 
 }

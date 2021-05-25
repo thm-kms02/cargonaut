@@ -118,7 +118,7 @@ function findbyId(id: number, list: any[]) {
 }
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-   const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
+    const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
     let data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
     let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, (err, results: any) => {
