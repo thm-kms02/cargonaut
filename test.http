@@ -1,0 +1,13 @@
+POST http://localhost:8080/Personenbefoerderung HTTP/1.1
+Content-Type: application/json
+
+{
+  "user_ID": 1,
+  "anzahlPersonen": 4,
+  "preis": 300,
+  "ang_ges": 1,
+  "start": "Gießen",
+  "ziel": "Hamburg",
+  "beschreibung": "TestTestTestTest",
+  "bild": "test_path_irgendwas"
+}

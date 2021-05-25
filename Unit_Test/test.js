@@ -66,29 +66,6 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
                 done();
             });
         });
-        it("Soll eine Anzeige für Lieferung erstellen", function (done) {
-            var lieferung = {
-                user_ID: 1,
-                ladungsgewicht: 4,
-                ladeflaeche: 4,
-                ladehoehe: 3,
-                preis: 300,
-                ang_ges: 1,
-                start: "Gießen",
-                ziel: "Hamburg",
-                beschreibung: "TestTestTestTest",
-                bild: "test_path_irgendwas"
-            };
-            chain
-                .request("http://localhost:8080")
-                .post("/create/Personenbefoerderung")
-                .send(lieferung)
-                .end(function (err, response) {
-                console.log(response.status);
-                response.should.have.status(201);
-                done();
-            });
-        });
         return [2 /*return*/];
     });
 }); });
