@@ -47,6 +47,7 @@ describe("Post /create/Account", function () { return __awaiter(_this, void 0, v
     return __generator(this, function (_a) {
         it("Erstellt ein Account", function (done) {
             var account = {
+                //email ist Uniqe, bitte vor jedem Test ändern
                 email: "test@gmail.com",
                 name: "Max Mustermann",
                 handyNr: "+49293204803",
