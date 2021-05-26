@@ -167,7 +167,7 @@ app.post('/create/anzeige_bild', function (req, res) {
 app.post('/create/account', function (req, res) {
     var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
     var data = [user.email, user.name, user.handyNr, user.passwort];
-    var cQuery = "INSERT INTO anzeige (email, name, handyNr, passwort) VALUES (?, ?, ?, ?);";
+    var cQuery = "INSERT INTO user (email, name, handyNr, passwort) VALUES (?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
             res.status(201);
