@@ -180,7 +180,4 @@ app.post('/create/account', (req: Request, res: Response) => {
                 res.sendStatus(500);
             }
         });
-
-
-
 });

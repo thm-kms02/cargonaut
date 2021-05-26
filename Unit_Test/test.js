@@ -43,6 +43,28 @@ var chaiHttps = require("chai-http");
 var host = require("../server/server");
 chain.should();
 chain.use(chaiHttps);
+describe("Post /create/Account", function () { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("Erstellt ein Account", function (done) {
+            var account = {
+                email: "test@gmail.com",
+                name: "Max Mustermann",
+                handyNr: "+49293204803",
+                passwort: "test1234"
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/create/account")
+                .send(account)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
 describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
@@ -85,28 +107,6 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
                 .request("http://localhost:8080")
                 .post("/create/anzeige")
                 .send(anzeige)
-                .end(function (err, response) {
-                console.log(response.status);
-                response.should.have.status(201);
-                done();
-            });
-        });
-        return [2 /*return*/];
-    });
-}); });
-describe("Post /create/Account", function () { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("Erstellt ein Account", function (done) {
-            var account = {
-                email: "test@gmail.com",
-                name: "Max Mustermann",
-                handyNr: "+49293204803",
-                passwort: "test1234"
-            };
-            chain
-                .request("http://localhost:8080")
-                .post("/create/account")
-                .send(account)
                 .end(function (err, response) {
                 console.log(response.status);
                 response.should.have.status(201);
