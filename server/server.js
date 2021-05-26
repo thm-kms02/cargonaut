@@ -2,22 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var mysql = require("mysql");
-var Anzeige = /** @class */ (function () {
-    function Anzeige(userId, angges, beschreibung, preis, start, ziel, personen, ladeflaeche, ladungsgewicht, ladehoehe, id) {
-        this.userId = userId;
-        this.angges = angges;
-        this.beschreibung = beschreibung;
-        this.preis = preis;
-        this.start = start;
-        this.ziel = ziel;
-        this.personen = personen;
-        this.ladeflaeche = ladeflaeche;
-        this.ladungsgewicht = ladungsgewicht;
-        this.ladehoehe = ladehoehe;
-        this.id = id;
-    }
-    return Anzeige;
-}());
+var anzeige_1 = require("../class/anzeige");
+var user_1 = require("../class/user");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -80,12 +66,12 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe));
+                        offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0));
+                            offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0));
                         }
                     }
                 }
@@ -106,7 +92,7 @@ function findbyId(id, list) {
     return false;
 }
 app.post('/create/anzeige', function (req, res) {
-    var anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
+    var anzeige = new anzeige_1.Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
     var data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
     var cQuery = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
@@ -167,6 +153,25 @@ app.post('/create/anzeige_bild', function (req, res) {
         if (err === null) {
             res.status(201);
             res.send(" anzeige von Bilder  wurde erstellt");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.post('/create/account', function (req, res) {
+    var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
+    var data = [user.email, user.name, user.handyNr, user.passwort];
+    var cQuery = "INSERT INTO anzeige (email, name, handyNr, passwort) VALUES (?, ?, ?, ?);";
+    database.query(cQuery, data, function (err, results) {
+        if (err === null) {
+            res.status(201);
+            res.send(" anzeige wurde erstellt");
         }
         else if (err.errno === 1062) {
             res.status(500);

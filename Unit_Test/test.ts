@@ -60,3 +60,24 @@ describe("Post /create/Anzeige", async () => {
 
 
 });
+describe("Post /create/Account", async () => {
+    it("Erstellt ein Account", (done) => {
+        const account = {
+
+            email: "test@gmail.com",
+            name: "Max Mustermann",
+            handyNr:"+49293204803",
+            passwort:"test1234"
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/create/account")
+            .send(account)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+
+});

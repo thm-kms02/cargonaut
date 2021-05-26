@@ -2,35 +2,8 @@ import express = require('express');
 import mysql = require('mysql');
 import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
-class Anzeige {
-    id: number;
-    userId: number;
-    angges: boolean;
-
-    beschreibung: string;
-    preis: number;
-    start: string;
-    ziel: string;
-    personen: number;
-    ladeflaeche: number;
-    ladungsgewicht: number;
-    ladehoehe: number;
-
-    constructor( userId: number, angges: boolean, beschreibung: string, preis: number, start: string, ziel: string, personen: number, ladeflaeche: number, ladungsgewicht: number, ladehoehe: number, id?: number) {
-        this.userId = userId;
-        this.angges = angges;
-        this.beschreibung = beschreibung;
-        this.preis = preis;
-        this.start = start;
-        this.ziel = ziel;
-        this.personen = personen;
-        this.ladeflaeche = ladeflaeche;
-        this.ladungsgewicht = ladungsgewicht;
-        this.ladehoehe = ladehoehe;
-        this.id = id;
-    }
-}
-
+import {Anzeige} from "../class/anzeige";
+import {User} from "../class/user";
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -149,8 +122,6 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
 
 });
 
-
-
 app.post('/create/bild', (req: Request, res: Response) => {
     const bild_ID: string = req.body.bild_ID;
     const pfad: string = req.body.pfad;
@@ -190,5 +161,26 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
             res.sendStatus(500);
         }
     });
+
+});
+
+app.post('/create/account', (req: Request, res: Response) => {
+    const user: User = new User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
+    let data = [user.email, user.name, user.handyNr, user.passwort]
+    let cQuery: string = "INSERT INTO anzeige (email, name, handyNr, passwort) VALUES (?, ?, ?, ?);";
+    database.query(cQuery, data, (err, results: any) => {
+            if (err === null) {
+                res.status(201);
+                res.send(" anzeige wurde erstellt");
+            } else if (err.errno === 1062) {
+                res.status(500);
+                res.send("Fehler");
+            } else {
+                console.log(err);
+                res.sendStatus(500);
+            }
+        });
+
+
 
 });
