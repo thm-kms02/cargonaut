@@ -122,32 +122,32 @@ function renderAnzeige(anz: Anzeige) {
         menge = anz.personen.toString();
     }
     let card: JQuery = $(`
-<tr>
-        <td>
-     <div class="card">
-    <div class="card-body">
-    <h5 class="card-title">${ueberschrift}</h5>
-    <div class="row">
-    <div class="col-5">
-    <img src="/./assets/Examplepictures/Pic-1.png" alt="Examplepicture">
-        </div>
-        <div class="col-5">
-    <p class="textListComponent"><span>Von: ${anz.start}</span></p>
-    <p class="textListComponent"><span>Nach: ${anz.ziel}</span></p>
-    <p class="textListComponent"><span>Wann: </span></p>
-    <p class="textListComponent"><span>Personenanzahl/Liefergewicht: ${menge}</span></p>
-    <p class="textListComponent"><span>Fahrzeug:</span></p>
-    </div>
-    <div class="col-2">
-    <p class="card-text pricing" style="margin-top: 90px">30<span>€</span></p>
-    </div>
-    </div>
-    <div class="alignRight">
-    <button class="btn btn-dark btn-sm">Zum Angebot</button>
-    </div>
-    </div>
-    </div>
-     </td>
+        <tr>
+            <td>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">${ueberschrift}</h5>
+                        <div class="row">
+                            <div class="col-5">
+                                <img src="/./assets/Examplepictures/Pic-1.png" alt="Examplepicture">
+                            </div>
+                            <div class="col-5">
+                                <p class="textListComponent"><span>Von: ${anz.start}</span></p>
+                                <p class="textListComponent"><span>Nach: ${anz.ziel}</span></p>
+                                <p class="textListComponent"><span>Wann: </span></p>
+                                <p class="textListComponent"><span>Personenanzahl/Liefergewicht: ${menge}</span></p>
+                                <p class="textListComponent"><span>Fahrzeug:</span></p>
+                            </div>
+                            <div class="col-2">
+                                <p class="card-text pricing" style="margin-top: 90px">30<span>€</span></p>
+                            </div>
+                        </div>
+                        <div class="alignRight">
+                            <button class="btn btn-dark btn-sm">Zum Angebot</button>
+                        </div>
+                    </div>
+                </div>
+            </td>
         </tr>
     `);
 offersListBody.append(card);
