@@ -4,6 +4,7 @@ var express = require("express");
 var mysql = require("mysql");
 var anzeige_1 = require("../class/anzeige");
 var user_1 = require("../class/user");
+var Anzeige_bild_1 = require("../class/Anzeige_bild");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -73,6 +74,43 @@ app.get('/anzeige', function (req, res) {
                         if (store != false) {
                             offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0));
                         }
+                    }
+                }
+                res.status(200).send({
+                    result: offerslist
+                });
+            });
+        }
+    });
+});
+app.get('/anzeige_bild', function (req, res) {
+    var offerslist = [];
+    var an_bild;
+    var bild;
+    var query = 'SELECT * FROM bild';
+    database.query(query, function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            bild = rows;
+            var query3 = 'SELECT * FROM anzeige_bild';
+            database.query(query3, function (err, rows) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                }
+                else {
+                    an_bild = rows;
+                }
+                for (var _i = 0, bild_1 = bild; _i < bild_1.length; _i++) {
+                    var abild = bild_1[_i];
+                    var store = findbyId(abild.bild_id, an_bild);
+                    if (store != false) {
+                        offerslist.push(new Anzeige_bild_1.Anzeige_bild(abild.bild_id, abild.pfad));
                     }
                 }
                 res.status(200).send({

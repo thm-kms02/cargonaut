@@ -4,6 +4,7 @@ import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
 import {Anzeige} from "../class/anzeige";
 import {User} from "../class/user";
+import {Anzeige_bild} from "../class/Anzeige_bild";
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -81,6 +82,46 @@ app.get('/anzeige', (req: Request, res: Response) => {
         }
     })
 });
+
+
+app.get('/anzeige_bild', (req: Request, res: Response) => {
+    let offerslist: Anzeige_bild[] = [];
+    let an_bild: any[];
+    let bild: any[];
+
+    const query: string = 'SELECT * FROM bild';
+    database.query(query, (err: MysqlError, rows: any) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+           bild = rows;
+
+            const query3 ='SELECT * FROM anzeige_bild';
+            database.query(query3, (err: MysqlError, rows: any) => {
+                if(err) {
+                    res.status(500).send({
+                        message: 'Database request failed: ' + err
+                    });
+                } else {
+                    an_bild = rows;
+                }
+                for(let abild of bild) {
+                    let store = findbyId(abild.bild_id, an_bild);
+                    if (store!=false) {
+                        offerslist.push(new Anzeige_bild(abild.bild_id,abild.pfad));
+                    }
+                }
+                res.status(200).send({
+                    result: offerslist
+                });
+            });
+
+        }
+    })
+});
+
 function findbyId(id: number, list: any[]) {
     for(let elem of list) {
         if (elem.anz_ID == id) {
