@@ -5,6 +5,5 @@ export class Anzeige_bild {
     constructor( bild_id: number, pfad: string) {
         this.bild_id = bild_id;
         this.pfad = pfad;
-
     }
 }
