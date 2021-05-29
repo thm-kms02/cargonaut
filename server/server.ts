@@ -4,7 +4,7 @@ import {Connection, MysqlError} from "mysql";
 import { Request, Response } from 'express';
 import {Anzeige} from "../class/anzeige";
 import {User} from "../class/user";
-
+import {Anzeige_bild} from "../class/anzeige_bild";
 
 const app = express();
 const database : Connection = mysql.createConnection( {
@@ -84,7 +84,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
 });
 
 
-/*app.get('/anzeige_bild', (req: Request, res: Response) => {
+app.get('/anzeige_bild', (req: Request, res: Response) => {
     let offerslist: Anzeige_bild[] = [];
     let an_bild: any[];
     let bild: any[];
@@ -120,7 +120,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
 
         }
     })
-});*/
+});
 
 function findbyId(id: number, list: any[]) {
     for(let elem of list) {
