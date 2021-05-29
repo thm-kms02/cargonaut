@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import {Anzeige} from "../class/anzeige";
 import {User} from "../class/user";
 import {Anzeige_bild} from "../class/Anzeige_bild";
+import {types} from "util";
 
 const app = express();
 const database : Connection = mysql.createConnection( {

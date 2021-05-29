@@ -74,7 +74,7 @@ function addAnzeige() {
     let userId: number = 1;
     let angebot: boolean= true;
     let beschreibung: string = '';
-    let price: number = Number(priceIn.val());
+    let price: number = 5;
     let start: string="";
     let ziel: string="";
     let personen: number=2;
@@ -90,16 +90,19 @@ function addAnzeige() {
     $.ajax({
         url: '/create/anzeige',
         type: 'POST',
+        contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            userId,
-            angebot,
-            beschreibung,
-            price,
-            start,
-            ziel,
-            personen,
-            ladeflaeche, ladegewicht, ladehoehe
+            "userId": userId,
+            "angges": angebot,
+            "beschreibung": beschreibung,
+            "preis": price,
+            "start": start,
+            "ziel": ziel,
+            "personen": personen,
+            "ladeflaeche": ladeflaeche,
+            "ladungsgewicht": ladegewicht,
+            "ladehoehe": ladehoehe
         }),
         success: (response) => {
             console.log("sucess");
