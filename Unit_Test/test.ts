@@ -11,7 +11,7 @@ describe("Post /create/Account", async () => {
     it("Erstellt ein Account", (done) => {
         const account = {
 //email ist Uniqe, bitte vor jedem Test ändern
-            email: "test@gmail.comm",
+            email: "test@gmail.commm",
             name: "Max Mustermann",
             handyNr:"+49293204803",
             passwort:"test1234"
