@@ -67,11 +67,11 @@ app.get('/anzeige', (req: Request, res: Response) => {
                 for(let offer of offers) {
                     let store = findbyId(offer.id, cargo);
                     if (store!=false) {
-                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe ));
+                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges,offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0,null, store.ladeflaeche,null, store.ladungsgewicht,store.ladehoehe));
                     } else {
                         store = findbyId(offer.id, taxi);
                         if(store!=false) {
-                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, 0, 0, 0 ));
+                        offerslist.push(new Anzeige(offer.user_id, offer.ang_ges,offer.datum,offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, store.fahrzeug, 0, offer.marke,0,0));
                     }}
                 }
                 res.status(200).send({
@@ -82,7 +82,6 @@ app.get('/anzeige', (req: Request, res: Response) => {
         }
     })
 });
-
 
 app.get('/anzeige_bild', (req: Request, res: Response) => {
     let offerslist: Anzeige_bild[] = [];
@@ -132,16 +131,17 @@ function findbyId(id: number, list: any[]) {
 }
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-    const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
-    let data = [anzeige.userId, anzeige.angges, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
-    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?);";
+    const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges,req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen,req.body.fahrzeug, req.body.ladeflaeche,req.body.marke ,req.body.ladungsgewicht, req.body.ladehoehe);
+    console.log("beschreibung "+ anzeige.beschreibung+ "preis"+anzeige.preis+"ladegewischt "+ anzeige.ladungsgewicht,"ladeflaeche "+ anzeige.ladeflaeche,"fahrzeug"+anzeige.fahrzeug+anzeige.marke)
+    let data = [anzeige.userId, anzeige.angges,anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
+    let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, (err, results: any) => {
         if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
             data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         } else if(anzeige.personen!=0&&anzeige.ladeflaeche==0&&anzeige.ladehoehe==0&&anzeige.ladungsgewicht==0){
-            data = [results.insertId, anzeige.personen];
-            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
+            data = [results.insertId, anzeige.personen,anzeige.fahrzeug,anzeige.marke];
+            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen, fahrzeugart,fahrzeugmarke) VALUES (?,?,?,?)";
         } else {
             data = [results.insertId];
             cQuery = "DELETE from anzeige WHERE id=?)";
