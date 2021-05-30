@@ -4,7 +4,7 @@ var express = require("express");
 var mysql = require("mysql");
 var anzeige_1 = require("../class/anzeige");
 var user_1 = require("../class/user");
-var Anzeige_bild_1 = require("../class/Anzeige_bild");
+var anzeige_bild_1 = require("../class/anzeige_bild");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -110,7 +110,7 @@ app.get('/anzeige_bild', function (req, res) {
                     var abild = bild_1[_i];
                     var store = findbyId(abild.bild_id, an_bild);
                     if (store != false) {
-                        offerslist.push(new Anzeige_bild_1.Anzeige_bild(abild.bild_id, abild.pfad));
+                        offerslist.push(new anzeige_bild_1.Anzeige_bild(abild.bild_id, abild.pfad));
                     }
                 }
                 res.status(200).send({
