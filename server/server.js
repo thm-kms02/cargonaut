@@ -67,12 +67,12 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, null, store.ladeflaeche, null, store.ladungsgewicht, store.ladehoehe));
+                        offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, store.fahrzeug, 0, offer.marke, 0, 0));
+                            offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, store.fahrzeugart, 0, offer.fahrzeugmarke, 0, 0));
                         }
                     }
                 }
@@ -142,7 +142,7 @@ app.post('/create/anzeige', function (req, res) {
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         }
         else if (anzeige.personen != 0 && anzeige.ladeflaeche == 0 && anzeige.ladehoehe == 0 && anzeige.ladungsgewicht == 0) {
-            data = [results.insertId, anzeige.personen, anzeige.fahrzeug, anzeige.marke];
+            data = [results.insertId, anzeige.personen, anzeige.fahrzeugart, anzeige.fahrzeugmarke];
             cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen, fahrzeugart,fahrzeugmarke) VALUES (?,?,?,?)";
         }
         else {
