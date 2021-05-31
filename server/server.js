@@ -130,6 +130,8 @@ function findbyId(id, list) {
     return false;
 }
 app.post('/create/anzeige', function (req, res) {
+    var anzId;
+    var bilder = req.body.bilder;
     var anzeige = new anzeige_1.Anzeige(req.body.userId, req.body.angges, req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.fahrzeug, req.body.ladeflaeche, req.body.marke, req.body.ladungsgewicht, req.body.ladehoehe);
     console.log("beschreibung " + anzeige.beschreibung + "preis" + anzeige.preis + "ladegewischt " + anzeige.ladungsgewicht, "ladeflaeche " + anzeige.ladeflaeche, "fahrzeug" + anzeige.fahrzeug + anzeige.marke);
     var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
@@ -146,9 +148,28 @@ app.post('/create/anzeige', function (req, res) {
         else {
             data = [results.insertId];
             cQuery = "DELETE from anzeige WHERE id=?)";
+            res.status(500).send({ "message": "Fehler" });
         }
+        anzId = results.insertId;
         database.query(cQuery, data, function (err) {
             if (err === null) {
+                if (bilder.length > 0) {
+                    bilder.forEach(function (bild) {
+                        var bId = saveBild(bild);
+                        if (bId == false) {
+                            res.status(500).send({ "message": "Fehler" });
+                        }
+                        else {
+                            cQuery = "INSERT INTO anz_bild (anz_ID, b_id) VALUES (?,?)";
+                            data = [anzId, bId];
+                            database.query(cQuery, data, function (err, results) {
+                                if (err != null) {
+                                    res.status(500).send({ "message": "Fehler" });
+                                }
+                            });
+                        }
+                    });
+                }
                 res.status(201);
                 res.send(" anzeige wurde erstellt");
             }
@@ -163,46 +184,62 @@ app.post('/create/anzeige', function (req, res) {
         });
     });
 });
-app.post('/create/bild', function (req, res) {
-    var bild_ID = req.body.bild_ID;
-    var pfad = req.body.pfad;
-    var data = [bild_ID, pfad];
-    var cQuery = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
+function saveBild(pfad) {
+    var query = "INSERT INTO bild (pfad) VALUES (?)";
+    var data = [pfad];
+    database.query(query, data, function (err, results) {
+        if (err == null) {
+            return results.insertId;
+        }
+        else {
+            return false;
+        }
+    });
+}
+/*
+
+app.post('/create/bild', (req: Request, res: Response) => {
+    const bild_ID: string = req.body.bild_ID;
+    const pfad: string = req.body.pfad;
+    const data = [bild_ID,pfad]
+
+    const cQuery: string = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
         if (err === null) {
             res.status(201);
             res.send(" bild wurde hinzugefügt");
-        }
-        else if (err.errno === 1062) {
+        } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        }
-        else {
+        } else {
             console.log(err);
             res.sendStatus(500);
         }
     });
+
 });
-app.post('/create/anzeige_bild', function (req, res) {
-    var anz_ID = req.body.anz_ID;
-    var b_id = req.body.b_id;
-    var data = [anz_ID, b_id];
-    var cQuery = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
+
+
+app.post('/create/anzeige_bild', (req: Request, res: Response) => {
+    const anz_ID: string = req.body.anz_ID;
+    const b_id: string = req.body.b_id;
+    const data = [anz_ID,b_id]
+    const cQuery: string = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
         if (err === null) {
             res.status(201);
             res.send(" anzeige von Bilder  wurde erstellt");
-        }
-        else if (err.errno === 1062) {
+        } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        }
-        else {
+        } else {
             console.log(err);
             res.sendStatus(500);
         }
     });
+
 });
+*/
 app.post('/create/account', function (req, res) {
     var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
     var data = [user.email, user.name, user.handyNr, user.passwort];
