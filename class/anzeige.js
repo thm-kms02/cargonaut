@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Anzeige = void 0;
 var Anzeige = /** @class */ (function () {
-    function Anzeige(userId, angges, datum, beschreibung, preis, start, ziel, personen, fahrzeug, ladeflaeche, marke, ladungsgewicht, ladehoehe, id) {
+    function Anzeige(userId, angges, datum, beschreibung, preis, start, ziel, personen, fahrzeugart, ladeflaeche, fahrzeugmarke, ladungsgewicht, ladehoehe, id) {
         this.userId = userId;
         this.angges = angges;
         this.beschreibung = beschreibung;
@@ -15,8 +15,8 @@ var Anzeige = /** @class */ (function () {
         this.ladehoehe = ladehoehe;
         this.id = id;
         this.datum = datum;
-        this.fahrzeug = fahrzeug;
-        this.marke = marke;
+        this.fahrzeugart = fahrzeugart;
+        this.fahrzeugmarke = fahrzeugmarke;
     }
     return Anzeige;
 }());

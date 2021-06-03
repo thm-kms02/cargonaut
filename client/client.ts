@@ -63,7 +63,6 @@ function saveValues(){
 }
 
 function addAnzeige() {
-
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
     let beschIn: JQuery = $('#inputBeschreibung');
@@ -76,9 +75,9 @@ function addAnzeige() {
     let ziel: string=nach;
     let datum: string = setDate;
     let personen:number= person;
-    let fahrzeug:string = fahrzeugIN;
+    let fahrzeugart:string = fahrzeugIN;
     alert("hier"+ beschreibung + "preis"+price);
-    let marke: string = markeIN;
+    let fahrzeugmarke: string = markeIN;
     let ladeflaeche: number=0;
     let ladegewicht: number=0;
     let ladehoehe: number=0;
@@ -102,8 +101,8 @@ function addAnzeige() {
             "start": start,
             "ziel": ziel,
             "personen": personen,
-            "fahrzeug":fahrzeug,
-            "marke":marke,
+            "fahrzeugart":fahrzeugart,
+            "marke":fahrzeugmarke,
             "ladeflaeche": ladeflaeche,
             "ladungsgewicht": ladegewicht,
             "ladehoehe": ladehoehe
@@ -117,13 +116,30 @@ function addAnzeige() {
         },
     });
 }
-
+function dateConvert(datum:string):string { // yyyy-mm-dd to dd.mm.yyyy
+    let yearTemp:Array<string>=[];
+    let monthTemp:Array<string>=[];
+    let dayTemp: Array<string>=[];
+    for (let i=0;i<datum.length;i++){
+        if (i<4){
+            yearTemp[i]=datum.charAt(i);
+        }
+        if (i>4 && i<7){
+           monthTemp[i-4] = datum.charAt(i);
+        }
+        if (i>7){
+            dayTemp[i-7]=datum.charAt(i);
+        }
+    }
+    let dateNew = dayTemp.toString()+"."+monthTemp.toString()+"."+yearTemp;
+    return dateNew.replace(/,/g,"");
+}
 function renderAnzeige(anz: Anzeige) {
     const offersListBody: JQuery = $("#offersTableBody");
     let ueberschrift: string;
     let menge: string;
-    let datum:string= String((anz.datum).split("",10)).replace(/,/g, "");
-
+    let datumSqlFormat:string= String((anz.datum).split("",10)).replace(/,/g, "");
+    let datumEuropaFormat:string=dateConvert(datumSqlFormat);
     if(anz.personen==0){
         ueberschrift = "Ladungsbeförderung"
         menge = anz.ladungsgewicht.toString();
@@ -131,6 +147,7 @@ function renderAnzeige(anz: Anzeige) {
         ueberschrift = "Personenbeförderung"
         menge = anz.personen.toString();
     }
+    alert(anz.fahrzeugart)
     let card: JQuery = $(`
         <tr>
             <td>
@@ -144,9 +161,9 @@ function renderAnzeige(anz: Anzeige) {
                             <div class="col-5">
                                 <p class="textListComponent"><span>Von: ${anz.start}</span></p>
                                 <p class="textListComponent"><span>Nach: ${anz.ziel}</span></p>
-                                <p class="textListComponent"><span>Wann: ${datum}</span></p>
+                                <p class="textListComponent"><span>Wann: ${datumEuropaFormat}</span></p>
                                 <p class="textListComponent"><span>Personenanzahl: ${menge}</span></p>
-                                <p class="textListComponent"><span>Fahrzeug: ${anz.fahrzeug}</span></p>
+                                <p class="textListComponent"><span>Fahrzeug: ${anz.fahrzeugart}</span></p>
                             </div>
                             <div class="col-2">
                                 <p class="card-text pricing" style="margin-top: 90px">${anz.preis}<span>€</span></p>
@@ -169,6 +186,4 @@ function renderOffersList(offerList: Anzeige[]) {
     offerList.forEach((anz) => {
         renderAnzeige(anz);
     })
-
-
 }
