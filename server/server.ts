@@ -132,13 +132,14 @@ function findbyId(id: number, list: any[]) {
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
     let anzId: number;
+    let error: boolean = false;
     const bilder: string[] = req.body.bilder;
-    const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges,req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen,req.body.fahrzeug, req.body.ladeflaeche,req.body.marke ,req.body.ladungsgewicht, req.body.ladehoehe);
-    console.log("beschreibung "+ anzeige.beschreibung+ "preis"+anzeige.preis+"ladegewischt "+ anzeige.ladungsgewicht,"ladeflaeche "+ anzeige.ladeflaeche,"fahrzeug"+anzeige.fahrzeug+anzeige.marke)
     const anzeige: Anzeige = new Anzeige(req.body.userId, req.body.angges,req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen,req.body.fahrzeugart, req.body.ladeflaeche,req.body.fahrzeugmarke ,req.body.ladungsgewicht, req.body.ladehoehe);
     console.log("beschreibung "+ anzeige.beschreibung+ "preis"+anzeige.preis+"ladegewischt "+ anzeige.ladungsgewicht,"ladeflaeche "+ anzeige.ladeflaeche,"fahrzeug"+anzeige.fahrzeugart+anzeige.fahrzeugmarke)
+
     let data = [anzeige.userId, anzeige.angges,anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung]
     let cQuery: string = "INSERT INTO anzeige (user_id, ang_ges,datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?, ?);";
+
     database.query(cQuery, data, (err, results: any) => {
         if(anzeige.personen==0&&anzeige.ladeflaeche!=0&&anzeige.ladehoehe!=0&&anzeige.ladungsgewicht!=0) {
             data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
@@ -149,26 +150,39 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
         } else {
             data = [results.insertId];
             cQuery = "DELETE from anzeige WHERE id=?)";
-            res.status(500).send({"message":"Fehler"});
+           error = true;
         }
+
         anzId = results.insertId;
-        database.query(cQuery, data, (err) => {
+        database.query(cQuery, data, (err: MysqlError, results: any) => {
              if (err === null) {
                      if (bilder.length>0) {
-                         bilder.forEach((bild: string) => {
-                             let bId: any = saveBild(bild);
-                             if (bId == false) {
-                                 res.status(500).send({"message":"Fehler"});
-                             } else {
-                                 cQuery = "INSERT INTO anz_bild (anz_ID, b_id) VALUES (?,?)";
-                                 data = [anzId, bId];
-                                 database.query(cQuery, data, (err: MysqlError, results: any) => {
-                                     if(err != null) {
-                                         res.status(500).send({"message":"Fehler"});
-                                     }
-                                 });
-                             }
-                         });
+                         for(let i: number = 0; i<bilder.length; i++) {
+                             let bId: number = null;
+                             let query: string = "INSERT INTO bild (pfad) VALUES (?)";
+                             let data = [bilder[i]];
+                             database.query(query, data, (err: MysqlError, results: any) => {
+                                 console.log("afs");
+                                 if (err != null) {
+                                     console.log("error");
+                                     error = true;
+                                 }
+                                 else {
+                                     console.log("success");
+                                     bId = results.insertId;
+                                     cQuery = "INSERT INTO anz_bild (anz_ID, b_id) VALUES (?,?)";
+
+                                     let dat = [anzId, bId];
+                                     database.query(cQuery, dat, (err: MysqlError) => {
+                                         if(err != null) {
+                                             error = true;
+                                         }
+                                     });
+
+                                 }
+                             })
+
+                         }
                      }
                      res.status(201);
                      res.send(" anzeige wurde erstellt");
@@ -185,18 +199,6 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
 
 });
 
-function saveBild(pfad: string) {
-    let query: string = "INSERT INTO bild (pfad) VALUES (?)";
-    let data = [pfad];
-    database.query(query, data, (err: MysqlError, results: any) => {
-        if (err == null) {
-            return results.insertId;
-        }
-        else {
-            return false;
-        }
-    })
-}
 /*
 
 app.post('/create/bild', (req: Request, res: Response) => {
