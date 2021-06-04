@@ -116,6 +116,148 @@ function addAnzeige() {
         },
     });
 }
+function updateAnzg() {
+    let rad1: JQuery = $('#inlineRadio1:checked');
+    let rad2: JQuery = $('#inlineRadio2:checked');
+    let beschIn: JQuery = $('#inputBeschreibung');
+    let priceIn: JQuery = $('#inputPrice');
+    let userId: number = 1;
+    let angebot: boolean= true;
+    let beschreibung: string = String(beschIn.val()).trim();
+    let price: number = Number(priceIn.val());
+    let start: string= von;
+    let ziel: string=nach;
+    let datum: string = setDate;
+    let personen:number= person;
+    let fahrzeugart:string = fahrzeugIN;
+    alert("hier"+ beschreibung + "preis"+price);
+    let fahrzeugmarke: string = markeIN;
+    let ladeflaeche: number=0;
+    let ladegewicht: number=0;
+    let ladehoehe: number=0;
+    if (rad1.val()=="option1") {
+        angebot = true;
+    } else if (rad2.val()=="option2") {
+        angebot = false;
+    }
+
+    $.ajax({
+        url: '/update/anzeige',
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "userId": userId,
+            "angges": angebot,
+            "datum":datum,
+            "beschreibung": beschreibung,
+            "preis": price,
+            "start": start,
+            "ziel": ziel,
+            "personen": personen,
+            "fahrzeugart":fahrzeugart,
+            "marke":fahrzeugmarke,
+            "ladeflaeche": ladeflaeche,
+            "ladungsgewicht": ladegewicht,
+            "ladehoehe": ladehoehe
+
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function addFzg() {
+
+
+    let marke: string = "";
+    let modell: string = "";
+    let baujahr: number = 0;
+    let ladevolumen: number = 0;
+    let zuladung: number = 0;
+
+    $.ajax({
+        url: '/create/fzg',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+           "marke": marke,
+            "modell": modell,
+            "baujahr": baujahr,
+            "ladevolumen": ladevolumen,
+           "zuladung": zuladung
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function deleteAnzeige() {
+    let id: number = 0;
+    $.ajax({
+        url: '/delete/anzeige',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+          "id": id
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function deleteBild() {
+    let id: number = 0;
+    $.ajax({
+        url: '/delete/bild',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "id": id
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function deleteFzg() {
+    let id: number = 0;
+    $.ajax({
+        url: '/delete/fzg',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "id": id
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
 function dateConvert(datum:string):string { // yyyy-mm-dd to dd.mm.yyyy
     let yearTemp:Array<string>=[];
     let monthTemp:Array<string>=[];

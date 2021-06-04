@@ -157,10 +157,10 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
         database.query(cQuery, data, (err: MysqlError, results: any) => {
              if (err === null) {
                      if (bilder.length>0) {
-                         for(let i: number = 0; i<bilder.length; i++) {
+                         for(let bild of bilder) {
                              let bId: number = null;
                              let query: string = "INSERT INTO bild (pfad) VALUES (?)";
-                             let data = [bilder[i]];
+                             let data = [bild];
                              database.query(query, data, (err: MysqlError, results: any) => {
                                  console.log("afs");
                                  if (err != null) {
@@ -198,6 +198,49 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
     });
 
 });
+
+app.delete('/delete/bild', (req: Request, res: Response) => {
+    const bild_ID: string = req.body.bild_ID;
+
+    const data = [bild_ID]
+
+    const cQuery: string = "DELETE FROM bild WHERE bild_id=? VALUES (?);";
+    database.query(cQuery, data, (err) => {
+        if (err === null) {
+            res.status(200);
+            res.send(" bild wurde gelöscht");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+
+
+app.delete('/delete/anzeige', (req: Request, res: Response) => {
+    const anzeigeID: string = req.body.anzeige_Id;
+
+    const data = [anzeigeID]
+
+    const cQuery: string = "DELETE FROM anzeige WHERE id=? VALUES (?);";
+    database.query(cQuery, data, (err) => {
+        if (err === null) {
+            res.status(200);
+            res.send(" Anzeige wurde gelöscht");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+
+
 
 /*
 
