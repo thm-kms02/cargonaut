@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/thm-kms02/cargonaut#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@types/bootstrap": "^5.0.13",
     "@types/chai": "^4.2.18",
     "@types/chai-http": "^4.2.0",

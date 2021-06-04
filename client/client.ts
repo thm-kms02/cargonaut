@@ -63,7 +63,6 @@ function saveValues(){
 }
 
 function addAnzeige() {
-
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
     let beschIn: JQuery = $('#inputBeschreibung');
@@ -187,6 +186,4 @@ function renderOffersList(offerList: Anzeige[]) {
     offerList.forEach((anz) => {
         renderAnzeige(anz);
     })
-
-
 }
