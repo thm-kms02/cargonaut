@@ -50,7 +50,7 @@ mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, 
         it("Erstellt ein Account", function (done) {
             var account = {
                 //email ist Uniqe, bitte vor jedem Test ändern
-                email: "test@gmail.commm",
+                email: "test@gmail21.commm",
                 name: "Max Mustermann",
                 handyNr: "+49293204803",
                 passwort: "test1234"
@@ -70,15 +70,14 @@ mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, 
 }); });
 mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        it('soll ein Bild erstellen ', function (done) {
-        });
         it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
             var fahrzeug = {
                 user_id: 1,
                 name: "VW Golf",
+                jahr: 2010,
                 volumen: 500,
                 gewicht: 1500,
-                bild_id: null
+                bild_pfad: "bilder/img.pn"
             };
             chain
                 .request("http://localhost:8080")
@@ -97,12 +96,14 @@ mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
             var anzeige = {
-                userId: 1,
-                angges: 1,
-                beschreibung: "TestTestTestTest",
+                user_id: 1,
+                ang_ges: 0,
+                datum: "2021-06-23",
                 preis: 300,
                 start: "Gießen",
                 ziel: "Hamburg",
+                beschreibung: "TestTestTestTest",
+                id_fahrzeug: 1,
                 personen: 4,
                 ladeflaeche: 0,
                 ladungsgewicht: 0,
@@ -120,12 +121,14 @@ mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, 
         });
         it("Soll eine Anzeige für Lieferung erstellen", function (done) {
             var anzeige = {
-                userId: 1,
-                angges: 1,
-                beschreibung: "TestTestTestTest",
+                user_id: 1,
+                ang_ges: 0,
+                datum: "2021-06-23",
                 preis: 300,
                 start: "Gießen",
                 ziel: "Hamburg",
+                beschreibung: "TestTestTestTest",
+                id_fahrzeug: 1,
                 personen: 0,
                 ladeflaeche: 3,
                 ladungsgewicht: 3,
