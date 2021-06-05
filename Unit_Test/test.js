@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,8 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 // tslint:disable-next-line:no-var-requires
+var mocha_1 = require("mocha");
 var chain = require("chai");
 // tslint:disable-next-line:no-var-requires
 var chaiHttps = require("chai-http");
@@ -43,7 +45,7 @@ var chaiHttps = require("chai-http");
 var host = require("../server/server");
 chain.should();
 chain.use(chaiHttps);
-describe("Post /create/Account", function () { return __awaiter(_this, void 0, void 0, function () {
+mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("Erstellt ein Account", function (done) {
             var account = {
@@ -66,7 +68,32 @@ describe("Post /create/Account", function () { return __awaiter(_this, void 0, v
         return [2 /*return*/];
     });
 }); });
-describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, void 0, function () {
+mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it('soll ein Bild erstellen ', function (done) {
+        });
+        it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
+            var fahrzeug = {
+                user_id: 1,
+                name: "VW Golf",
+                volumen: 500,
+                gewicht: 1500,
+                bild_id: null
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/create/fahrzeug")
+                .send(fahrzeug)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
+mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
             var anzeige = {
