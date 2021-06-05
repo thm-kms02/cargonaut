@@ -5,6 +5,8 @@ var mysql = require("mysql");
 var anzeige_1 = require("../class/anzeige");
 var user_1 = require("../class/user");
 var anzeige_bild_1 = require("../class/anzeige_bild");
+var fahrzeug_1 = require("../class/fahrzeug");
+var anzeigeRender_1 = require("../class/anzeigeRender");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -15,6 +17,7 @@ var database = mysql.createConnection({
 var basedir = __dirname + '/../';
 app.use("/", express.static(basedir + '/client/'));
 app.use("/", express.static(basedir + '/CSS/'));
+app.use("/", express.static(basedir + '/bilder/'));
 app.use("/", express.static(basedir));
 app.use(express.json());
 app.listen(8080, function () {
@@ -33,7 +36,7 @@ app.get('/anzeige', function (req, res) {
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT * FROM anzeige';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id;';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -67,18 +70,35 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe));
+                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe, store.name, store.bild_pfad));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, store.fahrzeugart, 0, offer.fahrzeugmarke, 0, 0));
+                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, store.personen, 0, 0, 0, offer.name, offer.bild_pfad));
                         }
                     }
                 }
                 res.status(200).send({
                     result: offerslist
                 });
+            });
+        }
+    });
+});
+app.get('/fahrzeug', function (req, res) {
+    var fahrzeug = [];
+    var query = 'SELECT * FROM fahrzeug';
+    database.query(query, function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            fahrzeug = rows;
+            res.status(200).send({
+                result: fahrzeug
             });
         }
     });
@@ -130,18 +150,18 @@ function findbyId(id, list) {
     return false;
 }
 app.post('/create/anzeige', function (req, res) {
-    var anzeige = new anzeige_1.Anzeige(req.body.userId, req.body.angges, req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.fahrzeugart, req.body.ladeflaeche, req.body.fahrzeugmarke, req.body.ladungsgewicht, req.body.ladehoehe);
-    console.log("beschreibung " + anzeige.beschreibung + "preis" + anzeige.preis + "ladegewischt " + anzeige.ladungsgewicht, "ladeflaeche " + anzeige.ladeflaeche, "fahrzeug" + anzeige.fahrzeugart + anzeige.fahrzeugmarke);
-    var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
-    var cQuery = "INSERT INTO anzeige (user_id, ang_ges,datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    var anzeige = new anzeige_1.Anzeige(req.body.user_id, req.body.ang_ges, req.body.datum, req.body.preis, req.body.start, req.body.ziel, req.body.beschreibung, req.body.id_fahrzeug, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
+    var data = [anzeige.user_id, anzeige.ang_ges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung,
+        anzeige.id_fahrzeug];
+    var cQuery = "INSERT INTO anzeige (user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
             data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         }
         else if (anzeige.personen != 0 && anzeige.ladeflaeche == 0 && anzeige.ladehoehe == 0 && anzeige.ladungsgewicht == 0) {
-            data = [results.insertId, anzeige.personen, anzeige.fahrzeugart, anzeige.fahrzeugmarke];
-            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen, fahrzeugart,fahrzeugmarke) VALUES (?,?,?,?)";
+            data = [results.insertId, anzeige.personen];
+            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         }
         else {
             data = [results.insertId];
@@ -161,6 +181,25 @@ app.post('/create/anzeige', function (req, res) {
                 res.sendStatus(500);
             }
         });
+    });
+});
+app.post('/create/fahrzeug', function (req, res) {
+    var fahrzeug = new fahrzeug_1.Fahrzeug(req.body.user_id, req.body.name, req.body.jahr, req.body.volumen, req.body.gewicht, req.body.bild_pfad);
+    var data = [fahrzeug.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht, fahrzeug.bild_pfad];
+    var cQuery = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht, bild_pfad ) VALUES (?, ?, ?, ?, ?, ?);";
+    database.query(cQuery, data, function (err) {
+        if (err === null) {
+            res.status(201);
+            res.send(" Fahrzeug wurde erstellt");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
     });
 });
 app.post('/create/bild', function (req, res) {
