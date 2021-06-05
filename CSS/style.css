@@ -1,3 +1,154 @@
+
+.page-holder {
+    min-height: 100vh;
+    float: top;
+}
+
+.bg-cover {
+    background-size: cover !important;
+}
+
+
+
+
+
+
+
+
+.header-dark .navbar {
+    background:transparent;
+    padding-top:0;
+    padding-bottom:0;
+    color:#fff;
+    border-radius:0;
+    box-shadow:none;
+    border:none;
+}
+
+
+
+.header-dark .navbar .navbar-brand {
+    font-weight:bold;
+    color:inherit;
+}
+
+.header-dark .navbar .navbar-brand:hover {
+    color:#f0f0f0;
+}
+
+.header-dark .navbar .navbar-collapse span {
+    margin-top:5px;
+}
+
+.header-dark .navbar .navbar-collapse span .login {
+    color:#ffffff;
+    margin-right:.5rem;
+    text-decoration:none;
+}
+
+.header-dark .navbar .navbar-collapse span .login:hover {
+    color:#fff;
+}
+
+.header-dark .navbar .navbar-toggler {
+    border-color:#747474;
+}
+
+.header-dark .navbar .navbar-toggler:hover, .header-dark .navbar-toggler:focus {
+    background:none;
+}
+
+.header-dark .navbar .navbar-toggler {
+    color:#eee;
+}
+
+.header-dark .navbar .navbar-collapse, .header-dark .navbar .form-inline {
+    border-color:#636363;
+}
+
+.header-dark .navbar.navbar-dark .navbar-nav .nav-link {
+    color:#ffffff;
+}
+
+
+.header-dark .navbar .navbar-nav > li > .dropdown-menu {
+    margin-top:-5px;
+    box-shadow:0 4px 8px rgba(0,0,0,.1);
+    background-color:#fff;
+    border-radius:2px;
+}
+
+.header-dark .navbar .dropdown-menu .dropdown-item:focus, .header-dark .navbar .dropdown-menu .dropdown-item {
+    line-height:2;
+    font-size:14px;
+    color:#ffffff;
+}
+
+.header-dark .navbar .dropdown-menu .dropdown-item:focus, .header-dark .navbar .dropdown-menu .drodown-item:hover {
+    background:#ffffff;
+}
+
+.header-dark .navbar .action-button, .header-dark .navbar .action-button:active {
+    background:#1687A7;
+    border-radius:20px;
+    font-size:inherit;
+    color:#fff;
+    box-shadow:none;
+    border:none;
+    text-shadow:none;
+    padding:.5rem .8rem;
+    transition:background-color 0.25s;
+}
+
+.header-dark .navbar .action-button:hover {
+    background:#269d9d;
+}
+
+.header-dark .navbar .form-inline label {
+    color:#ccc;
+}
+
+.header-dark .navbar .form-inline .search-field {
+    display:inline-block;
+    width:80%;
+    background:none;
+    border:none;
+    border-bottom:1px solid transparent;
+    border-radius:0;
+    color:#ccc;
+    box-shadow:none;
+    color:inherit;
+    transition:border-bottom-color 0.3s;
+}
+
+.header-dark .navbar .form-inline .search-field:focus {
+    border-bottom:1px solid #ccc;
+}
+
+.header-dark .hero h1  {
+    color:#fff;
+    font-family:'Bitter', serif;
+    font-size:40px;
+    margin-top:20px;
+    margin-bottom:80px;
+}
+
+
+
+.header-dark .hero .embed-responsive iframe {
+    background-color:#666;
+}
+
+
+
+
+
+
+
+
+
+
+
 .area {
     margin-top: 5%;
 }
@@ -34,4 +185,98 @@
 
 .createFiledParts {
     margin-bottom: 5%;
+}
+
+
+
+
+
+
+
+
+
+.footer-clean {
+    padding:30px 0;
+    background-color:#D3E0EA;
+    color:#4b4c4d;
+}
+
+.footer-clean h3 {
+    margin-top:0;
+    margin-bottom:12px;
+    font-weight:bold;
+    font-size:16px;
+}
+
+.footer-clean ul {
+    padding:0;
+    list-style:none;
+    line-height:1.6;
+    font-size:14px;
+    margin-bottom:0;
+}
+
+.footer-clean ul a {
+    color:inherit;
+    text-decoration:none;
+    opacity:0.8;
+}
+
+.footer-clean ul a:hover {
+    opacity:1;
+}
+
+.footer-clean .item.social {
+    text-align:right;
+}
+
+@media (max-width:767px) {
+    .footer-clean .item {
+        text-align:center;
+        padding-bottom:20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-clean .item.social {
+        text-align:center;
+    }
+}
+
+.footer-clean .item.social > a {
+    font-size:24px;
+    width:40px;
+    height:40px;
+    line-height:40px;
+    display:inline-block;
+    text-align:center;
+    border-radius:50%;
+    border:1px solid #ccc;
+    margin-left:10px;
+    margin-top:22px;
+    color:inherit;
+    opacity:0.75;
+}
+
+.footer-clean .item.social > a:hover {
+    opacity:0.9;
+}
+
+@media (max-width:991px) {
+    .footer-clean .item.social > a {
+        margin-top:40px;
+    }
+}
+
+@media (max-width:767px) {
+    .footer-clean .item.social > a {
+        margin-top:10px;
+    }
+}
+
+.footer-clean .copyright {
+    margin-top:14px;
+    margin-bottom:0;
+    font-size:13px;
+    opacity:0.6;
 }
