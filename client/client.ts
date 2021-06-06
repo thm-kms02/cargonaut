@@ -1,6 +1,7 @@
 import {AnzeigeRender} from "../class/anzeigeRender";
 import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
+import {Anzeige} from "../class/anzeige";
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -22,6 +23,11 @@ let fahrzeugID2: number;
 let gesamtgewichtIN: number;
 let ladeflaecheIN: number;
 let ladehoeheIN: number;
+
+
+
+    let offerslist: Anzeige[];
+
 
 
 $(() => {
@@ -71,6 +77,8 @@ function getAll() {
         success: (response) => {
 
             renderOffersList(response.result);
+            offerslist = response.result;
+
         },
         error: (response) => {
 
@@ -95,6 +103,41 @@ function saveValuesLieferung() {
     ladeflaecheIN = Number($('#inputLadeflaeche').val());
     ladehoeheIN = Number($('#inputLadehoehe').val());
     fahrzeugID2 = Number($('.custom-select2').val());
+}
+
+function filtern() {
+    let filteredOffers: Anzeige[] = []
+    let ang: boolean;
+    let kategorie: number; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let minPreis: number;
+    let maxPreis: number;
+    let von: string;
+    let nach: string;
+    let datum: string;
+
+   offerslist.forEach((offer) =>{
+       if(ang==undefined|| ang == offer.ang_ges) {
+           if(minPreis==undefined|| minPreis<offer.preis) {
+               if(maxPreis== undefined|| maxPreis>offer.preis) {
+                   if(von==undefined|| von == offer.start) {
+                       if(nach == undefined|| nach == offer.ziel) {
+                           if(datum==undefined|| datum == offer.datum){
+                               if(kategorie==undefined) {
+                                   filteredOffers.push(offer);
+                               }
+                               else if(kategorie==1&&offer.personen<1) {
+                                   filteredOffers.push(offer);
+                               } else if(kategorie==2&&offer.personen>0) {
+                                   filteredOffers.push(offer);
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   })
+    offerslist = filteredOffers;
 }
 
 function addAnzeige() {
