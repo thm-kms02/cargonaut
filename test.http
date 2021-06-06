@@ -26,10 +26,13 @@ Content-Type: application/json
     "start": "Gießen",
     "ziel": "Hamburg",
     "personen": 4,
+  "fahrzeugart": "golf",
     "ladeflaeche": 0,
+  "fahrzeugmarke": "VW",
     "ladungsgewicht": 0,
-    "ladehoehe": 0
-
+    "ladehoehe": 0,
+  "datum": "10.10.2021",
+  "bilder": ["hallo", "test", "nopath"]
 }
 
 ####

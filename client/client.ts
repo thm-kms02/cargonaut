@@ -1,19 +1,30 @@
 import {AnzeigeRender} from "../class/anzeigeRender";
 import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
+import {Anzeige} from "../class/anzeige";
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
 let createOfferBTN: JQuery;
 let submitOfferBtn: JQuery;
 let saveBTN: JQuery;
-let fahrzeugDrop:JQuery;
+let saveBTN2: JQuery;
+let fahrzeugDropTaxi: JQuery;
+let fahrzeugDropLieferung: JQuery;
 let person: number;
 let von: string;
 let nach: string;
 let setDate: string;
-let markeIN: string;
-let fahrzeugID:number;
+let von2: string;
+let nach2: string;
+let setDate2: string;
+let fahrzeugID: number;
+let fahrzeugID2: number;
+let gesamtgewichtIN: number;
+let ladeflaecheIN: number;
+let ladehoeheIN: number;
+let offerslist: Anzeige[];
+
 
 $(() => {
     mainarea = $("#mainArea");
@@ -21,7 +32,9 @@ $(() => {
     createOfferBTN = $("#createOfferBTN");
     submitOfferBtn = $("#submitOfferBtn");
     saveBTN = $("#saveBTN");
-    fahrzeugDrop = $("#inputGroupSelect01");
+    fahrzeugDropTaxi = $(".custom-select");
+    fahrzeugDropLieferung = $(".custom-select2");
+    saveBTN2 = $("#saveBTN2");
 
 
     getAll();
@@ -38,10 +51,16 @@ $(() => {
         addAnzeige();
     })
     saveBTN.on('click', () => {
-        saveValues();
+        saveValuesTaxi();
     })
-    fahrzeugDrop.on('click', () => {
-       getFahrzeugDrop();
+    saveBTN2.on('click', () => {
+        saveValuesLieferung();
+    })
+    fahrzeugDropTaxi.on('click', () => {
+        getFahrzeugDropTaxi();
+    });
+    fahrzeugDropLieferung.on('click', () => {
+        getFahrzeugDropLieferung();
     });
 })
 
@@ -54,6 +73,8 @@ function getAll() {
         success: (response) => {
 
             renderOffersList(response.result);
+            offerslist = response.result;
+
         },
         error: (response) => {
 
@@ -62,13 +83,57 @@ function getAll() {
 
 }
 
-function saveValues() {
+function saveValuesTaxi() {
     person = Number($('#inputPersonenzahl').val());
     von = String($('#inputVon').val()).trim();
     nach = String($('#inputNach').val()).trim();
-   fahrzeugID = Number($('#inputGroupSelect01').val());
+    fahrzeugID = Number($('.custom-select').val());
     setDate = String($('#inputDate').val()).trim();
-alert(fahrzeugID)
+}
+
+function saveValuesLieferung() {
+    gesamtgewichtIN = Number($('#inputGesamtgewicht').val())
+    setDate2 = String($('#inputDate2').val()).trim();
+    von2 = String($('#inputVon2').val()).trim();
+    nach2 = String($('#inputNach2').val()).trim();
+    ladeflaecheIN = Number($('#inputLadeflaeche').val());
+    ladehoeheIN = Number($('#inputLadehoehe').val());
+    fahrzeugID2 = Number($('.custom-select2').val());
+}
+
+function filtern() {
+    let filteredOffers: Anzeige[] = []
+    let ang: boolean;
+    let kategorie: number; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let minPreis: number;
+    let maxPreis: number;
+    let von: string;
+    let nach: string;
+    let datum: string;
+
+   offerslist.forEach((offer) =>{
+       if(ang==undefined|| ang == offer.ang_ges) {
+           if(minPreis==undefined|| minPreis<offer.preis) {
+               if(maxPreis== undefined|| maxPreis>offer.preis) {
+                   if(von==undefined|| von == offer.start) {
+                       if(nach == undefined|| nach == offer.ziel) {
+                           if(datum==undefined|| datum == offer.datum){
+                               if(kategorie==undefined) {
+                                   filteredOffers.push(offer);
+                               }
+                               else if(kategorie==1&&offer.personen<1) {
+                                   filteredOffers.push(offer);
+                               } else if(kategorie==2&&offer.personen>0) {
+                                   filteredOffers.push(offer);
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   })
+    offerslist = filteredOffers;
 }
 
 function addAnzeige() {
@@ -80,21 +145,38 @@ function addAnzeige() {
     let ang_ges: boolean = true;
     let beschreibung: string = String(beschIn.val()).trim();
     let preis: number = Number(priceIn.val());
-    let start: string = von;
-    let ziel: string = nach;
-    let datum: string = setDate;
-    let personen: number = person;
-    let id_fahrzeug: number = fahrzeugID;
-    let fahrzeugmarke: string = markeIN;
-    let ladeflaeche: number = 0;
-    let ladegewicht: number = 0;
-    let ladehoehe: number = 0;
+    let start: string;
+    let ziel: string;
+    let datum: string;
+    let personen: number;
+    let id_fahrzeug: number;
+    let ladeflaeche: number;
+    let ladungsgewicht: number;
+    let ladehoehe: number;
+    if (person != 0 && ladeflaeche == 0 && ladungsgewicht == 0) {
+        start = von;
+        ziel = nach;
+        datum = setDate;
+        personen = person;
+        id_fahrzeug = fahrzeugID;
+        ladeflaeche = 0;
+        ladungsgewicht = 0;
+        ladehoehe = 0;
+    } else {
+        start = von2;
+        ziel = nach2;
+        datum = setDate2;
+        personen = 0;
+        id_fahrzeug = fahrzeugID2;
+        ladeflaeche = ladeflaecheIN;
+        ladungsgewicht = gesamtgewichtIN;
+        ladehoehe = ladehoeheIN;
+    }
     if (rad1.val() == "option1") {
         ang_ges = true;
     } else if (rad2.val() == "option2") {
         ang_ges = false;
     }
-
     $.ajax({
         url: '/create/anzeige',
         type: 'POST',
@@ -111,7 +193,7 @@ function addAnzeige() {
             "id_fahrzeug": id_fahrzeug,
             "personen": personen,
             "ladeflaeche": ladeflaeche,
-            "ladungsgewicht": ladegewicht,
+            "ladungsgewicht": ladungsgewicht,
             "ladehoehe": ladehoehe
 
         }),
@@ -198,37 +280,76 @@ function renderOffersList(offerList: AnzeigeRender[]) {
         i++;
     }
 }
-function getFahrzeugDrop(){
-    let inputFahrzeug:string = String($('#inputGroupSelect01').val()).trim();
+
+function getFahrzeugDropTaxi() {
+    let inputFahrzeug: string = String($('.custom-select').val()).trim();
     if (inputFahrzeug == "Choose ...")
-    $.ajax({
-        url: '/fahrzeug',
-        type: 'GET',
-        dataType: 'json',
-        success: (response) => {
-          inputFahrzeugDrop(response.result)
-        },
-        error: (response) => {
+        $.ajax({
+            url: '/fahrzeug',
+            type: 'GET',
+            dataType: 'json',
+            success: (response) => {
+                inputFahrzeugDropTaxi(response.result)
+            },
+            error: (response) => {
 
-        },
+            },
 
-    });
+        });
 
 
 }
-function inputFahrzeugDrop(fahrzeugListe:Fahrzeug[]) {
-    let fahrzeug_name: string;
-    let fahrzeug_id:number;
-    let drop:JQuery = $('#inputGroupSelect01')
-    let dropBody:JQuery;
-    drop.empty();
-    drop.append('<option selected id="dropID"> Choose ... </option>');
-    for (let i = 0; i<fahrzeugListe.length; i++){
-         fahrzeug_name = fahrzeugListe[i].name;
-         fahrzeug_id = fahrzeugListe[i].id;
-         dropBody =$(`<option  value=${fahrzeug_id} > ${fahrzeug_name} </option>`);
 
-             drop.append(dropBody)
+function getFahrzeugDropLieferung() {
+    let inputFahrzeug: string = String($('.custom-select2').val()).trim();
+    if (inputFahrzeug == "Choose ...")
+        $.ajax({
+            url: '/fahrzeug',
+            type: 'GET',
+            dataType: 'json',
+            success: (response) => {
+                inputFahrzeugDropLieferung(response.result)
+            },
+            error: (response) => {
+
+            },
+
+        });
+
+
+}
+
+function inputFahrzeugDropTaxi(fahrzeugListe: Fahrzeug[]) {
+    let fahrzeug_name: string;
+    let fahrzeug_id: number;
+    let drop: JQuery = $('.custom-select')
+    let dropBody: JQuery;
+    drop.empty();
+    drop.append('<option selected > Choose ... </option>');
+    for (let i = 0; i < fahrzeugListe.length; i++) {
+        fahrzeug_name = fahrzeugListe[i].name;
+        fahrzeug_id = fahrzeugListe[i].id;
+        dropBody = $(`<option  value=${fahrzeug_id} > ${fahrzeug_name} </option>`);
+
+        drop.append(dropBody)
+
+    }
+
+}
+
+function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
+    let fahrzeug_name: string;
+    let fahrzeug_id: number;
+    let drop: JQuery = $('.custom-select2')
+    let dropBody: JQuery;
+    drop.empty();
+    drop.append('<option selected > Choose ... </option>');
+    for (let i = 0; i < fahrzeugListe.length; i++) {
+        fahrzeug_name = fahrzeugListe[i].name;
+        fahrzeug_id = fahrzeugListe[i].id;
+        dropBody = $(`<option  value=${fahrzeug_id} > ${fahrzeug_name} </option>`);
+
+        drop.append(dropBody)
 
     }
 
