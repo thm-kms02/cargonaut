@@ -154,6 +154,7 @@ function findbyId(id: number, list: any[]) {
     return false;
 }
 
+
 app.post('/create/anzeige', (req: Request, res: Response) => {
     const anzeige: Anzeige = new Anzeige(req.body.user_id, req.body.ang_ges, req.body.datum, req.body.preis,
         req.body.start, req.body.ziel, req.body.beschreibung, req.body.id_fahrzeug, req.body.personen, req.body.ladeflaeche,

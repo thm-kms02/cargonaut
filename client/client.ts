@@ -23,11 +23,7 @@ let fahrzeugID2: number;
 let gesamtgewichtIN: number;
 let ladeflaecheIN: number;
 let ladehoeheIN: number;
-
-
-
-    let offerslist: Anzeige[];
-
+let offerslist: Anzeige[];
 
 
 $(() => {
