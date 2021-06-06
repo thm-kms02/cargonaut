@@ -71,7 +71,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
                 for (let offer of offers) {
                     let store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe, store.name,store.bild_pfad));
+                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe, store.name, store.bild_pfad));
                     } else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
