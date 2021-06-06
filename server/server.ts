@@ -268,3 +268,19 @@ app.post('/create/account', (req: Request, res: Response) => {
         }
     });
 });
+
+app.put('/update/user', (req: Request, res: Response) => {
+    let email: string = req.body.email;
+    let name: string = req.body.name;
+    let phonenmbr: string = req.body.handyNr;
+
+    let query: string = "UPDATE user SET name=?, handyNr=? WHERE user.email=?";
+    let data = [name, phonenmbr, email];
+    database.query(query, data,(err: MysqlError, results:any) => {
+        if(err===null) {
+            res.status(200).send({"message":"User updated."});
+        } else {
+            res.status(500).send({err});
+        }
+    });
+});

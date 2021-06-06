@@ -153,7 +153,7 @@ function addAnzeige() {
     let ladeflaeche: number;
     let ladungsgewicht: number;
     let ladehoehe: number;
-    if (person != 0 && ladeflaeche == 0 && ladungsgewicht == 0) {
+    if (person != 0) {
         start = von;
         ziel = nach;
         datum = setDate;
@@ -196,6 +196,29 @@ function addAnzeige() {
             "ladungsgewicht": ladungsgewicht,
             "ladehoehe": ladehoehe
 
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function updateUser() {
+    let email: string;
+    let name: string;
+    let handynmbr: string;
+    $.ajax({
+        url: '/update/user',
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+           "email": email,
+            "name": name,
+            "handyNr": handynmbr,
         }),
         success: (response) => {
             console.log("sucess");
@@ -350,7 +373,6 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
         dropBody = $(`<option  value=${fahrzeug_id} > ${fahrzeug_name} </option>`);
 
         drop.append(dropBody)
-
     }
 
 }
