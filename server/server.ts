@@ -109,6 +109,19 @@ app.get('/fahrzeug', (req: Request, res: Response) => {
     });
 });
 
+app.get('/messages/:userID', (req: Request, res: Response) => {
+   let id: number = Number(req.params.userID);
+   let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
+    let data = [id];
+   database.query(query, data, (err: MysqlError, rows: any) => {
+       if(err===null) {
+           res.status(200).send({rows});
+       } else {
+           res.status(500).send({err});
+       }
+   });
+});
+
 app.get('/anzeige_bild', (req: Request, res: Response) => {
     let offerslist: Anzeige_bild[] = [];
     let an_bild: any[];
@@ -173,7 +186,7 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
             cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         } else {
             data = [results.insertId];
-            cQuery = "DELETE from anzeige WHERE id=?)";
+            cQuery = "DELETE from anzeige WHERE id=?";
         }
         database.query(cQuery, data, (err) => {
             if (err === null) {
@@ -250,8 +263,23 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
             res.sendStatus(500);
         }
     });
-
 });
+
+app.post('/create/message', (req: Request, res: Response) => {
+    let absender: number = Number(req.body.absender);
+    let empfaenger: number = Number(req.body.empfaenger);
+    let inhalt: string = req.body.inhalt;
+    let cquery: string = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
+    let data = [absender, empfaenger, inhalt];
+    database.query(cquery, data, (err: MysqlError) => {
+        if(err===null) {
+            res.status(200).send({"message":"Message created"});
+        } else {
+            res.status(500).send({err});
+        }
+    });
+});
+
 
 app.post('/create/account', (req: Request, res: Response) => {
     const user: User = new User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);

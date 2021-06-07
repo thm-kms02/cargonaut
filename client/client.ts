@@ -44,6 +44,7 @@ $(() => {
     createOfferBTN.on('click', () => {
         mainarea.hide();
         addOfferArea.show();
+     sendMessage();
 
     });
 
@@ -205,11 +206,48 @@ function addAnzeige() {
         },
     });
 }
+function sendMessage() {
+    let message: string;
+    let absender: number;
+    let empfaenger: number;
+    $.ajax({
+        url: '/create/message',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "absender": absender,
+            "empfaenger": empfaenger,
+            "inhalt": message,
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+function getmyMessages() {
+    let id: number;
+    $.ajax({
+        url: '/messages/' + id,
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
 
+        success: (response) => {
+            console.log(response);
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
 function updateUser() {
-    let email: string;
-    let name: string;
-    let handynmbr: string;
+    let email: string= "test@gmail21.commm";
+    let name: string="testname";
+    let handynmbr: string= "testhandy";
     $.ajax({
         url: '/update/user',
         type: 'PUT',
