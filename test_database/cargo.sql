@@ -25,35 +25,6 @@ CREATE DATABASE IF NOT EXISTS `cargo` DEFAULT CHARACTER SET utf8 COLLATE utf8_ge
 USE `cargo`;
 
 
--- phpMyAdmin SQL Dump
--- version 5.1.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Erstellungszeit: 07. Jun 2021 um 12:41
--- Server-Version: 10.4.19-MariaDB
--- PHP-Version: 7.3.28
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Datenbank: `cargo`
---
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `anzeige`
---
-
 CREATE TABLE `anzeige` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -112,6 +83,25 @@ INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `z
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `buchungen`
+--
+
+CREATE TABLE `buchungen` (
+  `id` int(11) NOT NULL,
+  `id_kasse` int(11) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `buchungen`
+--
+
+INSERT INTO `buchungen` (`id`, `id_kasse`, `datum`) VALUES
+(1, 1, '2021-06-07 11:15:15');
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `fahrzeug`
 --
 
@@ -150,6 +140,30 @@ INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `kasse`
+--
+
+CREATE TABLE `kasse` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `anz_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `kasse`
+--
+
+INSERT INTO `kasse` (`id`, `user_id`, `anz_ID`) VALUES
+(1, 1, 111),
+(2, 1, 111),
+(3, 1, 111),
+(4, 1, 111),
+(5, 1, 111),
+(6, 1, 111);
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `lieferung`
 --
 
@@ -182,6 +196,19 @@ INSERT INTO `lieferung` (`anz_ID`, `ladeflaeche`, `ladungsgewicht`, `ladehoehe`)
 (128, 3, 3, 3),
 (130, 3, 3, 3),
 (132, 3, 3, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `nachricht`
+--
+
+CREATE TABLE `nachricht` (
+  `id` int(11) NOT NULL,
+  `id_absender` int(11) NOT NULL,
+  `id_empfaenger` int(11) NOT NULL,
+  `inhalt` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -269,6 +296,13 @@ ALTER TABLE `anzeige`
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
 
 --
+-- Indizes für die Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_kasse` (`id_kasse`);
+
+--
 -- Indizes für die Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
@@ -276,11 +310,27 @@ ALTER TABLE `fahrzeug`
   ADD KEY `id_user` (`user_id`);
 
 --
+-- Indizes für die Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`anz_ID`),
+  ADD KEY `anz_ID` (`anz_ID`);
+
+--
 -- Indizes für die Tabelle `lieferung`
 --
 ALTER TABLE `lieferung`
   ADD PRIMARY KEY (`anz_ID`),
   ADD KEY `anz_ID` (`anz_ID`);
+
+--
+-- Indizes für die Tabelle `nachricht`
+--
+ALTER TABLE `nachricht`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_absender` (`id_absender`),
+  ADD KEY `id_empfaenger` (`id_empfaenger`);
 
 --
 -- Indizes für die Tabelle `personenbefoerderung`
@@ -306,10 +356,28 @@ ALTER TABLE `anzeige`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
+-- AUTO_INCREMENT für Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT für Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `nachricht`
+--
+ALTER TABLE `nachricht`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
@@ -328,16 +396,36 @@ ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints der Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  ADD CONSTRAINT `buchungen_ibfk_1` FOREIGN KEY (`id_kasse`) REFERENCES `kasse` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints der Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
   ADD CONSTRAINT `fahrzeug_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints der Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD CONSTRAINT `kasse_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `kasse_ibfk_2` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints der Tabelle `lieferung`
 --
 ALTER TABLE `lieferung`
   ADD CONSTRAINT `lieferung_ibfk_1` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `nachricht`
+--
+ALTER TABLE `nachricht`
+  ADD CONSTRAINT `nachricht_ibfk_1` FOREIGN KEY (`id_absender`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `nachricht_ibfk_2` FOREIGN KEY (`id_empfaenger`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `personenbefoerderung`
