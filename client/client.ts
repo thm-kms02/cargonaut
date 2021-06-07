@@ -153,7 +153,7 @@ function addAnzeige() {
     let ladeflaeche: number;
     let ladungsgewicht: number;
     let ladehoehe: number;
-    if (person != 0) {
+    if (person != 0 ) {
         start = von;
         ziel = nach;
         datum = setDate;

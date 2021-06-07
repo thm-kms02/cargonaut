@@ -7,6 +7,8 @@ import {User} from "../class/user";
 import {Anzeige_bild} from "../class/anzeige_bild";
 import {Fahrzeug} from "../class/fahrzeug";
 import {AnzeigeRender} from "../class/anzeigeRender";
+import {Kasse} from "../class/kasse";
+import {Buchen} from "../class/buchen";
 import {log} from "util";
 
 const app = express();
@@ -281,6 +283,42 @@ app.put('/update/user', (req: Request, res: Response) => {
             res.status(200).send({"message":"User updated."});
         } else {
             res.status(500).send({err});
+        }
+    });
+});
+
+app.post('/kasse', (req: Request, res: Response) => {
+    const kasse: Kasse = new Kasse(req.body.user_id,req.body.anz_ID);
+    let data = [kasse.user_id,kasse.anz_ID]
+    let cQuery: string = "INSERT INTO kasse (user_id, anz_ID) VALUES (?, ?);";
+    database.query(cQuery, data, (err, results: any) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde in die Kasse gelegt");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+
+app.post('/buchen', (req: Request, res: Response) => {
+    const buchen: Buchen = new Buchen(req.body.id_kasse);
+    let data = [buchen.id_kasse]
+    let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
+    database.query(cQuery, data, (err, results: any) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde gebucht");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
         }
     });
 });
