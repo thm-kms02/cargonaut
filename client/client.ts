@@ -409,7 +409,6 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
         fahrzeug_name = fahrzeugListe[i].name;
         fahrzeug_id = fahrzeugListe[i].id;
         dropBody = $(`<option  value=${fahrzeug_id} > ${fahrzeug_name} </option>`);
-
         drop.append(dropBody)
     }
 
