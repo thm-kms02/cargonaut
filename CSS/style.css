@@ -112,7 +112,10 @@
 #message-text{
     border-radius:20px;
 }
-
+#i{
+    color: black;
+    font-size:40px;
+}
 .header-dark .navbar .form-inline label {
     color:#ccc;
 }
