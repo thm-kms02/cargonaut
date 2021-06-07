@@ -9,10 +9,10 @@ const host = require("../server/server");
 
 chain.should();
 chain.use(chaiHttps);
+
 describe("Post /create/Account", async () => {
     it("Erstellt ein Account", (done) => {
         const account = {
-//email ist Uniqe, bitte vor jedem Test ändern
             email: "test@gmail21.commm",
             name: "Max Mustermann",
             handyNr:"+49293204803",
@@ -30,7 +30,6 @@ describe("Post /create/Account", async () => {
     });
 
 });
-
 describe("Post/create/fahrzeug", async  () => {
     it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
         const fahrzeug = {
@@ -54,7 +53,7 @@ describe("Post/create/fahrzeug", async  () => {
             });
     });
 });
-    describe("Post /create/Anzeige", async () => {
+describe("Post /create/Anzeige", async () => {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", (done) => {
             const anzeige = {
                 user_id: 1,
@@ -110,3 +109,41 @@ describe("Post/create/fahrzeug", async  () => {
 
 
     });
+describe("Get/filter", async () =>{
+
+});
+
+describe("Post/Kasse/hinzufuegen", async () =>{
+    it("Fügt Anzeige in die Kasse", (done) => {
+        const kasse = {
+            user_id: 1,
+            anz_ID: 111
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/kasse")
+            .send(kasse)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+
+});
+describe("Post/Kasse/buchen", async () =>{
+    it("bucht eine Anzeige aus der Kasse", (done) => {
+        const buchen= {
+            id_kasse: 1,
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/buchen")
+            .send(buchen)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+});

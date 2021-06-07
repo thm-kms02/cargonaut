@@ -49,7 +49,6 @@ mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it("Erstellt ein Account", function (done) {
             var account = {
-                //email ist Uniqe, bitte vor jedem Test ändern
                 email: "test@gmail21.commm",
                 name: "Max Mustermann",
                 handyNr: "+49293204803",
@@ -138,6 +137,50 @@ mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, 
                 .request("http://localhost:8080")
                 .post("/create/anzeige")
                 .send(anzeige)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
+mocha_1.describe("Get/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); });
+mocha_1.describe("Post/Kasse/hinzufuegen", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("Fügt Anzeige in die Kasse", function (done) {
+            var kasse = {
+                user_id: 1,
+                anz_ID: 111
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/kasse")
+                .send(kasse)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
+mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("bucht eine Anzeige aus der Kasse", function (done) {
+            var buchen = {
+                id_kasse: 1,
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/buchen")
+                .send(buchen)
                 .end(function (err, response) {
                 console.log(response.status);
                 response.should.have.status(201);

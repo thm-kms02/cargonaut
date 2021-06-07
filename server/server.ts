@@ -7,6 +7,8 @@ import {User} from "../class/user";
 import {Anzeige_bild} from "../class/anzeige_bild";
 import {Fahrzeug} from "../class/fahrzeug";
 import {AnzeigeRender} from "../class/anzeigeRender";
+import {Kasse} from "../class/kasse";
+import {Buchen} from "../class/buchen";
 import {log} from "util";
 
 const app = express();
@@ -107,6 +109,19 @@ app.get('/fahrzeug', (req: Request, res: Response) => {
     });
 });
 
+app.get('/messages/:userID', (req: Request, res: Response) => {
+   let id: number = Number(req.params.userID);
+   let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
+    let data = [id];
+   database.query(query, data, (err: MysqlError, rows: any) => {
+       if(err===null) {
+           res.status(200).send({rows});
+       } else {
+           res.status(500).send({err});
+       }
+   });
+});
+
 app.get('/anzeige_bild', (req: Request, res: Response) => {
     let offerslist: Anzeige_bild[] = [];
     let an_bild: any[];
@@ -171,7 +186,7 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
             cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         } else {
             data = [results.insertId];
-            cQuery = "DELETE from anzeige WHERE id=?)";
+            cQuery = "DELETE from anzeige WHERE id=?";
         }
         database.query(cQuery, data, (err) => {
             if (err === null) {
@@ -248,8 +263,23 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
             res.sendStatus(500);
         }
     });
-
 });
+
+app.post('/create/message', (req: Request, res: Response) => {
+    let absender: number = Number(req.body.absender);
+    let empfaenger: number = Number(req.body.empfaenger);
+    let inhalt: string = req.body.inhalt;
+    let cquery: string = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
+    let data = [absender, empfaenger, inhalt];
+    database.query(cquery, data, (err: MysqlError) => {
+        if(err===null) {
+            res.status(200).send({"message":"Message created"});
+        } else {
+            res.status(500).send({err});
+        }
+    });
+});
+
 
 app.post('/create/account', (req: Request, res: Response) => {
     const user: User = new User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
@@ -281,6 +311,42 @@ app.put('/update/user', (req: Request, res: Response) => {
             res.status(200).send({"message":"User updated."});
         } else {
             res.status(500).send({err});
+        }
+    });
+});
+
+app.post('/kasse', (req: Request, res: Response) => {
+    const kasse: Kasse = new Kasse(req.body.user_id,req.body.anz_ID);
+    let data = [kasse.user_id,kasse.anz_ID]
+    let cQuery: string = "INSERT INTO kasse (user_id, anz_ID) VALUES (?, ?);";
+    database.query(cQuery, data, (err, results: any) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde in die Kasse gelegt");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+
+app.post('/buchen', (req: Request, res: Response) => {
+    const buchen: Buchen = new Buchen(req.body.id_kasse);
+    let data = [buchen.id_kasse]
+    let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
+    database.query(cQuery, data, (err, results: any) => {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde gebucht");
+        } else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
         }
     });
 });
