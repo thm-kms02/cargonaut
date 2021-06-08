@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Jun 2021 um 16:52
+-- Erstellungszeit: 08. Jun 2021 um 17:06
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 7.3.27
 
@@ -39,34 +39,6 @@ CREATE TABLE `anzeige` (
   `id_fahrzeug` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Daten für Tabelle `anzeige`
---
-
-INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `ziel`, `beschreibung`, `id_fahrzeug`) VALUES
-(96, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(97, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(98, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(99, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(100, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(101, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(102, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(103, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(104, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(105, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(106, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(107, 1, 1, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(108, 1, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(109, 1, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(110, 1, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(111, 1, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 10),
-(112, 1, 1, '2021-06-23', 300, 'Kassel', 'Nürnberg', 'Final test', 15),
-(113, 1, 1, '2021-06-23', 300, 'Kassel', 'Nürnberg', 'Final test', 15),
-(114, 1, 1, '2021-06-26', 2000, 'Berghausen', 'Ludwigshafen', 'Beratigung', 12),
-(115, 1, 1, '2021-06-03', 400, 'Ka', 'Am', 'dakslkaskd', 14),
-(116, 1, 1, '2021-06-24', 200, 'abcd', 'efgh', 'saklmdlkmaslkmasdlkmaslkmd', 14),
-(117, 1, 1, '2021-06-10', 4, 'sdfsd', 'sdfdsf', 'gfhfghgf', 11);
-
 -- --------------------------------------------------------
 
 --
@@ -83,21 +55,6 @@ CREATE TABLE `fahrzeug` (
   `bild_pfad` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Daten für Tabelle `fahrzeug`
---
-
-INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `bild_pfad`) VALUES
-(10, 1, 'VW Golf', 2010, 500, 1500, 'bilder/img.png'),
-(11, 1, 'lamborgini', 2010, 500, 1500, 'bilder/img.png'),
-(12, 1, 'ferrari', 2010, 500, 1500, 'bilder/img.png'),
-(13, 1, 'opel', 2010, 500, 1500, 'bilder/img.png'),
-(14, 1, 'nissan', 2010, 500, 1500, 'bilder/img.png'),
-(15, 1, 'mercedes', 2010, 500, 1500, 'bilder/img.png'),
-(16, 1, 'touran', 2010, 500, 1500, 'bilder/img.png'),
-(17, 1, 'sharan', 2010, 500, 1500, 'bilder/img.png'),
-(18, 1, 'casczs', 2010, 500, 1500, 'bilder/img.png');
-
 -- --------------------------------------------------------
 
 --
@@ -110,21 +67,6 @@ CREATE TABLE `lieferung` (
   `ladungsgewicht` int(11) NOT NULL,
   `ladehoehe` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `lieferung`
---
-
-INSERT INTO `lieferung` (`anz_ID`, `ladeflaeche`, `ladungsgewicht`, `ladehoehe`) VALUES
-(97, 3, 3, 3),
-(99, 3, 3, 3),
-(101, 3, 3, 3),
-(103, 3, 3, 3),
-(105, 3, 3, 3),
-(107, 3, 3, 3),
-(109, 3, 3, 3),
-(111, 3, 3, 3),
-(116, 20, 30, 5);
 
 -- --------------------------------------------------------
 
@@ -167,25 +109,6 @@ CREATE TABLE `personenbefoerderung` (
   `personen` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Daten für Tabelle `personenbefoerderung`
---
-
-INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
-(96, 4),
-(98, 4),
-(100, 4),
-(102, 4),
-(104, 4),
-(106, 4),
-(108, 4),
-(110, 4),
-(112, 10),
-(113, 10),
-(114, 23),
-(115, 4),
-(117, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -205,15 +128,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `handyNr`, `passwort`) VALUES
-(1, 'test@gmail.com', 'Max Mustermann', '+49293204803', 'test1234'),
-(31, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(32, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(33, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(34, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(35, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(36, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(37, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(38, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234');
+(31, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234');
 
 --
 -- Indizes der exportierten Tabellen
@@ -258,7 +173,8 @@ ALTER TABLE `personenbefoerderung`
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
