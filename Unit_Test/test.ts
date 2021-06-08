@@ -13,7 +13,7 @@ chain.use(chaiHttps);
 describe("Post /create/Account", async () => {
     it("Erstellt ein Account", (done) => {
         const account = { // email vor test/push immer ändern (unique)
-            email: "test66@gmail.comm",
+            email: "test71@gmail.comm",
             name: "Max Mustermann",
             handyNr:"+49293204803",
             passwort:"test1234"
@@ -150,7 +150,7 @@ describe("Post/Kasse/hinzufuegen", async () =>{
     it("Fügt Anzeige in die Kasse", (done) => {
         const kasse = {
             user_id: 31,
-            anz_ID: 111
+            anz_ID: 119
         };
         chain
             .request("http://localhost:8080")
@@ -167,7 +167,7 @@ describe("Post/Kasse/hinzufuegen", async () =>{
 describe("Post/Kasse/buchen", async () =>{
     it("bucht eine Anzeige aus der Kasse", (done) => {
         const buchen= {
-            id_kasse: 1,
+            id_kasse: 8,
         };
         chain
             .request("http://localhost:8080")

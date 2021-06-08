@@ -49,7 +49,7 @@ mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it("Erstellt ein Account", function (done) {
             var account = {
-                email: "test66@gmail.comm",
+                email: "test71@gmail.comm",
                 name: "Max Mustermann",
                 handyNr: "+49293204803",
                 passwort: "test1234"
@@ -189,7 +189,7 @@ mocha_1.describe("Post/Kasse/hinzufuegen", function () { return __awaiter(void 0
         it("Fügt Anzeige in die Kasse", function (done) {
             var kasse = {
                 user_id: 31,
-                anz_ID: 111
+                anz_ID: 119
             };
             chain
                 .request("http://localhost:8080")
@@ -208,7 +208,7 @@ mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, voi
     return __generator(this, function (_a) {
         it("bucht eine Anzeige aus der Kasse", function (done) {
             var buchen = {
-                id_kasse: 1,
+                id_kasse: 8,
             };
             chain
                 .request("http://localhost:8080")
