@@ -105,13 +105,13 @@ app.get('/fahrzeug', function (req, res) {
         }
     });
 });
-app.get('/messages/:userID', function (req, res) {
-    var id = Number(req.params.userID);
+app.get('/messages/:userMail', function (req, res) {
+    var id = req.params.userMail;
     var query = "SELECT * FROM nachricht WHERE empfaenger_id=?";
     var data = [id];
     database.query(query, data, function (err, rows) {
         if (err === null) {
-            res.status(200).send({ rows: rows });
+            res.status(200).send({ result: rows });
         }
         else {
             res.status(500).send({ err: err });
@@ -258,14 +258,14 @@ app.post('/create/anzeige_bild', function (req, res) {
     });
 });
 app.post('/create/message', function (req, res) {
-    var absender = Number(req.body.absender);
-    var empfaenger = Number(req.body.empfaenger);
+    var absender = req.body.absender;
+    var empfaenger = req.body.empfaenger;
     var inhalt = req.body.inhalt;
     var cquery = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
     var data = [absender, empfaenger, inhalt];
     database.query(cquery, data, function (err) {
         if (err === null) {
-            res.status(200).send({ "message": "Message created" });
+            res.status(201).send({ "message": "Message created" });
         }
         else {
             res.status(500).send({ err: err });

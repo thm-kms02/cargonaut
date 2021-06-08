@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Jun 2021 um 17:06
+-- Erstellungszeit: 08. Jun 2021 um 17:15
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 7.3.27
 
@@ -78,25 +78,9 @@ CREATE TABLE `nachricht` (
   `absender_id` varchar(255) NOT NULL,
   `empfaenger_id` varchar(255) NOT NULL,
   `inhalt` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `nachricht_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `nachricht`
---
-
-INSERT INTO `nachricht` (`absender_id`, `empfaenger_id`, `inhalt`, `date`) VALUES
-('2', '1', 'Test', '2021-06-08 14:36:27'),
-('1', '31', 'test1234', '2021-06-08 14:36:27'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:38:41'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:43:06'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:43:26'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:46:25'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:46:46'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:48:04'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:48:26'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:51:03'),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 14:51:47');
 
 -- --------------------------------------------------------
 
@@ -160,7 +144,7 @@ ALTER TABLE `lieferung`
 -- Indizes für die Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  ADD KEY `absender_id` (`absender_id`,`empfaenger_id`);
+  ADD PRIMARY KEY (`nachricht_id`);
 
 --
 -- Indizes für die Tabelle `personenbefoerderung`
@@ -191,6 +175,12 @@ ALTER TABLE `anzeige`
 --
 ALTER TABLE `fahrzeug`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT für Tabelle `nachricht`
+--
+ALTER TABLE `nachricht`
+  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
