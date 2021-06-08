@@ -47,6 +47,17 @@ CREATE TABLE `anzeige` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
+--
+-- Tabellenstruktur für Tabelle `buchungen`
+--
+
+CREATE TABLE `buchungen` (
+  `id` int(11) NOT NULL,
+  `id_kasse` int(11) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `fahrzeug`
@@ -60,6 +71,18 @@ CREATE TABLE `fahrzeug` (
   `volumen` int(6) UNSIGNED NOT NULL,
   `gewicht` int(6) NOT NULL,
   `bild_pfad` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `kasse`
+--
+
+CREATE TABLE `kasse` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `anz_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -132,6 +155,13 @@ ALTER TABLE `anzeige`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
+  --
+  -- Indizes für die Tabelle `buchungen`
+  --
+  ALTER TABLE `buchungen`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id_kasse` (`id_kasse`);
+
 
 --
 -- Indizes für die Tabelle `fahrzeug`
@@ -139,6 +169,14 @@ ALTER TABLE `anzeige`
 ALTER TABLE `fahrzeug`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`user_id`);
+
+--
+-- Indizes für die Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`anz_ID`),
+  ADD KEY `anz_ID` (`anz_ID`);
 
 --
 -- Indizes für die Tabelle `lieferung`
@@ -184,6 +222,18 @@ ALTER TABLE `fahrzeug`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT für Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT für Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT für Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
@@ -206,10 +256,23 @@ ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints der Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  ADD CONSTRAINT `buchungen_ibfk_1` FOREIGN KEY (`id_kasse`) REFERENCES `kasse` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints der Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
   ADD CONSTRAINT `fahrzeug_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD CONSTRAINT `kasse_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `kasse_ibfk_2` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `lieferung`

@@ -12,8 +12,8 @@ chain.use(chaiHttps);
 
 describe("Post /create/Account", async () => {
     it("Erstellt ein Account", (done) => {
-        const account = {
-            email: "test@gmail21.commm",
+        const account = { // email vor test/push immer ändern (unique)
+            email: "test66@gmail.comm",
             name: "Max Mustermann",
             handyNr:"+49293204803",
             passwort:"test1234"
@@ -33,7 +33,7 @@ describe("Post /create/Account", async () => {
 describe("Messages", async () => {
     it("Erstellt eine Nachricht", (done) => {
         const message = {
-            absender: "test@gmail21.commm",
+            absender: "test66@gmail.com",
             empfaenger: "test@gmail21.commm",
             inhalt:"Nachrichten test"
         };
@@ -66,7 +66,7 @@ describe("Messages", async () => {
 describe("Post/create/fahrzeug", async  () => {
     it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
         const fahrzeug = {
-            user_id: 1,
+            user_id: 31,
             name: "VW Golf",
             jahr:2010,
             volumen: 500,
@@ -89,7 +89,7 @@ describe("Post/create/fahrzeug", async  () => {
 describe("Post /create/Anzeige", async () => {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", (done) => {
             const anzeige = {
-                user_id: 1,
+                user_id: 31,
                 ang_ges: 0,
                 datum:"2021-06-23",
                 preis: 300,
@@ -116,7 +116,7 @@ describe("Post /create/Anzeige", async () => {
 
         it("Soll eine Anzeige für Lieferung erstellen", (done) => {
             const anzeige = {
-                user_id: 1,
+                user_id: 31,
                 ang_ges: 0,
                 datum:"2021-06-23",
                 preis: 300,
@@ -149,7 +149,7 @@ describe("Get/filter", async () =>{
 describe("Post/Kasse/hinzufuegen", async () =>{
     it("Fügt Anzeige in die Kasse", (done) => {
         const kasse = {
-            user_id: 1,
+            user_id: 31,
             anz_ID: 111
         };
         chain

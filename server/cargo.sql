@@ -40,7 +40,6 @@ CREATE TABLE `anzeige` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
-
 --
 -- Tabellenstruktur für Tabelle `buchungen`
 --
@@ -99,12 +98,12 @@ CREATE TABLE `lieferung` (
 --
 
 CREATE TABLE `nachricht` (
-  `id` int(11) NOT NULL,
   `absender_id` varchar(255) NOT NULL,
   `empfaenger_id` varchar(255) NOT NULL,
   `inhalt` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `nachricht_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -136,7 +135,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `handyNr`, `passwort`) VALUES
-(31, 'test@gmail21.commm', 'Max Mustermann', '+49293204803', 'test1234');
+(31, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234');
 
 --
 -- Indizes der exportierten Tabellen
@@ -149,13 +148,13 @@ ALTER TABLE `anzeige`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
+  --
+  -- Indizes für die Tabelle `buchungen`
+  --
+  ALTER TABLE `buchungen`
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id_kasse` (`id_kasse`);
 
---
--- Indizes für die Tabelle `buchungen`
---
-ALTER TABLE `buchungen`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_kasse` (`id_kasse`);
 
 --
 -- Indizes für die Tabelle `fahrzeug`
@@ -183,7 +182,7 @@ ALTER TABLE `lieferung`
 -- Indizes für die Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`nachricht_id`);
 
 --
 -- Indizes für die Tabelle `personenbefoerderung`
@@ -196,7 +195,8 @@ ALTER TABLE `personenbefoerderung`
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -206,19 +206,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `anzeige`
 --
 ALTER TABLE `anzeige`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+
+--
+-- AUTO_INCREMENT für Tabelle `fahrzeug`
+--
+ALTER TABLE `fahrzeug`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT für Tabelle `fahrzeug`
---
-ALTER TABLE `fahrzeug`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT für Tabelle `kasse`
@@ -230,13 +230,13 @@ ALTER TABLE `kasse`
 -- AUTO_INCREMENT für Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints der exportierten Tabellen

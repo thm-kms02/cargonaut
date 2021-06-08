@@ -49,7 +49,7 @@ mocha_1.describe("Post /create/Account", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it("Erstellt ein Account", function (done) {
             var account = {
-                email: "test@gmail21.commm",
+                email: "test66@gmail.comm",
                 name: "Max Mustermann",
                 handyNr: "+49293204803",
                 passwort: "test1234"
@@ -71,7 +71,7 @@ mocha_1.describe("Messages", function () { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         it("Erstellt eine Nachricht", function (done) {
             var message = {
-                absender: "test@gmail21.commm",
+                absender: "test66@gmail.com",
                 empfaenger: "test@gmail21.commm",
                 inhalt: "Nachrichten test"
             };
@@ -104,7 +104,7 @@ mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
             var fahrzeug = {
-                user_id: 1,
+                user_id: 31,
                 name: "VW Golf",
                 jahr: 2010,
                 volumen: 500,
@@ -128,7 +128,7 @@ mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
             var anzeige = {
-                user_id: 1,
+                user_id: 31,
                 ang_ges: 0,
                 datum: "2021-06-23",
                 preis: 300,
@@ -153,7 +153,7 @@ mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, 
         });
         it("Soll eine Anzeige für Lieferung erstellen", function (done) {
             var anzeige = {
-                user_id: 1,
+                user_id: 31,
                 ang_ges: 0,
                 datum: "2021-06-23",
                 preis: 300,
@@ -188,7 +188,7 @@ mocha_1.describe("Post/Kasse/hinzufuegen", function () { return __awaiter(void 0
     return __generator(this, function (_a) {
         it("Fügt Anzeige in die Kasse", function (done) {
             var kasse = {
-                user_id: 1,
+                user_id: 31,
                 anz_ID: 111
             };
             chain
