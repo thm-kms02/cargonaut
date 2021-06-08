@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Jun 2021 um 17:15
+-- Erstellungszeit: 08. Jun 2021 um 17:23
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 7.3.27
 
@@ -81,6 +81,14 @@ CREATE TABLE `nachricht` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `nachricht_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `nachricht`
+--
+
+INSERT INTO `nachricht` (`absender_id`, `empfaenger_id`, `inhalt`, `date`, `nachricht_id`) VALUES
+('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 15:18:45', 1),
+('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 15:22:45', 2);
 
 -- --------------------------------------------------------
 
@@ -180,7 +188,7 @@ ALTER TABLE `fahrzeug`
 -- AUTO_INCREMENT für Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
