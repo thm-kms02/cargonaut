@@ -103,7 +103,19 @@
 .header-dark .navbar .action-button:hover {
     background:#269d9d;
 }
-
+#tracking{
+    border-radius:20px;
+}
+#feld{
+    border-radius:20px;
+}
+#message-text{
+    border-radius:20px;
+}
+#i{
+    color: black;
+    font-size:40px;
+}
 .header-dark .navbar .form-inline label {
     color:#ccc;
 }

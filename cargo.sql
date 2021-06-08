@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Mai 2021 um 20:45
--- Server-Version: 10.4.18-MariaDB
--- PHP-Version: 8.0.3
+-- Erstellungszeit: 07. Jun 2021 um 12:57
+-- Server-Version: 10.4.19-MariaDB
+-- PHP-Version: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,13 +17,15 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-# Create Testuser
-CREATE USER 'dev'@'localhost' IDENTIFIED BY 'dev';
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'dev'@'localhost';
-# Create DB
-CREATE DATABASE IF NOT EXISTS `cargo` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `cargo`;
+--
+-- Datenbank: `cargo`
+--
 
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `anzeige`
+--
 
 CREATE TABLE `anzeige` (
   `id` int(11) NOT NULL,

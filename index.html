@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
     <script src="client/client.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="undefined" crossorigin="anonymous">
     <link rel="stylesheet" href="CSS/style.css" />
 
 
@@ -63,10 +64,40 @@
                         <div class="form-group"><label for="search-field"><i class="fa fa-search"></i></label><input class="form-control search-field" type="search" name="search" id="search-field"></div>
                     </form><span class="navbar-text"><a href="#" class="login">Log In</a></span><a class="btn btn-light action-button" role="button" href="#">Sign Up</a></div>
             </div>
+                    <i class="fa fa-map-marker" data-bs-toggle="modal" data-bs-target="#trackModal" data-bs-whatever="@getbootstrap" aria-hidden="true" id="i"></i>
+
         </nav>
     </div>
 
 </div>
+    <!---------trackmodalfenster------------>
+    <div class="modal fade" id="trackModal" tabindex="-1" aria-labelledby="trackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="trackModalLabel">Tracking</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary mb-3" id="tracking">Tracking</button>
+                        </div>
+                        <div class="col-sm-9">
+                            <input  class="form-control"  id="feld" placeholder="Bitte geben Sie hier die tracknummer ein ">
+                        </div>
+                        <div class="mb-lg-3">
+                            <label for="message-text" class="col-form-label">Tracking Informationen</label>
+                            <textarea class="form-control" rows="15" id="message-text"></textarea>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div id="addOfferArea" class="area">
     <div class="row">
@@ -145,6 +176,7 @@
             <div class="contentCenter">
                 <button class="btn btn-dark" id="submitOfferBtn">Abschicken</button>
             </div>
+
 
             <!-- Modalfenster für Personenbeförderung -->
             <div class="modal fade" id="personenbefoerderungModal" tabindex="-1" aria-labelledby="personenbefoerderungModalLabel" aria-hidden="true">
