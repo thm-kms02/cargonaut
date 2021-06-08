@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Jun 2021 um 17:23
+-- Erstellungszeit: 08. Jun 2021 um 17:36
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 7.3.27
 
@@ -42,6 +42,18 @@ CREATE TABLE `anzeige` (
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `buchungen`
+--
+
+CREATE TABLE `buchungen` (
+  `id` int(11) NOT NULL,
+  `id_kasse` int(11) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `fahrzeug`
 --
 
@@ -53,6 +65,18 @@ CREATE TABLE `fahrzeug` (
   `volumen` int(6) UNSIGNED NOT NULL,
   `gewicht` int(6) NOT NULL,
   `bild_pfad` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `kasse`
+--
+
+CREATE TABLE `kasse` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `anz_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -75,20 +99,12 @@ CREATE TABLE `lieferung` (
 --
 
 CREATE TABLE `nachricht` (
+  `id` int(11) NOT NULL,
   `absender_id` varchar(255) NOT NULL,
   `empfaenger_id` varchar(255) NOT NULL,
   `inhalt` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `nachricht_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `nachricht`
---
-
-INSERT INTO `nachricht` (`absender_id`, `empfaenger_id`, `inhalt`, `date`, `nachricht_id`) VALUES
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 15:18:45', 1),
-('test@gmail21.commm', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 15:22:45', 2);
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -120,7 +136,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `handyNr`, `passwort`) VALUES
-(31, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234');
+(31, 'test@gmail21.commm', 'Max Mustermann', '+49293204803', 'test1234');
 
 --
 -- Indizes der exportierten Tabellen
@@ -135,11 +151,26 @@ ALTER TABLE `anzeige`
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
 
 --
+-- Indizes für die Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_kasse` (`id_kasse`);
+
+--
 -- Indizes für die Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`user_id`);
+
+--
+-- Indizes für die Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`,`anz_ID`),
+  ADD KEY `anz_ID` (`anz_ID`);
 
 --
 -- Indizes für die Tabelle `lieferung`
@@ -152,7 +183,7 @@ ALTER TABLE `lieferung`
 -- Indizes für die Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  ADD PRIMARY KEY (`nachricht_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `personenbefoerderung`
@@ -165,8 +196,7 @@ ALTER TABLE `personenbefoerderung`
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -176,25 +206,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `anzeige`
 --
 ALTER TABLE `anzeige`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+
+--
+-- AUTO_INCREMENT für Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT für Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT für Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints der exportierten Tabellen
@@ -207,10 +249,23 @@ ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints der Tabelle `buchungen`
+--
+ALTER TABLE `buchungen`
+  ADD CONSTRAINT `buchungen_ibfk_1` FOREIGN KEY (`id_kasse`) REFERENCES `kasse` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints der Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
   ADD CONSTRAINT `fahrzeug_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `kasse`
+--
+ALTER TABLE `kasse`
+  ADD CONSTRAINT `kasse_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `kasse_ibfk_2` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `lieferung`
