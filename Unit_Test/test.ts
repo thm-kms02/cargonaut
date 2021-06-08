@@ -28,8 +28,41 @@ describe("Post /create/Account", async () => {
                 done()
             });
     });
-
 });
+
+describe("Messages", async () => {
+    it("Erstellt eine Nachricht", (done) => {
+        const message = {
+            absender: "test@gmail21.commm",
+            empfaenger: "test@gmail21.commm",
+            inhalt:"Nachrichten test"
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/create/message")
+            .send(message)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+    it("Holt Nachrichten eines Benutzers", (done) => {
+        const message = "test@gmail21.commm";
+        chain
+            .request("http://localhost:8080")
+            .get("/messages/" + message)
+            .send()
+            .end((err, response) => {
+                console.log(response.body);
+                response.should.have.status(200);
+                done()
+            });
+    });
+});
+
+
+
 describe("Post/create/fahrzeug", async  () => {
     it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
         const fahrzeug = {

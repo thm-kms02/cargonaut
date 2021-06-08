@@ -109,13 +109,13 @@ app.get('/fahrzeug', (req: Request, res: Response) => {
     });
 });
 
-app.get('/messages/:userID', (req: Request, res: Response) => {
-   let id: number = Number(req.params.userID);
+app.get('/messages/:userMail', (req: Request, res: Response) => {
+   let id: string = req.params.userMail;
    let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
     let data = [id];
    database.query(query, data, (err: MysqlError, rows: any) => {
        if(err===null) {
-           res.status(200).send({rows});
+           res.status(200).send({result:rows});
        } else {
            res.status(500).send({err});
        }
@@ -266,14 +266,14 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
 });
 
 app.post('/create/message', (req: Request, res: Response) => {
-    let absender: number = Number(req.body.absender);
-    let empfaenger: number = Number(req.body.empfaenger);
+    let absender: string =req.body.absender;
+    let empfaenger: string = req.body.empfaenger;
     let inhalt: string = req.body.inhalt;
     let cquery: string = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
     let data = [absender, empfaenger, inhalt];
     database.query(cquery, data, (err: MysqlError) => {
         if(err===null) {
-            res.status(200).send({"message":"Message created"});
+            res.status(201).send({"message":"Message created"});
         } else {
             res.status(500).send({err});
         }
