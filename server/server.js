@@ -9,6 +9,7 @@ var fahrzeug_1 = require("../class/fahrzeug");
 var anzeigeRender_1 = require("../class/anzeigeRender");
 var kasse_1 = require("../class/kasse");
 var buchen_1 = require("../class/buchen");
+var session = require("express-session");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -22,6 +23,8 @@ app.use("/", express.static(basedir + '/CSS/'));
 app.use("/", express.static(basedir + '/bilder/'));
 app.use("/", express.static(basedir));
 app.use(express.json());
+// Session-Route
+app.use(session({ cookie: { expires: new Date(Date.now() + 1000 * 60 * 60) }, secret: Math.random().toString() }));
 app.listen(8080, function () {
     console.log('Server started at http://localhost:8080');
 });
@@ -32,6 +35,33 @@ database.connect(function (err) {
     else {
         console.log('Database is connected');
     }
+});
+app.get('/login', function (require, res) {
+    var email = require.body.email;
+    var passwort = require.body.passwort;
+    var query = 'SELECT passwort from user where email = email';
+    database.query(query, function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Diese Emailadresse ist nicht registriert',
+                result: false
+            });
+        }
+        else {
+            if (passwort == rows.passwort) {
+                res.status(200).send({
+                    message: 'Anmeldung war erfolgreich',
+                    result: true
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: 'Passwort ist falsch',
+                    result: false
+                });
+            }
+        }
+    });
 });
 app.get('/anzeige', function (req, res) {
     var offerslist = [];

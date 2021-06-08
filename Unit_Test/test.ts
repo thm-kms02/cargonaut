@@ -180,3 +180,21 @@ describe("Post/Kasse/buchen", async () =>{
             });
     });
 });
+/*
+describe("post/login", async () =>{
+    it("bucht eine Anzeige aus der Kasse", (done) => {
+        const login= {
+            email:'test@gmail.com',
+            passwort:'test1234',
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/login")
+            .send(login)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+});*/

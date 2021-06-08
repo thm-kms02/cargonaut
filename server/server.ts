@@ -9,7 +9,7 @@ import {Fahrzeug} from "../class/fahrzeug";
 import {AnzeigeRender} from "../class/anzeigeRender";
 import {Kasse} from "../class/kasse";
 import {Buchen} from "../class/buchen";
-import {log} from "util";
+import * as session from  "express-session";
 
 const app = express();
 const database: Connection = mysql.createConnection({
@@ -25,6 +25,8 @@ app.use("/", express.static(basedir + '/bilder/'));
 app.use("/", express.static(basedir));
 
 app.use(express.json());
+// Session-Route
+app.use(session({cookie: {expires: new Date(Date.now() + 1000 * 60 * 60)}, secret: Math.random().toString()}))
 
 app.listen(8080, () => {
     console.log('Server started at http://localhost:8080');
@@ -38,6 +40,32 @@ database.connect((err: MysqlError) => {
     }
 });
 
+app.get('/login',(require:Request,res:Response) =>{
+    let email:string = require.body.email;
+    let passwort:string = require.body.passwort;
+    const query:string = 'SELECT passwort from user where email = email'
+    database.query(query, (err:MysqlError,rows:any) =>  {
+        if (err){
+            res.status(500).send({
+                message:'Diese Emailadresse ist nicht registriert',
+                result:false
+            })
+        }else {
+            if (passwort==rows.passwort){
+                res.status(200).send({
+                    message:'Anmeldung war erfolgreich',
+                    result:true
+                })
+            }else {
+                res.status(400).send({
+                    message:'Passwort ist falsch',
+                    result:false
+                })
+            }
+        }
+
+    })
+});
 app.get('/anzeige', (req: Request, res: Response) => {
     let offerslist: AnzeigeRender[] = [];
     let offers: any[];
