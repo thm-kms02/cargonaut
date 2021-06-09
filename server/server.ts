@@ -11,6 +11,7 @@ import {Kasse} from "../class/kasse";
 import {Buchen} from "../class/buchen";
 import * as session from  "express-session";
 
+
 const app = express();
 const database: Connection = mysql.createConnection({
     host: 'localhost',

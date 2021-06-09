@@ -2,6 +2,7 @@ import {AnzeigeRender} from "../class/anzeigeRender";
 import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
 import {Anzeige} from "../class/anzeige";
+import * as L from "../node_modules/leaflet/dist/leaflet";
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -11,6 +12,10 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
+let testBTN: JQuery;
+let mapArea: JQuery;
+
+
 let person: number;
 let von: string;
 let nach: string;
@@ -35,11 +40,17 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
+    testBTN = $("#testbutton");
+    mapArea = $('#mapArea');
 
 
     getAll();
 
     addOfferArea.hide();
+
+    testBTN.on('click', () => {
+        showMap();
+    });
 
     createOfferBTN.on('click', () => {
         mainarea.hide();
@@ -82,6 +93,18 @@ function getAll() {
         },
     });
 
+}
+
+function showMap() {
+    const mymap = L.map('mapArea').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'your.mapbox.access.token'
+    }).addTo(mymap);
 }
 
 function saveValuesTaxi() {

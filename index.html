@@ -14,10 +14,14 @@
 
     <!--Header-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="node_modules/leaflet/src/Leaflet.js"></script>
+
 
     <!--Footer-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
@@ -68,6 +72,9 @@
 
         </nav>
     </div>
+    <div id="test">
+        <button id="testbutton"> Test </button>
+    </div>
 
 </div>
     <!---------trackmodalfenster------------>
@@ -101,7 +108,9 @@
 
 <div id="addOfferArea" class="area">
     <div class="row">
-        <div class="col-3"></div>
+        <div class="col-3">
+
+        </div>
         <div class="col-6">
             <div class="row createFiledParts">
                 <div class="col-3">
@@ -292,7 +301,7 @@
 
 <div id="mainArea" class="area">
     <div class="row">
-        <div class="col-2"></div>
+        <div class="col-2" id="mapArea"></div>
         <!--Filterbereich-->
         <div class="col-2">
 
