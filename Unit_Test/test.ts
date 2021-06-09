@@ -9,11 +9,11 @@ const host = require("../server/server");
 
 chain.should();
 chain.use(chaiHttps);
-
+/*  Tests müssen auf neue Datensätze angepasst werden
 describe("Post /create/Account", async () => {
     it("Erstellt ein Account", (done) => {
         const account = { // email vor test/push immer ändern (unique)
-            email: "test71@gmail.comm",
+            email: "test72@gmail.comm",
             name: "Max Mustermann",
             handyNr:"+49293204803",
             passwort:"test1234"
@@ -149,8 +149,8 @@ describe("Get/filter", async () =>{
 describe("Post/Kasse/hinzufuegen", async () =>{
     it("Fügt Anzeige in die Kasse", (done) => {
         const kasse = {
-            user_id: 31,
-            anz_ID: 119
+            user_id: 1,
+            anz_ID: 1
         };
         chain
             .request("http://localhost:8080")
@@ -167,7 +167,7 @@ describe("Post/Kasse/hinzufuegen", async () =>{
 describe("Post/Kasse/buchen", async () =>{
     it("bucht eine Anzeige aus der Kasse", (done) => {
         const buchen= {
-            id_kasse: 8,
+            id_kasse: 1,
         };
         chain
             .request("http://localhost:8080")
@@ -180,12 +180,12 @@ describe("Post/Kasse/buchen", async () =>{
             });
     });
 });
-/*
+*/
 describe("post/login", async () =>{
-    it("bucht eine Anzeige aus der Kasse", (done) => {
+    it("meldet nutzer an", (done) => {
         const login= {
-            email:'test@gmail.com',
-            passwort:'test1234',
+            email:'root@gmail.com',
+            passwort:'root',
         };
         chain
             .request("http://localhost:8080")
@@ -193,8 +193,8 @@ describe("post/login", async () =>{
             .send(login)
             .end((err, response) => {
                 console.log(response.status);
-                response.should.have.status(201);
+                response.should.have.status(200);
                 done()
             });
     });
-});*/
+});

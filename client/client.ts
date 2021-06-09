@@ -11,6 +11,7 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
+let loginBTN:JQuery;
 let person: number;
 let von: string;
 let nach: string;
@@ -35,7 +36,7 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
-
+    loginBTN = $("#anmelden");
 
     getAll();
 
@@ -63,12 +64,15 @@ $(() => {
     fahrzeugDropLieferung.on('click', () => {
         getFahrzeugDropLieferung();
     });
+    loginBTN.on('click', () =>{
+        login();
+    })
 })
 
 function getAll() {
 
     $.ajax({
-        url: '/anzeige/',
+        url: '/anzeige',
         type: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -142,7 +146,6 @@ function addAnzeige() {
     let rad2: JQuery = $('#inlineRadio2:checked');
     let beschIn: JQuery = $('#inputBeschreibung');
     let priceIn: JQuery = $('#inputPrice');
-    let user_id: number = 1;
     let ang_ges: boolean = true;
     let beschreibung: string = String(beschIn.val()).trim();
     let preis: number = Number(priceIn.val());
@@ -184,7 +187,6 @@ function addAnzeige() {
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "user_id": user_id,
             "ang_ges": ang_ges,
             "datum": datum,
             "preis": preis,
@@ -293,15 +295,43 @@ function renderAnzeige(anz: AnzeigeRender) {
     let menge: string;
     let datumSqlFormat: string = String((anz.datum).split("", 10)).replace(/,/g, "");
     let datumEuropaFormat: string = dateConvert(datumSqlFormat);
-    if (anz.personen == 0) {
+    let fahrzeugName:string;
+    let img:string;
+    if (anz.personen === null) {
         ueberschrift = "Ladungsbeförderung"
-        menge = anz.ladungsgewicht.toString();
+        menge = String(anz.ladungsgewicht);
     } else {
         ueberschrift = "Personenbeförderung"
-        menge = anz.personen.toString();
+        menge = String(anz.personen);
+    }
+    if (anz.name === null){
+         fahrzeugName = "Beliebig"
+    }else {
+        fahrzeugName = anz.name;
+    }
+    if (anz.bild_pfad === null){
+        img = "assets/Examplepictures/Pic-1.png";
+    }else {
+        img = anz.bild_pfad;
     }
 
-    let card: JQuery = $(`
+    offersListBody.append( card(ueberschrift,anz,datumEuropaFormat,menge,fahrzeugName,img));
+
+}
+
+function renderOffersList(offerList: AnzeigeRender[]) {
+    const offersListBody: JQuery = $("#offersTableBody");
+    offersListBody.empty();
+    console.log(offerList.length)
+    for (let i = 0; i < offerList.length; i++) {
+        renderAnzeige(offerList[i]);
+
+    }
+}
+function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
+    let card: JQuery;
+    if (ueberschrift === "Personenbeförderung") {
+         card = $(`
         <tr>
             <td>
                 <div class="card">
@@ -309,14 +339,14 @@ function renderAnzeige(anz: AnzeigeRender) {
                         <h5 class="card-title">${ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
-                                <img src=${anz.bild_pfad} style="width: 200px; height: auto" alt="Examplepicture">
+                                <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
                             </div>
                             <div class="col-5">
                                 <p class="textListComponent"><span>Von: ${anz.start}</span></p>
                                 <p class="textListComponent"><span>Nach: ${anz.ziel}</span></p>
                                 <p class="textListComponent"><span>Wann: ${datumEuropaFormat}</span></p>
                                 <p class="textListComponent"><span>Personenanzahl: ${menge}</span></p>
-                                <p class="textListComponent"><span>Fahrzeug: ${anz.name}</span></p>
+                                <p class="textListComponent"><span>Fahrzeug: ${fahrzeugName}</span></p>
                             </div>
                             <div class="col-2">
                                 <p class="card-text pricing" style="margin-top: 90px">${anz.preis}<span>€</span></p>
@@ -330,16 +360,42 @@ function renderAnzeige(anz: AnzeigeRender) {
             </td>
         </tr>
     `);
-    offersListBody.append(card);
-}
-
-function renderOffersList(offerList: AnzeigeRender[]) {
-    const offersListBody: JQuery = $("#offersTableBody");
-    offersListBody.empty();
-    for (let i = 0; i < offerList.length; i++) {
-        renderAnzeige(offerList[i]);
-        i++;
+         return card;
+    } else {
+        card = $(`
+        <tr>
+            <td>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">${ueberschrift}</h5>
+                        <div class="row">
+                            <div class="col-5">
+                                <img src=${anz.bild_pfad} style="width: 200px; height: auto" alt="Examplepicture">
+                            </div>
+                            <div class="col-5">
+                                <p class="textListComponent"><span>Von: ${anz.start}</span></p>
+                                <p class="textListComponent"><span>Nach: ${anz.ziel}</span></p>
+                                <p class="textListComponent"><span>Wann: ${datumEuropaFormat}</span></p>
+                                <p class="textListComponent"><span>Ladefläche: ${anz.ladeflaeche} m²</span></p>
+                                <p class="textListComponent"><span>Ladehöhe: ${anz.ladehoehe} cm</span></p>
+                                 <p class="textListComponent"><span>Ladegewicht: ${anz.ladungsgewicht} Kg</span></p>
+                                <p class="textListComponent"><span>Fahrzeug: ${fahrzeugName}</span></p>
+                            </div>
+                            <div class="col-2">
+                                <p class="card-text pricing" style="margin-top: 90px">${anz.preis}<span>€</span></p>
+                            </div>
+                        </div>
+                        <div class="alignRight">
+                            <button class="btn btn-dark btn-sm">Zum Angebot</button>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    `);
+ return card;
     }
+
 }
 
 function getFahrzeugDropTaxi() {
@@ -412,4 +468,25 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
         drop.append(dropBody)
     }
 
+}
+
+function login(){
+    let email = "root@gmail.com"
+    let passwort = "root"
+    $.ajax({
+        url: '/login',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "email": email,
+            "passwort": passwort
+        }),
+        success: (response) => {
+            alert(response.message)
+        },
+        error: (response) => {
+           alert(response.responseJSON.message)
+        },
+    });
 }
