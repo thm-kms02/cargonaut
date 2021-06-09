@@ -1,6 +1,6 @@
 import express = require('express');
 import mysql = require('mysql');
-import {Connection, MysqlError} from "mysql";
+import {Connection, MysqlError, Query} from "mysql";
 import {Request, Response} from 'express';
 import {Anzeige} from "../class/anzeige";
 import {User} from "../class/user";
@@ -41,10 +41,11 @@ database.connect((err: MysqlError) => {
     }
 });
 
-app.get('/login',(require:Request,res:Response) =>{
-    let email:string = require.body.email;
-    let passwort:string = require.body.passwort;
-    const query:string = 'SELECT passwort from user where email = email'
+app.post('/login',(req:express.Request,res:express.Response) =>{
+    let email:string = req.body.email;
+    let passwort:string = req.body.passwort;
+
+    const query:string = 'SELECT user_id, passwort from user where email = email'
     database.query(query, (err:MysqlError,rows:any) =>  {
         if (err){
             res.status(500).send({
@@ -52,15 +53,16 @@ app.get('/login',(require:Request,res:Response) =>{
                 result:false
             })
         }else {
-            if (passwort==rows.passwort){
+            if (passwort === rows[0].passwort){
+                session.email = email;
+                session.user_id = rows[0].user_id;
                 res.status(200).send({
-                    message:'Anmeldung war erfolgreich',
-                    result:true
+
+                    message:'Anmeldung war erfolgreich'
                 })
             }else {
                 res.status(400).send({
-                    message:'Passwort ist falsch',
-                    result:false
+                    message:'Passwort ist falsch'
                 })
             }
         }
@@ -68,11 +70,12 @@ app.get('/login',(require:Request,res:Response) =>{
     })
 });
 app.get('/anzeige', (req: Request, res: Response) => {
+
     let offerslist: AnzeigeRender[] = [];
     let offers: any[];
     let taxi: any[];
     let cargo: any[];
-    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id;';
+    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id';
     database.query(query, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -102,11 +105,11 @@ app.get('/anzeige', (req: Request, res: Response) => {
                 for (let offer of offers) {
                     let store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe, store.name, store.bild_pfad));
+                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche,  store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild_pfad));
                     } else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, 1, store.personen, 0, 0, 0, offer.name, offer.bild_pfad));
+                            offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild_pfad));
                         }
                     }
                 }
@@ -121,9 +124,10 @@ app.get('/anzeige', (req: Request, res: Response) => {
 });
 
 app.get('/fahrzeug', (req: Request, res: Response) => {
+
     let fahrzeug: Fahrzeug[] = [];
-    const query: string = 'SELECT * FROM fahrzeug';
-    database.query(query, (err: MysqlError, rows: any) => {
+    const query: string = 'SELECT fahrzeug.name FROM fahrzeug left join user on user.user_id = fahrzeug.user_id where user.email = ?' ;
+    database.query(query,[session.email] ,(err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
@@ -200,7 +204,8 @@ function findbyId(id: number, list: any[]) {
 
 
 app.post('/create/anzeige', (req: Request, res: Response) => {
-    const anzeige: Anzeige = new Anzeige(req.body.user_id, req.body.ang_ges, req.body.datum, req.body.preis,
+
+    const anzeige: Anzeige = new Anzeige(session.user_id, req.body.ang_ges, req.body.datum, req.body.preis,
         req.body.start, req.body.ziel, req.body.beschreibung, req.body.id_fahrzeug, req.body.personen, req.body.ladeflaeche,
         req.body.ladungsgewicht, req.body.ladehoehe);
     let data = [anzeige.user_id, anzeige.ang_ges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung,
