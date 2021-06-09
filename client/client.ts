@@ -2,7 +2,8 @@ import {AnzeigeRender} from "../class/anzeigeRender";
 import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
 import {Anzeige} from "../class/anzeige";
-import * as L from "../node_modules/leaflet/dist/leaflet";
+import * as L  from  "leaflet";
+
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -111,6 +112,8 @@ function showMap() {
         accessToken: 'your.mapbox.access.token'
     }).addTo(mymap);
 }
+
+
 
 function saveValuesTaxi() {
     person = Number($('#inputPersonenzahl').val());
