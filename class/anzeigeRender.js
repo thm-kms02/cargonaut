@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Anzeige = void 0;
-var Anzeige = /** @class */ (function () {
-    function Anzeige(user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug, personen, ladeflaeche, ladungsgewicht, ladehoehe, id) {
+exports.AnzeigeRender = void 0;
+var AnzeigeRender = /** @class */ (function () {
+    function AnzeigeRender(user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug, personen, ladeflaeche, ladungsgewicht, ladehoehe, name, bild_pfad, id) {
         this.user_id = user_id;
         this.ang_ges = ang_ges;
         this.beschreibung = beschreibung;
@@ -16,7 +16,9 @@ var Anzeige = /** @class */ (function () {
         this.id = id;
         this.datum = datum;
         this.id_fahrzeug = id_fahrzeug;
+        this.name = name;
+        this.bild_pfad = bild_pfad;
     }
-    return Anzeige;
+    return AnzeigeRender;
 }());
-exports.Anzeige = Anzeige;
+exports.AnzeigeRender = AnzeigeRender;

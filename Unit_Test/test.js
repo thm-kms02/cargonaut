@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,8 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 // tslint:disable-next-line:no-var-requires
+var mocha_1 = require("mocha");
 var chain = require("chai");
 // tslint:disable-next-line:no-var-requires
 var chaiHttps = require("chai-http");
@@ -43,39 +45,94 @@ var chaiHttps = require("chai-http");
 var host = require("../server/server");
 chain.should();
 chain.use(chaiHttps);
-describe("Post /create/Account", function () { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("Erstellt ein Account", function (done) {
-            var account = {
-                //email ist Uniqe, bitte vor jedem Test ändern
-                email: "test@gmail.commm",
-                name: "Max Mustermann",
-                handyNr: "+49293204803",
-                passwort: "test1234"
-            };
-            chain
-                .request("http://localhost:8080")
-                .post("/create/account")
-                .send(account)
-                .end(function (err, response) {
+/*  Tests müssen auf neue Datensätze angepasst werden
+describe("Post /create/Account", async () => {
+    it("Erstellt ein Account", (done) => {
+        const account = { // email vor test/push immer ändern (unique)
+            email: "test72@gmail.comm",
+            name: "Max Mustermann",
+            handyNr:"+49293204803",
+            passwort:"test1234"
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/create/account")
+            .send(account)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+});
+
+describe("Messages", async () => {
+    it("Erstellt eine Nachricht", (done) => {
+        const message = {
+            absender: "test66@gmail.com",
+            empfaenger: "test@gmail21.commm",
+            inhalt:"Nachrichten test"
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/create/message")
+            .send(message)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+    it("Holt Nachrichten eines Benutzers", (done) => {
+        const message = "test@gmail21.commm";
+        chain
+            .request("http://localhost:8080")
+            .get("/messages/" + message)
+            .send()
+            .end((err, response) => {
+                console.log(response.body);
+                response.should.have.status(200);
+                done()
+            });
+    });
+});
+
+
+
+describe("Post/create/fahrzeug", async  () => {
+    it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
+        const fahrzeug = {
+            user_id: 31,
+            name: "VW Golf",
+            jahr:2010,
+            volumen: 500,
+            gewicht: 1500,
+            bild_pfad: "bilder/img.pn"
+        };
+
+        chain
+            .request("http://localhost:8080")
+            .post("/create/fahrzeug")
+            .send(fahrzeug)
+            .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(201);
                 done();
+
             });
-        });
-        return [2 /*return*/];
     });
-}); });
-describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
-            var anzeige = {
-                userId: 1,
-                angges: 1,
-                beschreibung: "TestTestTestTest",
+});
+describe("Post /create/Anzeige", async () => {
+        it("Soll eine Anzeige für Personenbefoerderung erstellen", (done) => {
+            const anzeige = {
+                user_id: 31,
+                ang_ges: 0,
+                datum:"2021-06-23",
                 preis: 300,
                 start: "Gießen",
                 ziel: "Hamburg",
+                beschreibung: "TestTestTestTest",
+                id_fahrzeug:1,
                 personen: 4,
                 ladeflaeche: 0,
                 ladungsgewicht: 0,
@@ -85,20 +142,24 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
                 .request("http://localhost:8080")
                 .post("/create/anzeige")
                 .send(anzeige)
-                .end(function (err, response) {
-                console.log(response.status);
-                response.should.have.status(201);
-                done();
-            });
+                .end((err, response) => {
+                    console.log(response.status);
+                    response.should.have.status(201);
+                    done()
+                });
         });
-        it("Soll eine Anzeige für Lieferung erstellen", function (done) {
-            var anzeige = {
-                userId: 1,
-                angges: 1,
-                beschreibung: "TestTestTestTest",
+
+
+        it("Soll eine Anzeige für Lieferung erstellen", (done) => {
+            const anzeige = {
+                user_id: 31,
+                ang_ges: 0,
+                datum:"2021-06-23",
                 preis: 300,
                 start: "Gießen",
                 ziel: "Hamburg",
+                beschreibung: "TestTestTestTest",
+                id_fahrzeug:1,
                 personen: 0,
                 ladeflaeche: 3,
                 ladungsgewicht: 3,
@@ -108,9 +169,68 @@ describe("Post /create/Anzeige", function () { return __awaiter(_this, void 0, v
                 .request("http://localhost:8080")
                 .post("/create/anzeige")
                 .send(anzeige)
-                .end(function (err, response) {
+                .end((err, response) => {
+                    console.log(response.status);
+                    response.should.have.status(201);
+                    done()
+                });
+        });
+
+
+    });
+describe("Get/filter", async () =>{
+
+});
+
+describe("Post/Kasse/hinzufuegen", async () =>{
+    it("Fügt Anzeige in die Kasse", (done) => {
+        const kasse = {
+            user_id: 1,
+            anz_ID: 1
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/kasse")
+            .send(kasse)
+            .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(201);
+                done()
+            });
+    });
+
+});
+describe("Post/Kasse/buchen", async () =>{
+    it("bucht eine Anzeige aus der Kasse", (done) => {
+        const buchen= {
+            id_kasse: 1,
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/buchen")
+            .send(buchen)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done()
+            });
+    });
+});
+*/
+mocha_1.describe("post/login", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("meldet nutzer an", function (done) {
+            var login = {
+                email: 'root@gmail.com',
+                passwort: 'root',
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/login")
+                .send(login)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(200);
                 done();
             });
         });

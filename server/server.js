@@ -5,6 +5,11 @@ var mysql = require("mysql");
 var anzeige_1 = require("../class/anzeige");
 var user_1 = require("../class/user");
 var anzeige_bild_1 = require("../class/anzeige_bild");
+var fahrzeug_1 = require("../class/fahrzeug");
+var anzeigeRender_1 = require("../class/anzeigeRender");
+var kasse_1 = require("../class/kasse");
+var buchen_1 = require("../class/buchen");
+var session = require("express-session");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -15,8 +20,11 @@ var database = mysql.createConnection({
 var basedir = __dirname + '/../';
 app.use("/", express.static(basedir + '/client/'));
 app.use("/", express.static(basedir + '/CSS/'));
+app.use("/", express.static(basedir + '/bilder/'));
 app.use("/", express.static(basedir));
 app.use(express.json());
+// Session-Route
+app.use(session({ cookie: { expires: new Date(Date.now() + 1000 * 60 * 60) }, secret: Math.random().toString() }));
 app.listen(8080, function () {
     console.log('Server started at http://localhost:8080');
 });
@@ -28,12 +36,39 @@ database.connect(function (err) {
         console.log('Database is connected');
     }
 });
+app.post('/login', function (req, res) {
+    var email = req.body.email;
+    var passwort = req.body.passwort;
+    var query = 'SELECT user_id, passwort from user where email = email';
+    database.query(query, function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Diese Emailadresse ist nicht registriert',
+                result: false
+            });
+        }
+        else {
+            if (passwort === rows[0].passwort) {
+                session.email = email;
+                session.user_id = rows[0].user_id;
+                res.status(200).send({
+                    message: 'Anmeldung war erfolgreich'
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: 'Passwort ist falsch'
+                });
+            }
+        }
+    });
+});
 app.get('/anzeige', function (req, res) {
     var offerslist = [];
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT * FROM anzeige';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -67,12 +102,12 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, 0, null, store.ladeflaeche, offer.marke, store.ladungsgewicht, store.ladehoehe));
+                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild_pfad));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new anzeige_1.Anzeige(offer.user_id, offer.ang_ges, offer.datum, offer.beschreibung, offer.preis, offer.start, offer.ziel, store.personen, store.fahrzeugart, 0, offer.fahrzeugmarke, 0, 0));
+                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild_pfad));
                         }
                     }
                 }
@@ -80,6 +115,36 @@ app.get('/anzeige', function (req, res) {
                     result: offerslist
                 });
             });
+        }
+    });
+});
+app.get('/fahrzeug', function (req, res) {
+    var fahrzeug = [];
+    var query = 'SELECT fahrzeug.name FROM fahrzeug left join user on user.user_id = fahrzeug.user_id where user.email = ?';
+    database.query(query, [session.email], function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            fahrzeug = rows;
+            res.status(200).send({
+                result: fahrzeug
+            });
+        }
+    });
+});
+app.get('/messages/:userMail', function (req, res) {
+    var id = req.params.userMail;
+    var query = "SELECT * FROM nachricht WHERE empfaenger_id=?";
+    var data = [id];
+    database.query(query, data, function (err, rows) {
+        if (err === null) {
+            res.status(200).send({ result: rows });
+        }
+        else {
+            res.status(500).send({ err: err });
         }
     });
 });
@@ -130,22 +195,22 @@ function findbyId(id, list) {
     return false;
 }
 app.post('/create/anzeige', function (req, res) {
-    var anzeige = new anzeige_1.Anzeige(req.body.userId, req.body.angges, req.body.datum, req.body.beschreibung, req.body.preis, req.body.start, req.body.ziel, req.body.personen, req.body.fahrzeugart, req.body.ladeflaeche, req.body.fahrzeugmarke, req.body.ladungsgewicht, req.body.ladehoehe);
-    console.log("beschreibung " + anzeige.beschreibung + "preis" + anzeige.preis + "ladegewischt " + anzeige.ladungsgewicht, "ladeflaeche " + anzeige.ladeflaeche, "fahrzeug" + anzeige.fahrzeugart + anzeige.fahrzeugmarke);
-    var data = [anzeige.userId, anzeige.angges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung];
-    var cQuery = "INSERT INTO anzeige (user_id, ang_ges,datum,preis, start, ziel, beschreibung ) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    var anzeige = new anzeige_1.Anzeige(session.user_id, req.body.ang_ges, req.body.datum, req.body.preis, req.body.start, req.body.ziel, req.body.beschreibung, req.body.id_fahrzeug, req.body.personen, req.body.ladeflaeche, req.body.ladungsgewicht, req.body.ladehoehe);
+    var data = [anzeige.user_id, anzeige.ang_ges, anzeige.datum, anzeige.preis, anzeige.start, anzeige.ziel, anzeige.beschreibung,
+        anzeige.id_fahrzeug];
+    var cQuery = "INSERT INTO anzeige (user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (anzeige.personen == 0 && anzeige.ladeflaeche != 0 && anzeige.ladehoehe != 0 && anzeige.ladungsgewicht != 0) {
             data = [results.insertId, anzeige.ladeflaeche, anzeige.ladungsgewicht, anzeige.ladehoehe];
             cQuery = "INSERT INTO lieferung(anz_ID, ladeflaeche, ladungsgewicht, ladehoehe) VALUES (?,?,?,?)";
         }
         else if (anzeige.personen != 0 && anzeige.ladeflaeche == 0 && anzeige.ladehoehe == 0 && anzeige.ladungsgewicht == 0) {
-            data = [results.insertId, anzeige.personen, anzeige.fahrzeugart, anzeige.fahrzeugmarke];
-            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen, fahrzeugart,fahrzeugmarke) VALUES (?,?,?,?)";
+            data = [results.insertId, anzeige.personen];
+            cQuery = "INSERT INTO personenbefoerderung(anz_ID, personen) VALUES (?,?)";
         }
         else {
             data = [results.insertId];
-            cQuery = "DELETE from anzeige WHERE id=?)";
+            cQuery = "DELETE from anzeige WHERE id=?";
         }
         database.query(cQuery, data, function (err) {
             if (err === null) {
@@ -161,6 +226,25 @@ app.post('/create/anzeige', function (req, res) {
                 res.sendStatus(500);
             }
         });
+    });
+});
+app.post('/create/fahrzeug', function (req, res) {
+    var fahrzeug = new fahrzeug_1.Fahrzeug(req.body.user_id, req.body.name, req.body.jahr, req.body.volumen, req.body.gewicht, req.body.bild_pfad);
+    var data = [fahrzeug.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht, fahrzeug.bild_pfad];
+    var cQuery = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht, bild_pfad ) VALUES (?, ?, ?, ?, ?, ?);";
+    database.query(cQuery, data, function (err) {
+        if (err === null) {
+            res.status(201);
+            res.send(" Fahrzeug wurde erstellt");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
     });
 });
 app.post('/create/bild', function (req, res) {
@@ -203,6 +287,21 @@ app.post('/create/anzeige_bild', function (req, res) {
         }
     });
 });
+app.post('/create/message', function (req, res) {
+    var absender = req.body.absender;
+    var empfaenger = req.body.empfaenger;
+    var inhalt = req.body.inhalt;
+    var cquery = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
+    var data = [absender, empfaenger, inhalt];
+    database.query(cquery, data, function (err) {
+        if (err === null) {
+            res.status(201).send({ "message": "Message created" });
+        }
+        else {
+            res.status(500).send({ err: err });
+        }
+    });
+});
 app.post('/create/account', function (req, res) {
     var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
     var data = [user.email, user.name, user.handyNr, user.passwort];
@@ -211,6 +310,59 @@ app.post('/create/account', function (req, res) {
         if (err === null) {
             res.status(201);
             res.send(" anzeige wurde erstellt");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.put('/update/user', function (req, res) {
+    var email = req.body.email;
+    var name = req.body.name;
+    var phonenmbr = req.body.handyNr;
+    var query = "UPDATE user SET name=?, handyNr=? WHERE user.email=?";
+    var data = [name, phonenmbr, email];
+    database.query(query, data, function (err, results) {
+        if (err === null) {
+            res.status(200).send({ "message": "User updated." });
+        }
+        else {
+            res.status(500).send({ err: err });
+        }
+    });
+});
+app.post('/kasse', function (req, res) {
+    var kasse = new kasse_1.Kasse(req.body.user_id, req.body.anz_ID);
+    var data = [kasse.user_id, kasse.anz_ID];
+    var cQuery = "INSERT INTO kasse (user_id, anz_ID) VALUES (?, ?);";
+    database.query(cQuery, data, function (err, results) {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde in die Kasse gelegt");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.post('/buchen', function (req, res) {
+    var buchen = new buchen_1.Buchen(req.body.id_kasse);
+    var data = [buchen.id_kasse];
+    var cQuery = "INSERT INTO buchungen (id_kasse) VALUES (?);";
+    database.query(cQuery, data, function (err, results) {
+        if (err === null) {
+            res.status(201);
+            res.send(" Anzeige wurde gebucht");
         }
         else if (err.errno === 1062) {
             res.status(500);

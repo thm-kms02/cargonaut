@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <script>var exports = {};</script>
+    <script>const exports = {};</script>
+    <script async
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6O7FEem9OWixpMuJGXbS3uQLqqA-uQ3A&callback=initMap">
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
-    <script src="client/client.js"></script>
+    <script  src="client/client.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="undefined" crossorigin="anonymous">
     <link rel="stylesheet" href="CSS/style.css" />
+
 
     <!--Header-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+
+
 
     <!--Footer-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
@@ -60,14 +72,49 @@
                         <div class="form-group"><label for="search-field"><i class="fa fa-search"></i></label><input class="form-control search-field" type="search" name="search" id="search-field"></div>
                     </form><span class="navbar-text"><a href="#" class="login">Log In</a></span><a class="btn btn-light action-button" role="button" href="#">Sign Up</a></div>
             </div>
+                    <i class="fa fa-map-marker" data-bs-toggle="modal" data-bs-target="#trackModal" data-bs-whatever="@getbootstrap" aria-hidden="true" id="i"></i>
+
         </nav>
     </div>
+    <div id="test">
+        <button id="testbutton"> Test </button>
+    </div>
 
-</div>
+</div>  <div> <button class="btn btn-dark" id="anmelden">Login Test</button></div>
+    <!---------trackmodalfenster------------>
+    <div class="modal fade" id="trackModal" tabindex="-1" aria-labelledby="trackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="trackModalLabel">Tracking</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary mb-3" id="tracking">Tracking</button>
+                        </div>
+                        <div class="col-sm-9">
+                            <input  class="form-control"  id="feld" placeholder="Bitte geben Sie hier die tracknummer ein ">
+                        </div>
+                        <div class="mb-lg-3">
+                            <label for="mapArea" class="col-form-label">Tracking Informationen</label>
+                            <div id="mapArea"></div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div id="addOfferArea" class="area">
     <div class="row">
-        <div class="col-3"></div>
+        <div class="col-3">
+
+        </div>
         <div class="col-6">
             <div class="row createFiledParts">
                 <div class="col-3">
@@ -140,7 +187,7 @@
                 <div class="col-3"></div>
             </div>
             <div class="contentCenter">
-                <button class="btn btn-dark" id="submitOfferBtn">Abschicken</button>
+                <button type="button" class="btn btn-dark" id="submitOfferBtn">Abschicken</button>
             </div>
 
             <!-- Modalfenster für Personenbeförderung -->
@@ -162,10 +209,7 @@
                                         <label for="inputVon" class="form-label">Von*</label>
                                         <input type="text" class="form-control" id="inputVon">
                                     </div>
-                                    <div>
-                                        <label for="inputAuto" class="form-label">Fahrzeug</label>
-                                        <input type="text" class="form-control" id="inputAuto">
-                                    </div>
+
                                 </div>
                                 <div class="col-6">
                                     <div>
@@ -176,10 +220,16 @@
                                         <label for="inputNach" class="form-label">Nach*</label>
                                         <input type="text" class="form-control" id="inputNach">
                                     </div>
-                                    <div>
-                                        <label for="inputMarke" class="form-label">Marke</label>
-                                        <input type="text" class="form-control" id="inputMarke">
+
+                                </div>
+                                <div class="input-group mb-3" style="margin-top: 5%">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Fahrzeug</label>
+                                        <select class="custom-select" id="inputGroupSelect01">
+                                            <option selected id="dropID"> Choose ... </option>
+                                        </select>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -225,15 +275,24 @@
                                         <input type="text" class="form-control" id="inputNach2">
                                     </div>
                                     <div>
-                                        <label for="inputHoehe" class="form-label">Marke</label>
-                                        <input type="text" class="form-control" id="inputHoehe">
+                                        <label for="inputNach2" class="form-label">Ladehoehe*</label>
+                                        <input type="text" class="form-control" id="inputLadehoehe">
+                                    </div>
+                                    <div class="input-group mb-3" style="margin-top: 10%">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect02">Fahrzeug</label>
+                                            <select class="custom-select2" id="inputGroupSelect02">
+                                                <option selected id="dropID2"> Choose ... </option>
+                                            </select>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                            <button type="button" class="btn btn-primary" >Speichern</button>
+                            <button type="button" class="btn btn-primary" id="saveBTN2" >Speichern</button>
                         </div>
                     </div>
                 </div>
@@ -245,7 +304,7 @@
 
 <div id="mainArea" class="area">
     <div class="row">
-        <div class="col-2"></div>
+
         <!--Filterbereich-->
         <div class="col-2">
 
