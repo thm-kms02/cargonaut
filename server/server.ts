@@ -123,6 +123,23 @@ app.get('/anzeige', (req: Request, res: Response) => {
     })
 });
 
+app.get('/user', (req: Request, res: Response) => {
+
+    const query: string = "SELECT * FROM user WHERE user_id=?";
+    database.query(query,[session.user_id], (err: MysqlError, rows: any) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            res.status(200).send({
+                result: rows[0]
+            });
+
+        }
+    });
+});
+
 app.get('/fahrzeug', (req: Request, res: Response) => {
 
     let fahrzeug: Fahrzeug[] = [];
@@ -239,8 +256,8 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
 
 });
 app.post('/create/fahrzeug', (req: Request, res: Response) => {
-    const fahrzeug: Fahrzeug = new Fahrzeug(req.body.user_id, req.body.name, req.body.jahr, req.body.volumen,
-        req.body.gewicht, req.body.bild_pfad);
+    const fahrzeug: Fahrzeug = new Fahrzeug(session.user_id, req.body.name, req.body.year, req.body.vol,
+        req.body.weight, req.body.pic_path);
     let data = [fahrzeug.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht, fahrzeug.bild_pfad]
 
     const cQuery: string = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht, bild_pfad ) VALUES (?, ?, ?, ?, ?, ?);";

@@ -3,6 +3,9 @@ import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
 import {Anzeige} from "../class/anzeige";
 
+///declare module 'google.maps'; in node_modules/@types/google.maps/index.d.ts ganz unten einfügen
+import {} from 'google.maps';
+
 
 
 let mainarea: JQuery;
@@ -13,7 +16,9 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
-let offerArea: JQuery;
+let trackbutton: JQuery;
+let mapArea: JQuery;
+let testbutton: JQuery
 
 
 
@@ -43,7 +48,9 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
-    offerArea = $("#offerArea");
+    trackbutton = $('#trackingButton');
+    mapArea = $('#mapArea');
+    testbutton = $('#testbutton');
 
 
     loginBTN = $("#anmelden");
@@ -51,9 +58,14 @@ $(() => {
     getAll();
 
     addOfferArea.hide();
-    //offerArea.hide();
 
+    testbutton.on('click', () => {
 
+    });
+
+    trackbutton.on('click', () => {
+       showMap();
+    });
 
     createOfferBTN.on('click', () => {
         mainarea.hide();
@@ -101,8 +113,49 @@ function getAll() {
 
 }
 
+function createCar() {
+    let namein: JQuery = $('#0');
+    let yearin: JQuery = $('#1');
+    let volin: JQuery = $('#2');
+    let weightin: JQuery = $('#3');
+    let picin: JQuery = $('#4');
 
+    let name: string = namein.val().toString().trim();
+    let year: number = Number(yearin.val());
+    let vol: number = Number(volin.val());
+    let weight: number = Number(weightin.val());
 
+    let fzg = new Fahrzeug("",1,1,1,1);
+    $.ajax({
+        url: '/create/fahrzeug',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+           name: fzg.name,
+           year: fzg.jahr,
+            vol: fzg.volumen,
+            weight: fzg.gewicht,
+            pic_path: fzg.bild_pfad,
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
+
+function showMap() {
+    let map: google.maps.Map;
+    const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
+        map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
+            center,
+            zoom: 8
+        });
+
+}
 
 function saveValuesTaxi() {
     person = Number($('#inputPersonenzahl').val());

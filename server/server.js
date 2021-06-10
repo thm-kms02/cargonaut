@@ -118,6 +118,21 @@ app.get('/anzeige', function (req, res) {
         }
     });
 });
+app.get('/user', function (req, res) {
+    var query = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [session.user_id], function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            res.status(200).send({
+                result: rows[0]
+            });
+        }
+    });
+});
 app.get('/fahrzeug', function (req, res) {
     var fahrzeug = [];
     var query = 'SELECT fahrzeug.name FROM fahrzeug left join user on user.user_id = fahrzeug.user_id where user.email = ?';
@@ -229,7 +244,7 @@ app.post('/create/anzeige', function (req, res) {
     });
 });
 app.post('/create/fahrzeug', function (req, res) {
-    var fahrzeug = new fahrzeug_1.Fahrzeug(req.body.user_id, req.body.name, req.body.jahr, req.body.volumen, req.body.gewicht, req.body.bild_pfad);
+    var fahrzeug = new fahrzeug_1.Fahrzeug(session.user_id, req.body.name, req.body.year, req.body.vol, req.body.weight, req.body.pic_path);
     var data = [fahrzeug.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht, fahrzeug.bild_pfad];
     var cQuery = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht, bild_pfad ) VALUES (?, ?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err) {
