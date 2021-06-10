@@ -127,7 +127,16 @@ app.get('/user', (req: Request, res: Response) => {
 
     const query: string = "SELECT * FROM user WHERE user_id=?";
     database.query(query,[session.user_id], (err: MysqlError, rows: any) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            res.status(200).send({
+                result: rows[0]
+            });
 
+        }
     });
 });
 
