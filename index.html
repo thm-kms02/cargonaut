@@ -275,7 +275,7 @@
                                         <input type="text" class="form-control" id="inputNach2">
                                     </div>
                                     <div>
-                                        <label for="inputNach2" class="form-label">Ladehoehe*</label>
+                                        <label for="inputLadehoehe" class="form-label">Ladehoehe*</label>
                                         <input type="text" class="form-control" id="inputLadehoehe">
                                     </div>
                                     <div class="input-group mb-3" style="margin-top: 10%">
@@ -325,38 +325,7 @@
                     </tr>
                 </thead>
                 <tbody id="offersTableBody">
-                <tr>
-                    <td>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Gesucht Personenbeförderung</h5>
-                                <div class="row">
-                                    <div class="col-5">
-                                        <img src="assets/Examplepictures/Pic-1.png" alt="Examplepicture">
-                                    </div>
-                                    <div class="col-5">
-                                        <p class="textListComponent"><span>Von:</span></p>
-                                        <p class="textListComponent"><span>Nach:</span></p>
-                                        <p class="textListComponent"><span>Wann:</span></p>
-                                        <p class="textListComponent"><span>Personenanzahl/Liefergewicht:</span></p>
-                                        <p class="textListComponent"><span>Fahrzeug:</span></p>
-                                    </div>
-                                    <div class="col-2">
-                                        <p class="card-text pricing" style="margin-top: 90px">30<span>€</span></p>
-                                    </div>
-                                </div>
-                                <div class="alignRight">
-                                    <button class="btn btn-dark btn-sm">Zum Angebot</button>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                <!--Hier wird die Liste reingerendert-->
                 </tbody>
             </table>
         </div>
@@ -401,7 +370,7 @@
 </div>
 </div>
 
-<div id="offerArea">
+<div id="offerArea" class="area">
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
@@ -413,31 +382,122 @@
                         <span id="countRating">(100)</span>
                     </div>
                     <div>
-                        <img src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%" alt="ExamplePicture">
+                        <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%" alt="ExamplePicture">
                     </div>
                 </div>
                 <div class="col-1"></div>
                 <div class="col-5">
                     <div>
-                        <img src="assets/contact-btn.png" alt="Contact" class="btn" width="80" height="70">
-                        <img src="assets/mark-btn.png" alt="Contact" class="btn" width="57" height="70" style="margin-left: 5%">
+                        <img id="contactBTN" src="assets/contact-btn.png" alt="Contact" class="btn" width="80" height="70">
+                        <img id="markBTN" src="assets/mark-btn.png" alt="Contact" class="btn" width="57" height="70" style="margin-left: 5%">
                     </div>
                     <div>
-                        <button class="btn w-75" style="background-color: #276678; color: white; margin-top: 2%">Zum Profil</button><br>
-                        <button class="btn w-75" style="background-color: #276678; color: white; margin-top: 2%">Zum Profil</button><br>
-                        <button class="btn w-75" style="background-color: #276678; color: white; margin-top: 2%">Zum Profil</button>
-                        <img src="assets/profile-btn.png" class="btn" alt="" width="309" height="83">
-                        <img src="assets/offer-btn.png" class="btn" alt="" width="309" height="83">
-                        <img src="assets/booking-btn.png" class="btn" alt="" width="309" height="83">
+                        <button id="profileBTN" class="btn w-75" style="background-color: #276678; color: white; margin-top: 5%">Zum Profil</button><br>
+                        <button id="sendOfferBTN" class="btn w-75" style="background-color: #276678; color: white; margin-top: 5%">Angebot abgeben</button><br>
+                        <button id="bookBTN" class="btn w-75" style="background-color: #276678; color: white; margin-top: 5%">Buchen</button>
                     </div>
                 </div>
             </div>
-            <textarea class="form-control" aria-label="With textarea"></textarea>
+            <textarea id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
 
         </div>
         <div class="col-2"></div>
 
     </div>
 </div>
+
+<div id="profileArea" class="area">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-3">
+                    <!--Profilbildbereich-->
+                    <div>
+                        <img id="profilePicture" src="assets/">
+                    </div>
+                    <input class="form-control" type="file" aria-label="">
+                </div>
+                <div class="col-9">
+                    <h1 id="profileName">Colin Kristen</h1>
+                    <span id="profileRating">5</span><span>/5 Sterne</span>
+                    <div style="margin-top: 10%; margin-left: 30%">
+                        <h3>Fahrzeuge</h3>
+                        <table class="table table-borderless">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="btn" id="addCarBTN">
+                                                        <img src="assets/AddCarBTN.png" height="80" width="80" alt="Add Car"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4" style="text-align: center">
+                                                    <label>
+                                                        <input class="form-control" id="addCarAttributeModel" type="text" placeholder="Marke/Modell"/>
+                                                    </label>
+                                                    <label>
+                                                        <input class="form-control" id="addCarAttributeYear" type="text" placeholder="Baujahr"/>
+                                                    </label>
+                                                </div>
+                                                <div class="col-4" style="text-align: center">
+                                                    <label>
+                                                        <input class="form-control" id="addCarAttributeCargoArea" type="text" placeholder="Stauraum"/>
+                                                    </label>
+                                                    <label>
+                                                        <input class="form-control" id="addCarAttributeWeight" type="text" placeholder="Gewicht"/>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="carsTableBody">
+                            <!--Hier wird die Liste reingerendert-->
+                            <tr>
+                                <td>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <img class="card-img" src="..." alt="Card image cap">
+                                                </div>
+                                                <div class="col-4" style="text-align: center">
+                                                    <div class="carAttribute">
+                                                        <span class="carAttributeModel">Mercedes C63</span>
+                                                    </div>
+                                                    <div class="carAttribute">
+                                                        <span class="carAttributeYear">2020</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4" style="text-align: center">
+                                                    <div class="carAttribute">
+                                                        <span class="carAttributeCargoArea">200 Liter</span>
+                                                    </div>
+                                                    <div class="carAttribute">
+                                                        <span class="carAttributeWeight">800 kg</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
 </body>
 </html>

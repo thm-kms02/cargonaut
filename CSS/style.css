@@ -201,6 +201,14 @@
     margin-bottom: 5%;
 }
 
+.carAttribute {
+    text-align: center;
+    background-color: #276678;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 4%;
+}
+
 
 .footer-clean {
     padding:30px 0;
