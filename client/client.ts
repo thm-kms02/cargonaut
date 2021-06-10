@@ -18,6 +18,7 @@ let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
 let trackbutton: JQuery;
 let mapArea: JQuery;
+let testbutton: JQuery
 
 
 
@@ -49,6 +50,7 @@ $(() => {
     saveBTN2 = $("#saveBTN2");
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
+    testbutton = $('#testbutton');
 
 
     loginBTN = $("#anmelden");
@@ -56,6 +58,10 @@ $(() => {
     getAll();
 
     addOfferArea.hide();
+
+    testbutton.on('click', () => {
+
+    });
 
     trackbutton.on('click', () => {
        showMap();
@@ -107,6 +113,39 @@ function getAll() {
 
 }
 
+function createCar() {
+    let namein: JQuery = $('#0');
+    let yearin: JQuery = $('#1');
+    let volin: JQuery = $('#2');
+    let weightin: JQuery = $('#3');
+    let picin: JQuery = $('#4');
+
+    let name: string = namein.val().toString().trim();
+    let year: number = Number(yearin.val());
+    let vol: number = Number(volin.val());
+    let weight: number = Number(weightin.val());
+
+    let fzg = new Fahrzeug("",1,1,1,1);
+    $.ajax({
+        url: '/create/fahrzeug',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+           name: fzg.name,
+           year: fzg.jahr,
+            vol: fzg.volumen,
+            weight: fzg.gewicht,
+            pic_path: fzg.bild_pfad,
+        }),
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
+}
 
 function showMap() {
     let map: google.maps.Map;
