@@ -13,6 +13,7 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
+let offerArea: JQuery;
 
 
 
@@ -42,6 +43,7 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
+    offerArea = $("#offerArea");
 
 
     loginBTN = $("#anmelden");
@@ -49,6 +51,7 @@ $(() => {
     getAll();
 
     addOfferArea.hide();
+    //offerArea.hide();
 
 
 

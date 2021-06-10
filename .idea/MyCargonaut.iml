@@ -9,5 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="leaflet" level="application" />
+    <orderEntry type="library" name="ionicons" level="application" />
+    <orderEntry type="library" name="twitter-bootstrap" level="application" />
   </component>
 </module>
