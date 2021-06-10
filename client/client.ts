@@ -3,6 +3,9 @@ import {Fahrzeug} from "../class/fahrzeug";
 import {response} from "express";
 import {Anzeige} from "../class/anzeige";
 
+///declare module 'google.maps'; in node_modules/@types/google.maps/index.d.ts ganz unten einfügen
+import {} from 'google.maps';
+
 
 
 let mainarea: JQuery;
@@ -13,6 +16,8 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
+let testbutton: JQuery;
+let mapArea: JQuery;
 
 
 
@@ -42,6 +47,8 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
+    testbutton = $('#testbutton');
+    mapArea = $('#mapArea');
 
 
     loginBTN = $("#anmelden");
@@ -50,7 +57,9 @@ $(() => {
 
     addOfferArea.hide();
 
-
+    testbutton.on('click', () => {
+       showMap();
+    });
 
     createOfferBTN.on('click', () => {
         mainarea.hide();
@@ -99,7 +108,15 @@ function getAll() {
 }
 
 
+function showMap() {
+    let map: google.maps.Map;
+    const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
+        map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
+            center,
+            zoom: 8
+        });
 
+}
 
 function saveValuesTaxi() {
     person = Number($('#inputPersonenzahl').val());
