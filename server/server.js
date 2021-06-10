@@ -118,6 +118,11 @@ app.get('/anzeige', function (req, res) {
         }
     });
 });
+app.get('/user', function (req, res) {
+    var query = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [session.user_id], function (err, rows) {
+    });
+});
 app.get('/fahrzeug', function (req, res) {
     var fahrzeug = [];
     var query = 'SELECT fahrzeug.name FROM fahrzeug left join user on user.user_id = fahrzeug.user_id where user.email = ?';

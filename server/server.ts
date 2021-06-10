@@ -123,6 +123,14 @@ app.get('/anzeige', (req: Request, res: Response) => {
     })
 });
 
+app.get('/user', (req: Request, res: Response) => {
+
+    const query: string = "SELECT * FROM user WHERE user_id=?";
+    database.query(query,[session.user_id], (err: MysqlError, rows: any) => {
+
+    });
+});
+
 app.get('/fahrzeug', (req: Request, res: Response) => {
 
     let fahrzeug: Fahrzeug[] = [];

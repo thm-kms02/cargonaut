@@ -16,7 +16,7 @@ let saveBTN: JQuery;
 let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
-let testbutton: JQuery;
+let trackbutton: JQuery;
 let mapArea: JQuery;
 
 
@@ -47,7 +47,7 @@ $(() => {
     fahrzeugDropTaxi = $(".custom-select");
     fahrzeugDropLieferung = $(".custom-select2");
     saveBTN2 = $("#saveBTN2");
-    testbutton = $('#testbutton');
+    trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
 
 
@@ -57,7 +57,7 @@ $(() => {
 
     addOfferArea.hide();
 
-    testbutton.on('click', () => {
+    trackbutton.on('click', () => {
        showMap();
     });
 
