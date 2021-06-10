@@ -69,6 +69,23 @@ app.post('/login',(req:express.Request,res:express.Response) =>{
 
     })
 });
+
+app.delete('/car/:carId',(req: Request, res: Response) => {
+    let id: number = Number(req.params.userMail);
+    let query: string = 'DELETE FROM fahrzeug WHERE fahrzeug.id=?';
+    database.query(query, [id], (err: MysqlError) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            res.status(200).send({
+                message: 'Fahrzeug gelöscht '
+            });
+        }
+    });
+});
+
 app.get('/anzeige', (req: Request, res: Response) => {
 
     let offerslist: AnzeigeRender[] = [];

@@ -8,6 +8,7 @@ import {} from 'google.maps';
 
 
 
+
 let mainarea: JQuery;
 let addOfferArea: JQuery;
 let createOfferBTN: JQuery;
@@ -149,12 +150,28 @@ function createCar() {
 
 function showMap() {
     let map: google.maps.Map;
+    let infoWindow: google.maps.InfoWindow;
     const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
         map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
             center,
             zoom: 8
         });
 
+}
+
+function deleteCar(id: number) {
+    $.ajax({
+        url: '/fahrzeug/' + id,
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: (response) => {
+            console.log("sucess");
+        },
+        error: (response) => {
+            console.log("error");
+        },
+    });
 }
 
 function saveValuesTaxi() {

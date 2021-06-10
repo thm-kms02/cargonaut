@@ -63,6 +63,22 @@ app.post('/login', function (req, res) {
         }
     });
 });
+app.delete('/car/:carId', function (req, res) {
+    var id = Number(req.params.userMail);
+    var query = 'DELETE FROM fahrzeug WHERE fahrzeug.id=?';
+    database.query(query, [id], function (err) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            res.status(200).send({
+                message: 'Fahrzeug gelöscht '
+            });
+        }
+    });
+});
 app.get('/anzeige', function (req, res) {
     var offerslist = [];
     var offers;
