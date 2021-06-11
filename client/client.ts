@@ -174,6 +174,8 @@ function getGPS() {
 function showLocation(lat: number, lng: number) {
     let mapArea: JQuery = $('#mapArea');
     mapArea.empty();
+    let trackmodal: JQuery = $('#trackModal');
+    trackmodal.show();
     let map: google.maps.Map;
     const center: google.maps.LatLngLiteral = {lat: lat, lng: lng};
     map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {

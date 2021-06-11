@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
 var mainarea;
 var addOfferArea;
 var createOfferBTN;
@@ -139,6 +140,8 @@ function getGPS() {
 function showLocation(lat, lng) {
     var mapArea = $('#mapArea');
     mapArea.empty();
+    var trackmodal = $('#trackModal');
+    trackmodal.show();
     var map;
     var center = { lat: lat, lng: lng };
     map = new google.maps.Map(document.getElementById("mapArea"), {

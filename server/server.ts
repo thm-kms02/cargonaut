@@ -87,7 +87,7 @@ app.delete('/car/:carId',(req: Request, res: Response) => {
 });
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
-    res.status(200).send({"trackRole":1});
+    res.status(200).send({"trackRole":2});
 });
 
 app.get('/getGPS', (req: Request, res: Response) => {

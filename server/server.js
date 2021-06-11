@@ -80,7 +80,7 @@ app.delete('/car/:carId', function (req, res) {
     });
 });
 app.get('/trackingrole/:trackID', function (req, res) {
-    res.status(200).send({ "trackRole": 1 });
+    res.status(200).send({ "trackRole": 2 });
 });
 app.get('/getGPS', function (req, res) {
     res.status(200).send({ 'lat': 1, "lng": 1 });
