@@ -579,7 +579,69 @@
     </div>
 </div>
 
+<!---------filterfunktion-------->
+<div class="filterfunktion">
+<button type="submit" class="btn btn-dark" id="filterfun"  data-bs-toggle="modal" data-bs-target="#filterModal" data-bs-whatever="@getbootstrap" aria-hidden="true">Filter</button>
+</div>
+
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="filterModalLabel">Filter</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="angebotyp">
+                <label>
+                   <h5>Angebotstyp</h5>
+                </label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Angebot</label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Gesucht</label>
+            </div>
+
+            <div class="angebotyp">
+                <label>
+                    <h5>Service</h5>
+                </label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Lieferung</label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Personebeförderung</label>
+            </div>
+            <div class="angebotyp">
+                <label>
+                    <h5>Preis</h5>
+                </label>
+                <form class="row g-3">
+                    <div class="col-auto">
+                        <input type="number" class="form-control" id="inputpreis">
+                    </div>
+                    <div class="col-auto">
+                        <input type="number" class="form-control" id="inputpreise">
+                    </div>
+                </form>
+            </div>
+
+            <div class="filbutton">
+                <button type="submit" class="btn btn-dark" id="filte">Filter</button>
+            </div>
 
 
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>

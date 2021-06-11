@@ -8,14 +8,50 @@
     background-size: cover !important;
 }
 
-
+.an{
+margin: 50px;
+    padding-top: 20px;
+}
 
 #mapArea {
     height: 180px;
 }
 
+#filterfun{
+    width:150px;
+    height: 50px;
+    border-radius:8px;
+    background-color: #276678;
+}
+#filte{
+    width:150px;
+    height: 50px;
+    border-radius:8px;
+    background-color: #276678;
 
+}
 
+.filterfunktion{
+    text-align: center;
+}
+#inputpreis{
+    width:150px;
+    height: 50px;
+    font-size:18px;
+    margin-left: 180px;
+}
+#inputpreise{
+    width:150px;
+    height: 50px;
+    font-size:18px;
+    margin-left: 100px;
+}
+
+.filbutton{
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
 
 .header-dark .navbar {
     background:transparent;
@@ -208,12 +244,17 @@
     border-radius: 5px;
     margin-bottom: 4%;
 }
-
-
 .footer-clean {
     padding:30px 0;
     background-color:#D3E0EA;
     color:#4b4c4d;
+}
+
+.footer-cleane {
+    padding:30px 0;
+    background-color:#D3E0EA;
+    color:#4b4c4d;
+    margin-top: 600px;
 }
 
 .footer-clean h3 {
