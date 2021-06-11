@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fahrzeug_1 = require("../class/fahrzeug");
 var mainarea;
 var addOfferArea;
 var createOfferBTN;
@@ -76,8 +75,10 @@ $(function () {
     });
 });
 function getTrackingRole() {
+    event.preventDefault();
     var trackNumIn = $('#feld');
     var trackNum = Number(trackNumIn.val());
+    trackNum = 1;
     $.ajax({
         url: '/trackingRole/' + trackNum,
         type: 'GET',

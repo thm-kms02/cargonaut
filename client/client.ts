@@ -102,8 +102,10 @@ $(() => {
 });
 
 function getTrackingRole() {
+    event.preventDefault();
     let trackNumIn: JQuery = $('#feld');
     let trackNum: number = Number(trackNumIn.val());
+    trackNum=1;
     $.ajax({
         url: '/trackingRole/'+trackNum,
         type: 'GET',

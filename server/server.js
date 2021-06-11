@@ -79,6 +79,15 @@ app.delete('/car/:carId', function (req, res) {
         }
     });
 });
+app.get('/trackingrole/:trackID', function (req, res) {
+    res.status(200).send({ "trackRole": 1 });
+});
+app.get('/getGPS', function (req, res) {
+    res.status(200).send({ 'lat': 1, "lng": 1 });
+});
+app.post('/create/location', function (req, res) {
+    res.status(200).send({ 'message': 'success' });
+});
 app.get('/anzeige', function (req, res) {
     var offerslist = [];
     var offers;
