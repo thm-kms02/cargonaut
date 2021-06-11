@@ -195,7 +195,7 @@ function saveValuesLieferung() {
 function filtern() {
     let filteredOffers: Anzeige[] = []
     let ang: boolean;
-    let kategorie: number; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let kategorie: number ; //1 = ladungsbeförderung, 2 = personenbeförderung
     let minPreis: number;
     let maxPreis: number;
     let von: string;
@@ -226,7 +226,51 @@ function filtern() {
    })
     offerslist = filteredOffers;
 }
+function getFilter() {
+    let ang: boolean;
+    let kategorie: number ; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let minPreis: number;
+    let maxPreis: number;
+    let von: string;
+    let nach: string;
+    let datum: string;
 
+    $.ajax({
+        url: '/anzeige/filter',
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+
+                filternStandard(response.result, minPreis, maxPreis, von, nach, datum, kategorie);
+
+
+        },
+        error: (response) => {
+
+        },
+    });
+}
+function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string,datum:string, kategorie:number){
+    let filteredAnzeigen:AnzeigeRender[]=[];
+    for (let i=0;i<anzeigen.length;i++){
+        if ((anzeigen[i].preis == minPreis||anzeigen[i].preis == maxPreis) && (minPreis == undefined || maxPreis== undefined) ){
+        }
+    }
+    if (kategorie== 1){
+
+    }else if (kategorie ==2 ){
+
+    }else{
+
+    }
+
+}
+function filternTaxi(){
+
+}
+function filternCargo(){
+
+}
 function addAnzeige() {
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
@@ -294,6 +338,7 @@ function addAnzeige() {
         },
     });
 }
+
 function sendMessage() {
     let message: string;
     let absender: number;
@@ -316,6 +361,7 @@ function sendMessage() {
         },
     });
 }
+
 function getmyMessages() {
     let id: number;
     $.ajax({
@@ -332,6 +378,7 @@ function getmyMessages() {
         },
     });
 }
+
 function updateUser() {
     let email: string= "test@gmail21.commm";
     let name: string="testname";
@@ -414,6 +461,7 @@ function renderOffersList(offerList: AnzeigeRender[]) {
 
     }
 }
+
 function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
     let card: JQuery;
     if (ueberschrift === "Personenbeförderung") {
@@ -576,3 +624,4 @@ function login(){
         },
     });
 }
+

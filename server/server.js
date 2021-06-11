@@ -405,3 +405,43 @@ app.post('/buchen', function (req, res) {
         }
     });
 });
+app.post('/anzeige/filter', function (req, res) {
+    var anzeigen = [];
+    var ang_ges = req.body.ang_ges;
+    var kategorie = req.body.kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var cQuery;
+    if (kategorie == 1) {
+        if (ang_ges == true) { // ang = False  ges = true
+            cQuery = "SELECT * from anzeige right join lieferung on anzeige.id = lieferung.anz_ID where ang_ges = 1";
+        }
+        else { // ang_ges == false
+            cQuery = "SELECT * from anzeige right join lieferung on anzeige.id = lieferung.anz_ID where ang_ges = 0";
+        }
+    }
+    else {
+        //kategorie 2
+        if (ang_ges == true) { // ang = False  ges = true
+            cQuery = "SELECT * from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID where ang_ges = 1";
+        }
+        else { // ang_ges == false
+            cQuery = "SELECT * from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID where ang_ges = 0";
+        }
+    }
+    database.query(cQuery, function (err, results) {
+        if (err === null) {
+            res.status(200);
+            for (var i = 0; i < results.length; i++) {
+                anzeigen[i] = results[i];
+            }
+            res.send(anzeigen);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});

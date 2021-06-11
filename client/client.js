@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
+var fahrzeug_1 = require("../class/fahrzeug");
 var mainarea;
 var addOfferArea;
 var createOfferBTN;
@@ -186,6 +186,42 @@ function filtern() {
         }
     });
     offerslist = filteredOffers;
+}
+function getFilter() {
+    var ang;
+    var kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var minPreis;
+    var maxPreis;
+    var von;
+    var nach;
+    var datum;
+    $.ajax({
+        url: '/anzeige/filter',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            filternStandard(response.result, minPreis, maxPreis, von, nach, datum, kategorie);
+        },
+        error: function (response) {
+        },
+    });
+}
+function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum, kategorie) {
+    var filteredAnzeigen = [];
+    for (var i = 0; i < anzeigen.length; i++) {
+        if ((anzeigen[i].preis == minPreis || anzeigen[i].preis == maxPreis) && (minPreis == undefined || maxPreis == undefined)) {
+        }
+    }
+    if (kategorie == 1) {
+    }
+    else if (kategorie == 2) {
+    }
+    else {
+    }
+}
+function filternTaxi() {
+}
+function filternCargo() {
 }
 function addAnzeige() {
     var rad1 = $('#inlineRadio1:checked');
