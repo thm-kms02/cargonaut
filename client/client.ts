@@ -7,7 +7,7 @@ import {Anzeige} from "../class/anzeige";
 import {} from 'google.maps';
 
 
-let trackRole: number = 0; /// 0= keine rolle, 1= sender/empfänger, 2= zusteller
+
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -109,11 +109,74 @@ function getTrackingRole() {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-            trackRole = response.trackRole;
+
+            goTrack(response.trackRole);
         },
         error: (response) => {
 
         },
+    });
+
+}
+
+function goTrack(role: number) {
+    /// 0 = not authorized, 1= viewer, 2= locationprovider
+    if(role==1) {
+      getGPS();
+    } else if(role==2) {
+        sendLocation();
+    }
+}
+
+function sendLocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position: GeolocationPosition) => {
+                $.ajax({
+                    url: '/create/location',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        "lat": position.coords.latitude,
+                        "lng": position.coords.longitude
+                    }),
+                    success: () => {
+                        showLocation(position.coords.latitude, position.coords.longitude);
+                    },
+                    error: (response) => {
+                        console.log("error");
+                    },
+                });
+            }
+        )
+    } else {
+        alert("Standort konnte nicht ermittelt werden");
+    }
+}
+
+function getGPS() {
+    $.ajax({
+        url: '/getGPS',
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+            showLocation(response.lat, response.lng);
+        },
+        error: (response) => {
+
+        },
+    });
+}
+
+function showLocation(lat: number, lng: number) {
+    let mapArea: JQuery = $('#mapArea');
+    mapArea.empty();
+    let map: google.maps.Map;
+    const center: google.maps.LatLngLiteral = {lat: lat, lng: lng};
+    map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
+        center,
+        zoom: 8
     });
 
 }
@@ -173,7 +236,6 @@ function createCar() {
 
 function showMap() {
     let map: google.maps.Map;
-    let infoWindow: google.maps.InfoWindow;
     const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
         map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
             center,

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fahrzeug_1 = require("../class/fahrzeug");
-var trackRole = 0; /// 0= keine rolle, 1= sender/empfänger, 2= zusteller
 var mainarea;
 var addOfferArea;
 var createOfferBTN;
@@ -84,10 +83,66 @@ function getTrackingRole() {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            trackRole = response.trackRole;
+            goTrack(response.trackRole);
         },
         error: function (response) {
         },
+    });
+}
+function goTrack(role) {
+    /// 0 = not authorized, 1= viewer, 2= locationprovider
+    if (role == 1) {
+        getGPS();
+    }
+    else if (role == 2) {
+        sendLocation();
+    }
+}
+function sendLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            $.ajax({
+                url: '/create/location',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    "lat": position.coords.latitude,
+                    "lng": position.coords.longitude
+                }),
+                success: function () {
+                    showLocation(position.coords.latitude, position.coords.longitude);
+                },
+                error: function (response) {
+                    console.log("error");
+                },
+            });
+        });
+    }
+    else {
+        alert("Standort konnte nicht ermittelt werden");
+    }
+}
+function getGPS() {
+    $.ajax({
+        url: '/getGPS',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            showLocation(response.lat, response.lng);
+        },
+        error: function (response) {
+        },
+    });
+}
+function showLocation(lat, lng) {
+    var mapArea = $('#mapArea');
+    mapArea.empty();
+    var map;
+    var center = { lat: lat, lng: lng };
+    map = new google.maps.Map(document.getElementById("mapArea"), {
+        center: center,
+        zoom: 8
     });
 }
 function getAll() {
@@ -136,7 +191,6 @@ function createCar() {
 }
 function showMap() {
     var map;
-    var infoWindow;
     var center = { lat: 30, lng: -110 };
     map = new google.maps.Map(document.getElementById("mapArea"), {
         center: center,
