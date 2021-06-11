@@ -299,6 +299,7 @@
 /*login */
 
 #Buttonlogin {
+    background-color: #276678;
     width:150px;
     height: 50px;
     font-size:18px;
@@ -331,14 +332,14 @@ input[type="text"], input[type="password"] {
     border-radius: 10px;
 }
 #ButtonSignin{
-
+    background-color: #276678;
     width:150px;
     height: 50px;
     font-size:18px;
     border:#fff solid 1px;
 }
 #Buttoncancel{
-
+    background-color: #276678;
     width:150px;
     height: 50px;
     font-size:18px;
