@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
+var fahrzeug_1 = require("../class/fahrzeug");
+var trackRole = 0; /// 0= keine rolle, 1= sender/empfänger, 2= zusteller
 var mainarea;
 var addOfferArea;
 var createOfferBTN;
@@ -10,6 +11,7 @@ var saveBTN2;
 var fahrzeugDropTaxi;
 var fahrzeugDropLieferung;
 var trackbutton;
+var trackNumButton;
 var mapArea;
 var testbutton;
 var loginBTN;
@@ -38,10 +40,14 @@ $(function () {
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
+    trackNumButton = $('#tracking');
     loginBTN = $("#anmelden");
     getAll();
     addOfferArea.hide();
     testbutton.on('click', function () {
+    });
+    trackNumButton.on('click', function () {
+        getTrackingRole();
     });
     trackbutton.on('click', function () {
         showMap();
@@ -70,6 +76,20 @@ $(function () {
         login();
     });
 });
+function getTrackingRole() {
+    var trackNumIn = $('#feld');
+    var trackNum = Number(trackNumIn.val());
+    $.ajax({
+        url: '/trackingRole/' + trackNum,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            trackRole = response.trackRole;
+        },
+        error: function (response) {
+        },
+    });
+}
 function getAll() {
     $.ajax({
         url: '/anzeige',

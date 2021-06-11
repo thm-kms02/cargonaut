@@ -7,7 +7,7 @@ import {Anzeige} from "../class/anzeige";
 import {} from 'google.maps';
 
 
-
+let trackRole: number = 0; /// 0= keine rolle, 1= sender/empfänger, 2= zusteller
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -18,8 +18,9 @@ let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
 let trackbutton: JQuery;
+let trackNumButton: JQuery
 let mapArea: JQuery;
-let testbutton: JQuery
+let testbutton: JQuery;
 
 
 
@@ -52,6 +53,7 @@ $(() => {
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
+    trackNumButton = $('#tracking');
 
 
     loginBTN = $("#anmelden");
@@ -62,6 +64,10 @@ $(() => {
 
     testbutton.on('click', () => {
 
+    });
+
+    trackNumButton.on('click', () => {
+        getTrackingRole();
     });
 
     trackbutton.on('click', () => {
@@ -77,13 +83,13 @@ $(() => {
 
     submitOfferBtn.on('click', () => {
         addAnzeige();
-    })
+    });
     saveBTN.on('click', () => {
         saveValuesTaxi();
-    })
+    });
     saveBTN2.on('click', () => {
         saveValuesLieferung();
-    })
+    });
     fahrzeugDropTaxi.on('click', () => {
         getFahrzeugDropTaxi();
     });
@@ -93,7 +99,24 @@ $(() => {
     loginBTN.on('click', () =>{
         login();
     })
-})
+});
+
+function getTrackingRole() {
+    let trackNumIn: JQuery = $('#feld');
+    let trackNum: number = Number(trackNumIn.val());
+    $.ajax({
+        url: '/trackingRole/'+trackNum,
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+            trackRole = response.trackRole;
+        },
+        error: (response) => {
+
+        },
+    });
+
+}
 
 function getAll() {
 
