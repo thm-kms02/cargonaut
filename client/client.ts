@@ -18,8 +18,9 @@ let saveBTN2: JQuery;
 let fahrzeugDropTaxi: JQuery;
 let fahrzeugDropLieferung: JQuery;
 let trackbutton: JQuery;
+let trackNumButton: JQuery
 let mapArea: JQuery;
-let testbutton: JQuery
+let testbutton: JQuery;
 
 
 
@@ -52,6 +53,7 @@ $(() => {
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
+    trackNumButton = $('#tracking');
 
 
     loginBTN = $("#anmelden");
@@ -62,6 +64,10 @@ $(() => {
 
     testbutton.on('click', () => {
 
+    });
+
+    trackNumButton.on('click', () => {
+        getTrackingRole();
     });
 
     trackbutton.on('click', () => {
@@ -77,13 +83,13 @@ $(() => {
 
     submitOfferBtn.on('click', () => {
         addAnzeige();
-    })
+    });
     saveBTN.on('click', () => {
         saveValuesTaxi();
-    })
+    });
     saveBTN2.on('click', () => {
         saveValuesLieferung();
-    })
+    });
     fahrzeugDropTaxi.on('click', () => {
         getFahrzeugDropTaxi();
     });
@@ -93,7 +99,89 @@ $(() => {
     loginBTN.on('click', () =>{
         login();
     })
-})
+});
+
+function getTrackingRole() {
+    event.preventDefault();
+    let trackNumIn: JQuery = $('#feld');
+    let trackNum: number = Number(trackNumIn.val());
+    trackNum=1;
+    $.ajax({
+        url: '/trackingRole/'+trackNum,
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+
+            goTrack(response.trackRole);
+        },
+        error: (response) => {
+
+        },
+    });
+
+}
+
+function goTrack(role: number) {
+    /// 0 = not authorized, 1= viewer, 2= locationprovider
+    if(role==1) {
+      getGPS();
+    } else if(role==2) {
+        sendLocation();
+    }
+}
+
+function sendLocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position: GeolocationPosition) => {
+                $.ajax({
+                    url: '/create/location',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        "lat": position.coords.latitude,
+                        "lng": position.coords.longitude
+                    }),
+                    success: () => {
+                        showLocation(position.coords.latitude, position.coords.longitude);
+                    },
+                    error: (response) => {
+                        console.log("error");
+                    },
+                });
+            }
+        )
+    } else {
+        alert("Standort konnte nicht ermittelt werden");
+    }
+}
+
+function getGPS() {
+    $.ajax({
+        url: '/getGPS',
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+            showLocation(response.lat, response.lng);
+        },
+        error: (response) => {
+
+        },
+    });
+}
+
+function showLocation(lat: number, lng: number) {
+    let mapArea: JQuery = $('#mapArea');
+    mapArea.empty();
+    let map: google.maps.Map;
+    const center: google.maps.LatLngLiteral = {lat: lat, lng: lng};
+    map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
+        center,
+        zoom: 8
+    });
+
+}
 
 function getAll() {
 
@@ -150,7 +238,6 @@ function createCar() {
 
 function showMap() {
     let map: google.maps.Map;
-    let infoWindow: google.maps.InfoWindow;
     const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
         map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
             center,

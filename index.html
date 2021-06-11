@@ -92,7 +92,7 @@
                 <div class="modal-body">
                     <form class="row g-3">
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-3" id="tracking">Tracking</button>
+                            <button class="btn btn-primary mb-3" id="tracking">Tracking</button>
                         </div>
                         <div class="col-sm-9">
                             <input  class="form-control"  id="feld" placeholder="Bitte geben Sie hier die tracknummer ein ">
@@ -362,7 +362,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-3 item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a>
-                    <p class="copyright">Lukas Kimpell © 2021</p>
+                    <p class="copyright">My Cargonaut © 2021</p>
                 </div>
             </div>
         </div>
@@ -504,7 +504,7 @@
 <div class="modal-fade">
     <div class="containerLogin">
 
-        <h1>Login</h1>
+        <h1 style=" color: #276678">Login</h1>
         <br>
         <form action="inc/login-inc.php" method="POST">
             <div class="login">
@@ -534,7 +534,7 @@
 <div class="modal-fade">
     <div class="containerSignin">
 
-        <h1>Anmelden</h1>
+        <h1 style=" color: #276678">Anmelden</h1>
         <br>
         <form action="inc/login-inc.php" method="POST">
             <div class="Signin">
@@ -579,7 +579,69 @@
     </div>
 </div>
 
+<!---------filterfunktion-------->
+<div class="filterfunktion">
+<button type="submit" class="btn btn-dark" id="filterfun"  data-bs-toggle="modal" data-bs-target="#filterModal" data-bs-whatever="@getbootstrap" aria-hidden="true">Filter</button>
+</div>
+
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="filterModalLabel">Filter</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="angebotyp">
+                <label>
+                   <h5>Angebotstyp</h5>
+                </label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Angebot</label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Gesucht</label>
+            </div>
+
+            <div class="angebotyp">
+                <label>
+                    <h5>Service</h5>
+                </label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Lieferung</label>
+            </div>
+            <div class="an">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                <label class="form-check-label" for="inlineRadio1">Personebeförderung</label>
+            </div>
+            <div class="angebotyp">
+                <label>
+                    <h5>Preis</h5>
+                </label>
+                <form class="row g-3">
+                    <div class="col-auto">
+                        <input type="number" class="form-control" id="inputpreise1" placeholder="preise in (euro)">
+                    </div>
+                    <div class="col-auto">
+                        <input type="number" class="form-control" id="inputpreise2" placeholder="preise in (euro)">
+                    </div>
+                </form>
+            </div>
+
+            <div class="filbutton">
+                <button type="submit" class="btn btn-dark" id="filte">Filtern</button>
+            </div>
 
 
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>

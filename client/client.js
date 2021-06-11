@@ -10,6 +10,7 @@ var saveBTN2;
 var fahrzeugDropTaxi;
 var fahrzeugDropLieferung;
 var trackbutton;
+var trackNumButton;
 var mapArea;
 var testbutton;
 var loginBTN;
@@ -38,10 +39,14 @@ $(function () {
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
+    trackNumButton = $('#tracking');
     loginBTN = $("#anmelden");
     getAll();
     addOfferArea.hide();
     testbutton.on('click', function () {
+    });
+    trackNumButton.on('click', function () {
+        getTrackingRole();
     });
     trackbutton.on('click', function () {
         showMap();
@@ -70,6 +75,78 @@ $(function () {
         login();
     });
 });
+function getTrackingRole() {
+    event.preventDefault();
+    var trackNumIn = $('#feld');
+    var trackNum = Number(trackNumIn.val());
+    trackNum = 1;
+    $.ajax({
+        url: '/trackingRole/' + trackNum,
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            goTrack(response.trackRole);
+        },
+        error: function (response) {
+        },
+    });
+}
+function goTrack(role) {
+    /// 0 = not authorized, 1= viewer, 2= locationprovider
+    if (role == 1) {
+        getGPS();
+    }
+    else if (role == 2) {
+        sendLocation();
+    }
+}
+function sendLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            $.ajax({
+                url: '/create/location',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    "lat": position.coords.latitude,
+                    "lng": position.coords.longitude
+                }),
+                success: function () {
+                    showLocation(position.coords.latitude, position.coords.longitude);
+                },
+                error: function (response) {
+                    console.log("error");
+                },
+            });
+        });
+    }
+    else {
+        alert("Standort konnte nicht ermittelt werden");
+    }
+}
+function getGPS() {
+    $.ajax({
+        url: '/getGPS',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            showLocation(response.lat, response.lng);
+        },
+        error: function (response) {
+        },
+    });
+}
+function showLocation(lat, lng) {
+    var mapArea = $('#mapArea');
+    mapArea.empty();
+    var map;
+    var center = { lat: lat, lng: lng };
+    map = new google.maps.Map(document.getElementById("mapArea"), {
+        center: center,
+        zoom: 8
+    });
+}
 function getAll() {
     $.ajax({
         url: '/anzeige',
@@ -116,7 +193,6 @@ function createCar() {
 }
 function showMap() {
     var map;
-    var infoWindow;
     var center = { lat: 30, lng: -110 };
     map = new google.maps.Map(document.getElementById("mapArea"), {
         center: center,

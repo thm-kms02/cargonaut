@@ -86,6 +86,18 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
     });
 });
 
+app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
+    res.status(200).send({"trackRole":1});
+});
+
+app.get('/getGPS', (req: Request, res: Response) => {
+res.status(200).send({'lat':1, "lng":1});
+});
+
+app.post('/create/location', (req: Request, res: Response) => {
+res.status(200).send({'message': 'success'});
+});
+
 app.get('/anzeige', (req: Request, res: Response) => {
 
     let offerslist: AnzeigeRender[] = [];
