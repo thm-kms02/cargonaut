@@ -83,28 +83,27 @@ function getTrackingRole() {
     event.preventDefault();
     var trackNumIn = $('#feld');
     var trackNum = Number(trackNumIn.val());
-    trackNum = 1;
     $.ajax({
         url: '/trackingRole/' + trackNum,
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            goTrack(response.trackRole);
+            goTrack(response.trackRole, trackNum);
         },
         error: function (response) {
         },
     });
 }
-function goTrack(role) {
+function goTrack(role, tracknum) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
     if (role == 1) {
-        getGPS();
+        getGPS(tracknum);
     }
     else if (role == 2) {
-        sendLocation();
+        sendLocation(tracknum);
     }
 }
-function sendLocation() {
+function sendLocation(tracknum) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             $.ajax({
@@ -113,6 +112,7 @@ function sendLocation() {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
+                    "tracknum": tracknum,
                     "lat": position.coords.latitude,
                     "lng": position.coords.longitude
                 }),
@@ -129,9 +129,9 @@ function sendLocation() {
         alert("Standort konnte nicht ermittelt werden");
     }
 }
-function getGPS() {
+function getGPS(tracknum) {
     $.ajax({
-        url: '/getGPS',
+        url: '/getGPS/' + tracknum,
         type: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -183,11 +183,11 @@ function createCar() {
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            name: fzg.name,
-            year: fzg.jahr,
-            vol: fzg.volumen,
-            weight: fzg.gewicht,
-            pic_path: fzg.bild_pfad,
+            "name": fzg.name,
+            "year": fzg.jahr,
+            "vol": fzg.volumen,
+            "weight": fzg.gewicht,
+            "pic_path": fzg.bild_pfad,
         }),
         success: function (response) {
             console.log("sucess");
@@ -407,9 +407,8 @@ function sendMessage() {
     });
 }
 function getmyMessages() {
-    var id;
     $.ajax({
-        url: '/messages/' + id,
+        url: '/messages/',
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',

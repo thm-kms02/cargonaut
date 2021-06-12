@@ -87,15 +87,68 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
 });
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
-    res.status(200).send({"trackRole":2});
+    session.user_id=39;
+    const query: string = 'SELECT * FROM tracking WHERE tracking.id =?';
+    const data = [req.params.trackID];
+
+    database.query(query, data,(err: MysqlError, results: any) => {
+        if(err) {
+            res.status(500).send({err, "trackRole":0});
+        } else {
+            if(results[0].writer==session.user_id) {
+                res.status(200).send({"trackRole":2});
+            } else if(results[0].reader==session.user_id) {
+                res.status(200).send({"trackRole":1})
+            } else {
+                res.status(200).send({"trackRole":0})
+            }
+        }
+    });
+
 });
 
-app.get('/getGPS', (req: Request, res: Response) => {
-res.status(200).send({'lat':1, "lng":1});
+app.get('/getGPS/:trackID', (req: Request, res: Response) => {
+    session.user_id=39;
+const query: string= 'SELECT * FROM tracking WHERE tracking.id =?'
+    const data = [req.params.trackID];
+
+    database.query(query, data, (err: MysqlError, results: any) => {
+       if(err) {
+           res.status(500).send();
+       } else {
+           if (results[0].reader==session.user_id) {
+               res.status(200).send({"lat":results[0].lat, "lng": results[0].lng});
+           } else {
+               res.status(200).send({"message":"You are not authorized!"});
+           }
+       }
+    });
 });
 
 app.post('/create/location', (req: Request, res: Response) => {
-res.status(200).send({'message': 'success'});
+const query: string = 'SELECT * FROM tracking WHERE tracking.id =?';
+   const data = [req.body.tracknum];
+   let tracking: any;
+   database.query(query, data,(err: MysqlError, results: any) => {
+       if(err) {
+           res.status(500).send({err});
+       } else {
+           tracking = results;
+       }
+   });
+   if(tracking!=undefined) {
+       if(tracking[0].writer==session.user_id) {
+           const query1: string = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?'
+            const data1 = [req.body.lat, req.body.lng, req.body.tracknum];
+           database.query(query1, data1, (err: MysqlError, results:any) => {
+              if(err) {
+                  res.status(500).send({err});
+              } else {
+                  res.status(200).send();
+              }
+           });
+       }
+   }
 });
 
 app.get('/anzeige', (req: Request, res: Response) => {
@@ -188,10 +241,9 @@ app.get('/fahrzeug', (req: Request, res: Response) => {
     });
 });
 
-app.get('/messages/:userMail', (req: Request, res: Response) => {
-    let id: string = req.params.userMail;
+app.get('/messages', (req: Request, res: Response) => {
     let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
-    let data = [id];
+    let data = [session.user_id];
     database.query(query, data, (err: MysqlError, rows: any) => {
         if (err === null) {
             res.status(200).send({result: rows});
@@ -199,44 +251,6 @@ app.get('/messages/:userMail', (req: Request, res: Response) => {
             res.status(500).send({err});
         }
     });
-});
-
-app.get('/anzeige_bild', (req: Request, res: Response) => {
-    let offerslist: Anzeige_bild[] = [];
-    let an_bild: any[];
-    let bild: any[];
-
-    const query: string = 'SELECT * FROM bild';
-    database.query(query, (err: MysqlError, rows: any) => {
-        if (err) {
-            res.status(500).send({
-                message: 'Database request failed: ' + err
-            });
-        } else {
-            bild = rows;
-
-            const query3 = 'SELECT * FROM anzeige_bild';
-            database.query(query3, (err: MysqlError, rows: any) => {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Database request failed: ' + err
-                    });
-                } else {
-                    an_bild = rows;
-                }
-                for (let abild of bild) {
-                    let store = findbyId(abild.bild_id, an_bild);
-                    if (store != false) {
-                        offerslist.push(new Anzeige_bild(abild.bild_id, abild.pfad));
-                    }
-                }
-                res.status(200).send({
-                    result: offerslist
-                });
-            });
-
-        }
-    })
 });
 
 function findbyId(id: number, list: any[]) {
@@ -413,6 +427,7 @@ app.post('/kasse', (req: Request, res: Response) => {
 
 app.post('/buchen', (req: Request, res: Response) => {
     const buchen: Buchen = new Buchen(req.body.id_kasse);
+    const anzID: number = req.body.anzID;
     let data = [buchen.id_kasse]
     let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
     database.query(cQuery, data, (err, results: any) => {

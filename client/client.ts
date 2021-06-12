@@ -104,14 +104,13 @@ function getTrackingRole() {
     event.preventDefault();
     let trackNumIn: JQuery = $('#feld');
     let trackNum: number = Number(trackNumIn.val());
-    trackNum=1;
     $.ajax({
         url: '/trackingRole/'+trackNum,
         type: 'GET',
         dataType: 'json',
         success: (response) => {
 
-            goTrack(response.trackRole);
+            goTrack(response.trackRole, trackNum);
         },
         error: (response) => {
 
@@ -120,16 +119,16 @@ function getTrackingRole() {
 
 }
 
-function goTrack(role: number) {
+function goTrack(role: number, tracknum: number) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
     if(role==1) {
-      getGPS();
+      getGPS(tracknum);
     } else if(role==2) {
-        sendLocation();
+        sendLocation(tracknum);
     }
 }
 
-function sendLocation() {
+function sendLocation(tracknum: number) {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
@@ -139,6 +138,7 @@ function sendLocation() {
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify({
+                        "tracknum": tracknum,
                         "lat": position.coords.latitude,
                         "lng": position.coords.longitude
                     }),
@@ -156,9 +156,9 @@ function sendLocation() {
     }
 }
 
-function getGPS() {
+function getGPS(tracknum: number) {
     $.ajax({
-        url: '/getGPS',
+        url: '/getGPS/'+tracknum,
         type: 'GET',
         dataType: 'json',
         success: (response) => {
@@ -222,11 +222,11 @@ function createCar() {
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-           name: fzg.name,
-           year: fzg.jahr,
-            vol: fzg.volumen,
-            weight: fzg.gewicht,
-            pic_path: fzg.bild_pfad,
+           "name": fzg.name,
+           "year": fzg.jahr,
+            "vol": fzg.volumen,
+            "weight": fzg.gewicht,
+            "pic_path": fzg.bild_pfad,
         }),
         success: (response) => {
             console.log("sucess");
@@ -456,9 +456,8 @@ function sendMessage() {
 }
 
 function getmyMessages() {
-    let id: number;
     $.ajax({
-        url: '/messages/' + id,
+        url: '/messages/',
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',

@@ -4,7 +4,6 @@ var express = require("express");
 var mysql = require("mysql");
 var anzeige_1 = require("../class/anzeige");
 var user_1 = require("../class/user");
-var anzeige_bild_1 = require("../class/anzeige_bild");
 var fahrzeug_1 = require("../class/fahrzeug");
 var anzeigeRender_1 = require("../class/anzeigeRender");
 var kasse_1 = require("../class/kasse");
@@ -80,13 +79,70 @@ app.delete('/car/:carId', function (req, res) {
     });
 });
 app.get('/trackingrole/:trackID', function (req, res) {
-    res.status(200).send({ "trackRole": 2 });
+    session.user_id = 39;
+    var query = 'SELECT * FROM tracking WHERE tracking.id =?';
+    var data = [req.params.trackID];
+    database.query(query, data, function (err, results) {
+        if (err) {
+            res.status(500).send({ err: err, "trackRole": 0 });
+        }
+        else {
+            if (results[0].writer == session.user_id) {
+                res.status(200).send({ "trackRole": 2 });
+            }
+            else if (results[0].reader == session.user_id) {
+                res.status(200).send({ "trackRole": 1 });
+            }
+            else {
+                res.status(200).send({ "trackRole": 0 });
+            }
+        }
+    });
 });
-app.get('/getGPS', function (req, res) {
-    res.status(200).send({ 'lat': 1, "lng": 1 });
+app.get('/getGPS/:trackID', function (req, res) {
+    session.user_id = 39;
+    var query = 'SELECT * FROM tracking WHERE tracking.id =?';
+    var data = [req.params.trackID];
+    database.query(query, data, function (err, results) {
+        if (err) {
+            res.status(500).send();
+        }
+        else {
+            if (results[0].reader == session.user_id) {
+                res.status(200).send({ "lat": results[0].lat, "lng": results[0].lng });
+            }
+            else {
+                res.status(200).send({ "message": "You are not authorized!" });
+            }
+        }
+    });
 });
 app.post('/create/location', function (req, res) {
-    res.status(200).send({ 'message': 'success' });
+    var query = 'SELECT * FROM tracking WHERE tracking.id =?';
+    var data = [req.body.tracknum];
+    var tracking;
+    database.query(query, data, function (err, results) {
+        if (err) {
+            res.status(500).send({ err: err });
+        }
+        else {
+            tracking = results;
+        }
+    });
+    if (tracking != undefined) {
+        if (tracking[0].writer == session.user_id) {
+            var query1 = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?';
+            var data1 = [req.body.lat, req.body.lng, req.body.tracknum];
+            database.query(query1, data1, function (err, results) {
+                if (err) {
+                    res.status(500).send({ err: err });
+                }
+                else {
+                    res.status(200).send();
+                }
+            });
+        }
+    }
 });
 app.get('/anzeige', function (req, res) {
     var offerslist = [];
@@ -175,53 +231,15 @@ app.get('/fahrzeug', function (req, res) {
         }
     });
 });
-app.get('/messages/:userMail', function (req, res) {
-    var id = req.params.userMail;
+app.get('/messages', function (req, res) {
     var query = "SELECT * FROM nachricht WHERE empfaenger_id=?";
-    var data = [id];
+    var data = [session.user_id];
     database.query(query, data, function (err, rows) {
         if (err === null) {
             res.status(200).send({ result: rows });
         }
         else {
             res.status(500).send({ err: err });
-        }
-    });
-});
-app.get('/anzeige_bild', function (req, res) {
-    var offerslist = [];
-    var an_bild;
-    var bild;
-    var query = 'SELECT * FROM bild';
-    database.query(query, function (err, rows) {
-        if (err) {
-            res.status(500).send({
-                message: 'Database request failed: ' + err
-            });
-        }
-        else {
-            bild = rows;
-            var query3 = 'SELECT * FROM anzeige_bild';
-            database.query(query3, function (err, rows) {
-                if (err) {
-                    res.status(500).send({
-                        message: 'Database request failed: ' + err
-                    });
-                }
-                else {
-                    an_bild = rows;
-                }
-                for (var _i = 0, bild_1 = bild; _i < bild_1.length; _i++) {
-                    var abild = bild_1[_i];
-                    var store = findbyId(abild.bild_id, an_bild);
-                    if (store != false) {
-                        offerslist.push(new anzeige_bild_1.Anzeige_bild(abild.bild_id, abild.pfad));
-                    }
-                }
-                res.status(200).send({
-                    result: offerslist
-                });
-            });
         }
     });
 });
@@ -397,6 +415,7 @@ app.post('/kasse', function (req, res) {
 });
 app.post('/buchen', function (req, res) {
     var buchen = new buchen_1.Buchen(req.body.id_kasse);
+    var anzID = req.body.anzID;
     var data = [buchen.id_kasse];
     var cQuery = "INSERT INTO buchungen (id_kasse) VALUES (?);";
     database.query(cQuery, data, function (err, results) {
