@@ -198,3 +198,21 @@ describe("post/login", async () =>{
             });
     });
 });
+
+describe("anzeige/filter", async () =>{
+    it("meldet nutzer an", (done) => {
+        const filter= {
+            ang_ges:true,
+            kategorie:0
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/anzeige/filter")
+            .send(filter)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(200);
+                done()
+            });
+    });
+});

@@ -414,3 +414,57 @@ app.post('/buchen', function (req, res) {
         }
     });
 });
+app.post('/anzeige/filter', function (req, res) {
+    var anzeigen = [];
+    var ang_ges = req.body.ang_ges;
+    var kategorie = req.body.kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var cQuery;
+    if (kategorie == undefined) {
+        if (ang_ges == undefined) {
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID";
+        }
+        if (ang_ges == 0) {
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID where ang_ges = 0";
+        }
+        if (ang_ges == 1) {
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID where ang_ges = 1";
+        }
+    }
+    if (kategorie == 2) {
+        console.log(" bin 2");
+        if (ang_ges == 1) {
+            console.log(" bin 2,1");
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 1";
+        }
+        else {
+            console.log(" bin 2,2");
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 0";
+        }
+    }
+    if (kategorie == 1) {
+        if (ang_ges == 1) {
+            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 1";
+        }
+        else {
+            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 0";
+        }
+    }
+    database.query(cQuery, function (err, results) {
+        if (err === null) {
+            res.status(200);
+            for (var i = 0; i < results.length; i++) {
+                anzeigen.push(new anzeigeRender_1.AnzeigeRender(results[i].user_id, results[i].ang_ges, results[i].datum, results[i].preis, results[i].start, results[i].ziel, results[i].beschreibung, results[i].id_fahrzeug, results[i].personen, results[i].ladeflaeche, results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild_pfad));
+            }
+            console.log(anzeigen.length);
+            res.send(anzeigen);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});

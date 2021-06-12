@@ -5,8 +5,8 @@ export class Fahrzeug{
     jahr:number;
     volumen:number;
     gewicht:number;
-    bild_pfad:number;
-    constructor(name:string, jahr:number, volumen:number, gewicht:number, bild_pfad?:number, id?:number, userid?:number) {
+    bild_pfad:string;
+    constructor(name:string, jahr:number, volumen:number, gewicht:number, bild_pfad?:string, id?:number, userid?:number) {
         this.name = name;
         this.jahr = jahr;
         this.volumen = volumen;

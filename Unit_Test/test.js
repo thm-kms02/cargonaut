@@ -237,3 +237,23 @@ mocha_1.describe("post/login", function () { return __awaiter(void 0, void 0, vo
         return [2 /*return*/];
     });
 }); });
+mocha_1.describe("anzeige/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("meldet nutzer an", function (done) {
+            var filter = {
+                ang_ges: true,
+                kategorie: 0
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/anzeige/filter")
+                .send(filter)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(200);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
