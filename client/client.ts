@@ -1,13 +1,9 @@
 import {AnzeigeRender} from "../class/anzeigeRender";
 import {Fahrzeug} from "../class/fahrzeug";
-import {response} from "express";
 import {Anzeige} from "../class/anzeige";
 
 ///declare module 'google.maps'; in node_modules/@types/google.maps/index.d.ts ganz unten einfügen
 import {} from 'google.maps';
-
-
-
 
 let mainarea: JQuery;
 let addOfferArea: JQuery;
@@ -21,6 +17,7 @@ let trackbutton: JQuery;
 let trackNumButton: JQuery
 let mapArea: JQuery;
 let testbutton: JQuery;
+let filternBTN:JQuery;
 
 
 
@@ -54,9 +51,8 @@ $(() => {
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
-
-
     loginBTN = $("#anmelden");
+    filternBTN = $("#filtern");
 
     getAll();
 
@@ -98,6 +94,9 @@ $(() => {
     });
     loginBTN.on('click', () =>{
         login();
+    });
+    filternBTN.on('click', () =>{
+        getFilter();
     })
 });
 
@@ -214,7 +213,7 @@ function createCar() {
     let vol: number = Number(volin.val());
     let weight: number = Number(weightin.val());
 
-    let fzg = new Fahrzeug("",1,1,1,1);
+    let fzg = new Fahrzeug("",1,1,1,"");
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
@@ -278,7 +277,7 @@ function saveValuesLieferung() {
     ladehoeheIN = Number($('#inputLadehoehe').val());
     fahrzeugID2 = Number($('.custom-select2').val());
 }
-
+/*
 function filtern() {
     let filteredOffers: Anzeige[] = []
     let ang: boolean;
@@ -313,50 +312,91 @@ function filtern() {
    })
     offerslist = filteredOffers;
 }
+
+ */
 function getFilter() {
-    let ang: boolean;
-    let kategorie: number ; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let ang_ges: number = 0;
+    let kategorie: number = 1 ; //1 = ladungsbeförderung, 2 = personenbeförderung
     let minPreis: number;
     let maxPreis: number;
     let von: string;
     let nach: string;
     let datum: string;
-
+    let anzeigenRender:AnzeigeRender[]=[];
+    let personen:number ;
+    let ladeflaeche:number;
+    let ladehoehe:number;
+    let ladungsgewicht:number;
     $.ajax({
         url: '/anzeige/filter',
-        type: 'GET',
+        type: 'POST',
+        contentType: 'application/json',
         dataType: 'json',
+        data: JSON.stringify({
+            "ang_ges": ang_ges,
+            "kategorie":kategorie
+        }),
         success: (response) => {
-
-                filternStandard(response.result, minPreis, maxPreis, von, nach, datum, kategorie);
-
-
+            let serverAnzeigen:AnzeigeRender[];
+                serverAnzeigen =response;
+                anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
+                if(kategorie == undefined){
+                    renderOffersList(anzeigenRender);
+                }if (kategorie ==1){
+                    anzeigenRender = filternCargo(anzeigenRender,ladeflaeche,ladehoehe,ladungsgewicht);
+                    renderOffersList(anzeigenRender);
+                }if (kategorie ==2) {
+                    anzeigenRender=filternTaxi(anzeigenRender,personen);
+                    renderOffersList(anzeigenRender);
+                }
         },
         error: (response) => {
 
         },
     });
 }
-function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string,datum:string, kategorie:number){
+function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string, datum:string):AnzeigeRender[]{
     let filteredAnzeigen:AnzeigeRender[]=[];
     for (let i=0;i<anzeigen.length;i++){
-        if ((anzeigen[i].preis == minPreis||anzeigen[i].preis == maxPreis) && (minPreis == undefined || maxPreis== undefined) ){
-        }
+
+                if (anzeigen[i].preis == minPreis || minPreis === undefined) {
+                    if (anzeigen[i].preis == maxPreis || maxPreis === undefined) {
+                        if (anzeigen[i].datum == datum || datum === undefined) {
+                            if (anzeigen[i].start == von || von === undefined) {
+                                if (anzeigen[i].ziel == nach || nach === undefined) {
+                                    filteredAnzeigen[i] = anzeigen[i];
+                                }
+                            }
+                        }
+                    }
+                }
     }
-    if (kategorie== 1){
 
-    }else if (kategorie ==2 ){
-
-    }else{
+return filteredAnzeigen;
+}
+function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
+    let filteredTaxi:AnzeigeRender[]=[];
+    for (let i=0; i<anzeigen.length;i++){
+            if (anzeigen[i].personen == personen || personen == undefined) {
+                filteredTaxi[i] = anzeigen[i];
+            }
 
     }
-
+return filteredTaxi;
 }
-function filternTaxi(){
+function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewicht):AnzeigeRender[]{
+    let filteredCargo:AnzeigeRender[]=[];
+    for (let i=0;i< anzeigen.length;i++){
 
-}
-function filternCargo(){
-
+            if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche === undefined) {
+                if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe === undefined) {
+                    if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht === undefined) {
+                        filteredCargo[i] = anzeigen[i];
+                    }
+                }
+            }
+    }
+return filteredCargo;
 }
 function addAnzeige() {
     let rad1: JQuery = $('#inlineRadio1:checked');
@@ -517,7 +557,7 @@ function renderAnzeige(anz: AnzeigeRender) {
     let datumEuropaFormat: string = dateConvert(datumSqlFormat);
     let fahrzeugName:string;
     let img:string;
-    if (anz.personen === null) {
+    if (anz.personen === null || anz.personen === undefined) {
         ueberschrift = "Ladungsbeförderung"
         menge = String(anz.ladungsgewicht);
     } else {
@@ -542,7 +582,6 @@ function renderAnzeige(anz: AnzeigeRender) {
 function renderOffersList(offerList: AnzeigeRender[]) {
     const offersListBody: JQuery = $("#offersTableBody");
     offersListBody.empty();
-    console.log(offerList.length)
     for (let i = 0; i < offerList.length; i++) {
         renderAnzeige(offerList[i]);
 

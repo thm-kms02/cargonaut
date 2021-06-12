@@ -13,6 +13,7 @@ var trackbutton;
 var trackNumButton;
 var mapArea;
 var testbutton;
+var filternBTN;
 var loginBTN;
 var person;
 var von;
@@ -41,6 +42,7 @@ $(function () {
     testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
     loginBTN = $("#anmelden");
+    filternBTN = $("#filtern");
     getAll();
     addOfferArea.hide();
     testbutton.on('click', function () {
@@ -73,6 +75,9 @@ $(function () {
     });
     loginBTN.on('click', function () {
         login();
+    });
+    filternBTN.on('click', function () {
+        getFilter();
     });
 });
 function getTrackingRole() {
@@ -170,7 +175,7 @@ function createCar() {
     var year = Number(yearin.val());
     var vol = Number(volin.val());
     var weight = Number(weightin.val());
-    var fzg = new fahrzeug_1.Fahrzeug("", 1, 1, 1, 1);
+    var fzg = new fahrzeug_1.Fahrzeug("", 1, 1, 1, "");
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
@@ -229,75 +234,123 @@ function saveValuesLieferung() {
     ladehoeheIN = Number($('#inputLadehoehe').val());
     fahrzeugID2 = Number($('.custom-select2').val());
 }
+/*
 function filtern() {
-    var filteredOffers = [];
-    var ang;
-    var kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
-    var minPreis;
-    var maxPreis;
-    var von;
-    var nach;
-    var datum;
-    offerslist.forEach(function (offer) {
-        if (ang == undefined || ang == offer.ang_ges) {
-            if (minPreis == undefined || minPreis < offer.preis) {
-                if (maxPreis == undefined || maxPreis > offer.preis) {
-                    if (von == undefined || von == offer.start) {
-                        if (nach == undefined || nach == offer.ziel) {
-                            if (datum == undefined || datum == offer.datum) {
-                                if (kategorie == undefined) {
-                                    filteredOffers.push(offer);
-                                }
-                                else if (kategorie == 1 && offer.personen < 1) {
-                                    filteredOffers.push(offer);
-                                }
-                                else if (kategorie == 2 && offer.personen > 0) {
-                                    filteredOffers.push(offer);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
+    let filteredOffers: Anzeige[] = []
+    let ang: boolean;
+    let kategorie: number ; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let minPreis: number;
+    let maxPreis: number;
+    let von: string;
+    let nach: string;
+    let datum: string;
+
+   offerslist.forEach((offer) =>{
+       if(ang==undefined|| ang == offer.ang_ges) {
+           if(minPreis==undefined|| minPreis<offer.preis) {
+               if(maxPreis== undefined|| maxPreis>offer.preis) {
+                   if(von==undefined|| von == offer.start) {
+                       if(nach == undefined|| nach == offer.ziel) {
+                           if(datum==undefined|| datum == offer.datum){
+                               if(kategorie==undefined) {
+                                   filteredOffers.push(offer);
+                               }
+                               else if(kategorie==1&&offer.personen<1) {
+                                   filteredOffers.push(offer);
+                               } else if(kategorie==2&&offer.personen>0) {
+                                   filteredOffers.push(offer);
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
+   })
     offerslist = filteredOffers;
 }
+
+ */
 function getFilter() {
-    var ang;
-    var kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var ang_ges = 0;
+    var kategorie = 1; //1 = ladungsbeförderung, 2 = personenbeförderung
     var minPreis;
     var maxPreis;
     var von;
     var nach;
     var datum;
+    var anzeigenRender = [];
+    var personen;
+    var ladeflaeche;
+    var ladehoehe;
+    var ladungsgewicht;
     $.ajax({
         url: '/anzeige/filter',
-        type: 'GET',
+        type: 'POST',
+        contentType: 'application/json',
         dataType: 'json',
+        data: JSON.stringify({
+            "ang_ges": ang_ges,
+            "kategorie": kategorie
+        }),
         success: function (response) {
-            filternStandard(response.result, minPreis, maxPreis, von, nach, datum, kategorie);
+            var serverAnzeigen;
+            serverAnzeigen = response;
+            anzeigenRender = filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
+            if (kategorie == undefined) {
+                renderOffersList(anzeigenRender);
+            }
+            if (kategorie == 1) {
+                anzeigenRender = filternCargo(anzeigenRender, ladeflaeche, ladehoehe, ladungsgewicht);
+                renderOffersList(anzeigenRender);
+            }
+            if (kategorie == 2) {
+                anzeigenRender = filternTaxi(anzeigenRender, personen);
+                renderOffersList(anzeigenRender);
+            }
         },
         error: function (response) {
         },
     });
 }
-function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum, kategorie) {
+function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum) {
     var filteredAnzeigen = [];
     for (var i = 0; i < anzeigen.length; i++) {
-        if ((anzeigen[i].preis == minPreis || anzeigen[i].preis == maxPreis) && (minPreis == undefined || maxPreis == undefined)) {
+        if (anzeigen[i].preis == minPreis || minPreis === undefined) {
+            if (anzeigen[i].preis == maxPreis || maxPreis === undefined) {
+                if (anzeigen[i].datum == datum || datum === undefined) {
+                    if (anzeigen[i].start == von || von === undefined) {
+                        if (anzeigen[i].ziel == nach || nach === undefined) {
+                            filteredAnzeigen[i] = anzeigen[i];
+                        }
+                    }
+                }
+            }
         }
     }
-    if (kategorie == 1) {
-    }
-    else if (kategorie == 2) {
-    }
-    else {
-    }
+    return filteredAnzeigen;
 }
-function filternTaxi() {
+function filternTaxi(anzeigen, personen) {
+    var filteredTaxi = [];
+    for (var i = 0; i < anzeigen.length; i++) {
+        if (anzeigen[i].personen == personen || personen == undefined) {
+            filteredTaxi[i] = anzeigen[i];
+        }
+    }
+    return filteredTaxi;
 }
-function filternCargo() {
+function filternCargo(anzeigen, ladeflaeche, ladehoehe, ladungsgewicht) {
+    var filteredCargo = [];
+    for (var i = 0; i < anzeigen.length; i++) {
+        if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche === undefined) {
+            if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe === undefined) {
+                if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht === undefined) {
+                    filteredCargo[i] = anzeigen[i];
+                }
+            }
+        }
+    }
+    return filteredCargo;
 }
 function addAnzeige() {
     var rad1 = $('#inlineRadio1:checked');
@@ -452,7 +505,7 @@ function renderAnzeige(anz) {
     var datumEuropaFormat = dateConvert(datumSqlFormat);
     var fahrzeugName;
     var img;
-    if (anz.personen === null) {
+    if (anz.personen === null || anz.personen === undefined) {
         ueberschrift = "Ladungsbeförderung";
         menge = String(anz.ladungsgewicht);
     }
@@ -477,7 +530,6 @@ function renderAnzeige(anz) {
 function renderOffersList(offerList) {
     var offersListBody = $("#offersTableBody");
     offersListBody.empty();
-    console.log(offerList.length);
     for (var i = 0; i < offerList.length; i++) {
         renderAnzeige(offerList[i]);
     }
