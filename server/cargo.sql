@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Jun 2021 um 15:10
--- Server-Version: 10.4.18-MariaDB
--- PHP-Version: 7.3.27
+-- Erstellungszeit: 09. Jun 2021 um 21:33
+-- Server-Version: 10.4.19-MariaDB
+-- PHP-Version: 7.3.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -44,12 +44,11 @@ CREATE TABLE `anzeige` (
 --
 
 INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `ziel`, `beschreibung`, `id_fahrzeug`) VALUES
-(118, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1),
-(119, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1),
-(120, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1),
-(121, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1),
-(122, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1),
-(123, 31, 0, '2021-06-23', 300, 'Gießen', 'Hamburg', 'TestTestTestTest', 1);
+(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', 1),
+(2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
+(3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
+(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', 2),
+(5, 1, 1, '2021-06-17', 250, 'Aßlar', 'Wetzlar', 'Just do it', NULL);
 
 -- --------------------------------------------------------
 
@@ -68,7 +67,7 @@ CREATE TABLE `buchungen` (
 --
 
 INSERT INTO `buchungen` (`id`, `id_kasse`, `datum`) VALUES
-(4, 8, '2021-06-08 18:22:53');
+(1, 1, '2021-06-09 17:27:07');
 
 -- --------------------------------------------------------
 
@@ -91,9 +90,10 @@ CREATE TABLE `fahrzeug` (
 --
 
 INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `bild_pfad`) VALUES
-(19, 31, 'VW Golf', 2010, 500, 1500, 'bilder/img.pn'),
-(20, 31, 'VW Golf', 2010, 500, 1500, 'bilder/img.pn'),
-(21, 31, 'VW Golf', 2010, 500, 1500, 'bilder/img.pn');
+(1, 1, 'VW Arteon', 2018, 300, 2000, 'bilder/img.png'),
+(2, 1, 'VW Sharan', 2012, 500, 2300, 'bilder/img.png'),
+(3, 2, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
+(4, 6, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
 
 -- --------------------------------------------------------
 
@@ -112,8 +112,7 @@ CREATE TABLE `kasse` (
 --
 
 INSERT INTO `kasse` (`id`, `user_id`, `anz_ID`) VALUES
-(8, 31, 119),
-(9, 31, 119);
+(1, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -133,9 +132,7 @@ CREATE TABLE `lieferung` (
 --
 
 INSERT INTO `lieferung` (`anz_ID`, `ladeflaeche`, `ladungsgewicht`, `ladehoehe`) VALUES
-(119, 3, 3, 3),
-(121, 3, 3, 3),
-(123, 3, 3, 3);
+(4, 3, 30, 120);
 
 -- --------------------------------------------------------
 
@@ -150,15 +147,6 @@ CREATE TABLE `nachricht` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `nachricht_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `nachricht`
---
-
-INSERT INTO `nachricht` (`absender_id`, `empfaenger_id`, `inhalt`, `date`, `nachricht_id`) VALUES
-('test66@gmail.com', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 16:21:05', 1),
-('test66@gmail.com', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 16:22:14', 2),
-('test66@gmail.com', 'test@gmail21.commm', 'Nachrichten test', '2021-06-08 16:22:53', 3);
 
 -- --------------------------------------------------------
 
@@ -176,12 +164,12 @@ CREATE TABLE `personenbefoerderung` (
 --
 
 INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
-(118, 4),
-(120, 4),
-(122, 4);
+(1, 4),
+(2, 2),
+(3, 1),
+(5, 10);
 
 -- --------------------------------------------------------
-
 --
 -- Tabellenstruktur für Tabelle `tracking`
 --
@@ -195,17 +183,7 @@ CREATE TABLE `tracking` (
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Daten für Tabelle `tracking`
---
-
-INSERT INTO `tracking` (`id`, `lat`, `lng`, `reader`, `writer`, `date`) VALUES
-(1, 0, 0, 39, 40, '2021-06-12 16:51:06'),
-(2, 50, 50, 39, 40, '2021-06-12 17:13:54'),
-(3, 30, -110, 39, 40, '2021-06-12 17:15:07');
-
 -- --------------------------------------------------------
-
 --
 -- Tabellenstruktur für Tabelle `user`
 --
@@ -223,10 +201,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `handyNr`, `passwort`) VALUES
-(31, 'test@gmail21.commm', 'testname', 'testhandy', 'test1234'),
-(39, 'test66@gmail.comm', 'Max Mustermann', '+49293204803', 'test1234'),
-(40, 'test67@gmail.comm', 'Max Mustermann', '+49293204803', 'test1234'),
-(41, 'test70@gmail.comm', 'Max Mustermann', '+49293204803', 'test1234');
+(1, 'root@gmail.com', 'Test User', '01743485938', 'root'),
+(2, 'fast-Driver@gmail.com', 'Thomas Müller', '01949383234', 'Blanco99'),
+(3, 'Bandigo@gmail.com', 'Bernd Wender', '012483193493', 'B239djak3?!'),
+(4, 'hyper@gmail.com', 'Lukas Hohl', '1029343943', 'jd3nd93kqn'),
+(5, 'onur@gmail.com', 'Onur Dede', '0239913290321', 'ksnai3dnaj3n3'),
+(6, 'travel-alg@gmail.com', 'Trevor Denkins', '013839452923', 'nofiann3f932nds93');
 
 --
 -- Indizes der exportierten Tabellen
@@ -291,6 +271,12 @@ ALTER TABLE `tracking`
   ADD KEY `writer` (`writer`);
 
 --
+-- AUTO_INCREMENT für Tabelle `tracking`
+--
+ALTER TABLE `tracking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+--
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
@@ -305,43 +291,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `anzeige`
 --
 ALTER TABLE `anzeige`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `kasse`
 --
 ALTER TABLE `kasse`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT für Tabelle `nachricht`
 --
 ALTER TABLE `nachricht`
-  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT für Tabelle `tracking`
---
-ALTER TABLE `tracking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints der exportierten Tabellen
@@ -351,7 +331,8 @@ ALTER TABLE `user`
 -- Constraints der Tabelle `anzeige`
 --
 ALTER TABLE `anzeige`
-  ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `buchungen`
@@ -383,6 +364,7 @@ ALTER TABLE `lieferung`
 --
 ALTER TABLE `personenbefoerderung`
   ADD CONSTRAINT `personenbefoerderung_ibfk_1` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 --
 -- Constraints der Tabelle `tracking`

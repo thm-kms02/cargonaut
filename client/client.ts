@@ -18,11 +18,8 @@ let trackNumButton: JQuery
 let mapArea: JQuery;
 let testbutton: JQuery;
 let filternBTN:JQuery;
-
-
-
-
 let loginBTN:JQuery;
+
 let person: number;
 let von: string;
 let nach: string;
@@ -51,7 +48,7 @@ $(() => {
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
-    loginBTN = $("#anmelden");
+    loginBTN = $("#Buttonlogin");
     filternBTN = $("#filtern");
 
     getAll();
@@ -698,8 +695,9 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
 }
 
 function login(){
-    let email = "root@gmail.com"
-    let passwort = "root"
+    event.preventDefault();
+    let email = String($('#loginEmail').val()).trim().toLowerCase();
+    let passwort = String($('#loginPasswort').val()).trim()
     $.ajax({
         url: '/login',
         type: 'POST',
