@@ -379,8 +379,8 @@ app.post('/create/message', (req: Request, res: Response) => {
 });
 
 app.post('/create/account', (req: Request, res: Response) => {
-    const user: User = new User(req.body.email, req.body.name, req.body.passwort, req.body.geburtsdatum, req.body.bild);
-    let data = [user.email, user.name, user.passwort, user.geburtsdatum, req.body.bild]
+    const user: User = new User(req.body.email, req.body.name, req.body.password, req.body.birthday, req.body.img);
+    let data = [user.email, user.name, user.passwort, user.geburtsdatum, user.profil_bild]
     let cQuery: string = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, (err, results: any) => {
         if (err === null) {

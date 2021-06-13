@@ -17,6 +17,7 @@ let inputLoginEmail: JQuery;
 let inputLoginPassword: JQuery;
 
 //Register-Page html-Elements
+let registryModal: JQuery;
 let registryMail: JQuery;
 let registryName: JQuery;
 let registryPassword: JQuery;
@@ -88,6 +89,7 @@ $(() => {
     offerArea = $("#offerArea");
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
+    registryModal = $('#exampleModal');
 
 
     getAll();
@@ -143,7 +145,9 @@ $(() => {
     })
 
     registryBTN.on('click', () =>{
+        registryModal.modal('hide');
         registry();
+
     })
 });
 
@@ -774,6 +778,7 @@ function login(){
         },
     });
 }
+
 function logout() {
     $.ajax({
         url: '/logout',
@@ -825,28 +830,35 @@ function postBewertung(){
 }
 
 function registry(){
+
+
 let email:string = String($('#registryMail').val()).trim().toLowerCase();
 let name :string = String($('#registryName').val());
 let password :string = String($('#registryPassword').val()).trim();
 let birthday:string = String($('#registryBirthday').val());
+if(email!=""&&name!=""&&password!=""&&birthday!="") {
 let img:string = "bilder/profil_default.png";
+
     $.ajax({
         url: '/create/account',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "email": email,
-            "name": name,
-            "passwort":password,
-            "geburtsdatum":birthday,
-            "bild":img
+        email,
+           name,
+            password,
+            birthday,
+            img
         }),
         success: (response) => {
-            alert(response.message)
+            alert("sucess");
         },
         error: (response) => {
-            alert(response.responseJSON.message)
+            alert("Error");
         },
     });
+} else {
+    alert("Bitte alle Eingabefelder ausfüllen!");
+}
 }

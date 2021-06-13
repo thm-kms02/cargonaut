@@ -364,8 +364,8 @@ app.post('/create/message', function (req, res) {
     });
 });
 app.post('/create/account', function (req, res) {
-    var user = new user_1.User(req.body.email, req.body.name, req.body.passwort, req.body.geburtsdatum, req.body.bild);
-    var data = [user.email, user.name, user.passwort, user.geburtsdatum, req.body.bild];
+    var user = new user_1.User(req.body.email, req.body.name, req.body.password, req.body.birthday, req.body.img);
+    var data = [user.email, user.name, user.passwort, user.geburtsdatum, user.profil_bild];
     var cQuery = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
