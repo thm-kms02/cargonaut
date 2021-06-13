@@ -120,6 +120,21 @@ function getTrackingRole() {
 
 }
 
+function logout() {
+    $.ajax({
+        url: '/session/',
+        type: 'DELETE',
+        dataType: 'json',
+        success: (response) => {
+
+
+        },
+        error: (response) => {
+
+        },
+    });
+}
+
 function goTrack(role: number, tracknum: number) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
     if(role==1) {

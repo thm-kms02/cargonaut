@@ -94,6 +94,17 @@ function getTrackingRole() {
         },
     });
 }
+function logout() {
+    $.ajax({
+        url: '/session/',
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (response) {
+        },
+        error: function (response) {
+        },
+    });
+}
 function goTrack(role, tracknum) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
     if (role == 1) {
