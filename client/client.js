@@ -9,6 +9,10 @@ var loginBTN;
 var inputLoginEmail;
 var inputLoginPassword;
 //Register-Page html-Elements
+var registryMail;
+var registryName;
+var registryPassword;
+var registryBirthday;
 var registryBTN;
 //Offers Page html-Elements:
 var mainarea;

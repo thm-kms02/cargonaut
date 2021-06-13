@@ -17,6 +17,10 @@ let inputLoginEmail: JQuery;
 let inputLoginPassword: JQuery;
 
 //Register-Page html-Elements
+let registryMail: JQuery;
+let registryName: JQuery;
+let registryPassword: JQuery;
+let registryBirthday: JQuery;
 let registryBTN:JQuery;
 
 //Offers Page html-Elements:
