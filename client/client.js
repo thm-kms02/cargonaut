@@ -176,18 +176,16 @@ function createCar() {
     var year = Number(yearin.val());
     var vol = Number(volin.val());
     var weight = Number(weightin.val());
-    var fzg = new fahrzeug_1.Fahrzeug("", 1, 1, 1, "");
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "name": fzg.name,
-            "year": fzg.jahr,
-            "vol": fzg.volumen,
-            "weight": fzg.gewicht,
-            "pic_path": fzg.bild_pfad,
+            "name": name,
+            "year": year,
+            "vol": vol,
+            "weight": weight,
         }),
         success: function (response) {
             console.log("sucess");
