@@ -114,17 +114,27 @@ let addCarAttributeWeight: JQuery;
 
 //Global Variables:
 let person: number;
+let personF:number;
 let von: string;
+let vonF: string;
 let nach: string;
+let nachF: string;
 let setDate: string;
+let setDateF: string;
 let von2: string;
+let von2F: string;
 let nach2: string;
+let nach2F: string;
 let setDate2: string;
+let setDate2F: string;
 let fahrzeugID: number;
 let fahrzeugID2: number;
 let gesamtgewichtIN: number;
+let gesamtgewichtF: number;
 let ladeflaecheIN: number;
+let ladeflaecheF: number;
 let ladehoeheIN: number;
+let ladehoeheF: number;
 let offerslist: Anzeige[];
 
 
@@ -152,7 +162,26 @@ $(() => {
     registryModal = $('#exampleModal');
     addCarBTN = $("#addCarBTN");
     offerTableForm = $("#offerTableForm");
-
+    inputPersonenzahlF = $("#inputPersonenzahlF");
+    inputVonF  = $("#inputVonF");
+    inputNachF = $("#inputNachF");
+    inputDateF = $("#inputDateF");
+    inputGesamtgewichtF = $("#inputGesamtgewichtF");
+    inputVon2F = $("#inputVon2F");
+    inputLadeflaecheF = $("#inputLadeflaecheF");
+    inputDate2F = $("#inputDate2F");
+    inputNach2F = $("#inputNach2F");
+    inputLadehoeheF = $("#inputLadehoeheF");
+    inputPersonenzahl = $("#inputPersonenzahl");
+    inputVon  = $("#inputVon");
+    inputNach = $("#inputNach");
+    inputDate = $("#inputDate");
+    inputGesamtgewicht = $("#inputGesamtgewicht");
+    inputLadeflaeche  = $("#inputLadeflaecheF");
+    inputLadehoehe = $("#inputLadehoehe");
+    inputVon2 = $("#inputVon2");
+    inputNach2 =  $("#inputNach2");
+    inputDate2 = $("#inputDate2");
 
     getAll();
 
@@ -201,6 +230,7 @@ $(() => {
     fahrzeugDropLieferung.on('click', () => {
         getFahrzeugDropLieferung();
     });
+
     loginBTN.on('click', () =>{
         login();
     });
@@ -212,7 +242,13 @@ $(() => {
         registryModal.modal('hide');
         registry();
 
-    })
+    });
+    saveBTNF.on('click',()=>{
+        saveValuesTaxiFilter();
+    });
+    saveBTN2F.on('click', () => {
+        saveValuesLieferungFilter();
+    });
 });
 
 function getTrackingRole() {
@@ -382,36 +418,60 @@ function deleteCar(id: number) {
 }
 
 function saveValuesTaxi() {
-    person = Number($('#inputPersonenzahl').val());
-    von = String($('#inputVon').val()).trim();
-    nach = String($('#inputNach').val()).trim();
+    person = Number($(inputPersonenzahl).val());
+    von = String($(inputVon).val()).trim();
+    nach = String($(inputNach).val()).trim();
     fahrzeugID = Number($('.custom-select').val());
-    setDate = String($('#inputDate').val()).trim();
+    setDate = String($(inputDate).val()).trim();
 }
-
+function saveValuesTaxiFilter() {
+    personF = Number($(inputPersonenzahlF).val());
+    vonF = String($(inputVonF).val()).trim();
+    nachF = String($(inputNachF).val()).trim();
+    setDateF = String($(inputDateF).val()).trim();
+}
 function saveValuesLieferung() {
-    gesamtgewichtIN = Number($('#inputGesamtgewicht').val())
-    setDate2 = String($('#inputDate2').val()).trim();
-    von2 = String($('#inputVon2').val()).trim();
-    nach2 = String($('#inputNach2').val()).trim();
-    ladeflaecheIN = Number($('#inputLadeflaeche').val());
-    ladehoeheIN = Number($('#inputLadehoehe').val());
+    gesamtgewichtIN = Number($(inputGesamtgewicht).val())
+    setDate2 = String($(inputDate2).val()).trim();
+    von2 = String($(inputVon2).val()).trim();
+    nach2 = String($(inputNach2).val()).trim();
+    ladeflaecheIN = Number($(inputLadeflaeche).val());
+    ladehoeheIN = Number($(inputLadehoehe).val());
     fahrzeugID2 = Number($('.custom-select2').val());
 }
-
+function saveValuesLieferungFilter() {
+    gesamtgewichtF = Number($(inputGesamtgewichtF).val())
+    setDate2F =String($(inputDate2F).val())
+    von2F = String($(inputVon2F).val()).trim();
+    nach2F = String($(inputNach2F).val()).trim();
+    ladeflaecheF = Number($(inputLadeflaecheF).val());
+    ladehoeheF = Number($(inputLadehoeheF).val());
+}
 function getFilter() {
     let ang_ges: number = 0;
     let kategorie: number = 1 ; //1 = ladungsbeförderung, 2 = personenbeförderung
-    let minPreis: number;
-    let maxPreis: number;
     let von: string;
     let nach: string;
     let datum: string;
     let anzeigenRender:AnzeigeRender[]=[];
-    let personen:number ;
-    let ladeflaeche:number;
-    let ladehoehe:number;
-    let ladungsgewicht:number;
+    let personen:number = personF;
+    let ladeflaeche:number = ladeflaecheF;
+    let ladehoehe:number = ladehoeheF;
+    let ladungsgewicht:number = gesamtgewichtF;
+
+    if (kategorie == 1){
+        von = von2F;
+        nach = nach2F;
+        datum = setDate2F;
+    }
+    if (kategorie == 2){
+        von = vonF;
+        nach = nachF;
+        datum = setDateF;
+    }
+    let minPreis: number;
+    let maxPreis: number;
+
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -423,17 +483,17 @@ function getFilter() {
         }),
         success: (response) => {
             let serverAnzeigen:AnzeigeRender[];
-                serverAnzeigen =response;
-                anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
-                if(kategorie == undefined){
-                    renderOffersList(anzeigenRender);
-                }if (kategorie ==1){
-                    anzeigenRender = filternCargo(anzeigenRender,ladeflaeche,ladehoehe,ladungsgewicht);
-                    renderOffersList(anzeigenRender);
-                }if (kategorie ==2) {
-                    anzeigenRender=filternTaxi(anzeigenRender,personen);
-                    renderOffersList(anzeigenRender);
-                }
+            serverAnzeigen =response;
+            anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
+            if(kategorie == undefined){
+                renderOffersList(anzeigenRender);
+            }if (kategorie ==1){
+                anzeigenRender = filternCargo(anzeigenRender,ladeflaeche,ladehoehe,ladungsgewicht);
+                renderOffersList(anzeigenRender);
+            }if (kategorie ==2) {
+                anzeigenRender=filternTaxi(anzeigenRender,personen);
+                renderOffersList(anzeigenRender);
+            }
         },
         error: (response) => {
 
