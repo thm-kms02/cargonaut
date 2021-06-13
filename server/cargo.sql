@@ -169,6 +169,7 @@ INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
 (3, 1),
 (5, 10);
 
+
 -- --------------------------------------------------------
 --
 -- Tabellenstruktur für Tabelle `tracking`
