@@ -60,7 +60,6 @@ var inputDateF;
 var inputNachF;
 var saveBTNF;
 //Cargo-FILTER-Modal-Page html-Elements:
-var fahrzeugDropLieferungF;
 var inputGesamtgewichtF;
 var inputVon2F;
 var inputLadeflaecheF;
@@ -94,17 +93,27 @@ var addCarAttributeCargoArea;
 var addCarAttributeWeight;
 //Global Variables:
 var person;
+var personF;
 var von;
+var vonF;
 var nach;
+var nachF;
 var setDate;
+var setDateF;
 var von2;
+var von2F;
 var nach2;
+var nach2F;
 var setDate2;
+var setDate2F;
 var fahrzeugID;
 var fahrzeugID2;
 var gesamtgewichtIN;
+var gesamtgewichtF;
 var ladeflaecheIN;
+var ladeflaecheF;
 var ladehoeheIN;
+var ladehoeheF;
 var offerslist;
 $(function () {
     mainarea = $("#mainArea");
@@ -126,6 +135,26 @@ $(function () {
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
     addCarBTN = $("#addCarBTN");
+    inputPersonenzahlF = $("#inputPersonenzahlF");
+    inputVonF = $("#inputVonF");
+    inputNachF = $("#inputNachF");
+    inputDateF = $("#inputDateF");
+    inputGesamtgewichtF = $("#inputGesamtgewichtF");
+    inputVon2F = $("#inputVon2F");
+    inputLadeflaecheF = $("#inputLadeflaecheF");
+    inputDate2F = $("#inputDate2F");
+    inputNach2F = $("#inputNach2F");
+    inputLadehoeheF = $("#inputLadehoeheF");
+    inputPersonenzahl = $("#inputPersonenzahl");
+    inputVon = $("#inputVon");
+    inputNach = $("#inputNach");
+    inputDate = $("#inputDate");
+    inputGesamtgewicht = $("#inputGesamtgewicht");
+    inputLadeflaeche = $("#inputLadeflaecheF");
+    inputLadehoehe = $("#inputLadehoehe");
+    inputVon2 = $("#inputVon2");
+    inputNach2 = $("#inputNach2");
+    inputDate2 = $("#inputDate2");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
@@ -154,8 +183,14 @@ $(function () {
     saveBTN.on('click', function () {
         saveValuesTaxi();
     });
+    saveBTNF.on('click', function () {
+        saveValuesTaxiFilter();
+    });
     saveBTN2.on('click', function () {
         saveValuesLieferung();
+    });
+    saveBTN2F.on('click', function () {
+        saveValuesLieferungFilter();
     });
     fahrzeugDropTaxi.on('click', function () {
         getFahrzeugDropTaxi();
@@ -316,34 +351,58 @@ function deleteCar(id) {
     });
 }
 function saveValuesTaxi() {
-    person = Number($('#inputPersonenzahl').val());
-    von = String($('#inputVon').val()).trim();
-    nach = String($('#inputNach').val()).trim();
+    person = Number($(inputPersonenzahl).val());
+    von = String($(inputVon).val()).trim();
+    nach = String($(inputNach).val()).trim();
     fahrzeugID = Number($('.custom-select').val());
-    setDate = String($('#inputDate').val()).trim();
+    setDate = String($(inputDate).val()).trim();
+}
+function saveValuesTaxiFilter() {
+    personF = Number($(inputPersonenzahlF).val());
+    vonF = String($(inputVonF).val()).trim();
+    nachF = String($(inputNachF).val()).trim();
+    setDateF = String($(inputDateF).val()).trim();
 }
 function saveValuesLieferung() {
-    gesamtgewichtIN = Number($('#inputGesamtgewicht').val());
-    setDate2 = String($('#inputDate2').val()).trim();
-    von2 = String($('#inputVon2').val()).trim();
-    nach2 = String($('#inputNach2').val()).trim();
-    ladeflaecheIN = Number($('#inputLadeflaeche').val());
-    ladehoeheIN = Number($('#inputLadehoehe').val());
+    gesamtgewichtIN = Number($(inputGesamtgewicht).val());
+    setDate2 = String($(inputDate2).val()).trim();
+    von2 = String($(inputVon2).val()).trim();
+    nach2 = String($(inputNach2).val()).trim();
+    ladeflaecheIN = Number($(inputLadeflaeche).val());
+    ladehoeheIN = Number($(inputLadehoehe).val());
     fahrzeugID2 = Number($('.custom-select2').val());
+}
+function saveValuesLieferungFilter() {
+    gesamtgewichtF = Number($(inputGesamtgewichtF).val());
+    setDate2F = String($(inputDate2F).val());
+    von2F = String($(inputVon2F).val()).trim();
+    nach2F = String($(inputNach2F).val()).trim();
+    ladeflaecheF = Number($(inputLadeflaecheF).val());
+    ladehoeheF = Number($(inputLadehoeheF).val());
 }
 function getFilter() {
     var ang_ges = 0;
     var kategorie = 1; //1 = ladungsbeförderung, 2 = personenbeförderung
-    var minPreis;
-    var maxPreis;
     var von;
     var nach;
     var datum;
     var anzeigenRender = [];
-    var personen;
-    var ladeflaeche;
-    var ladehoehe;
-    var ladungsgewicht;
+    var personen = personF;
+    var ladeflaeche = ladeflaecheF;
+    var ladehoehe = ladehoeheF;
+    var ladungsgewicht = gesamtgewichtF;
+    if (kategorie == 1) {
+        von = von2F;
+        nach = nach2F;
+        datum = setDate2F;
+    }
+    if (kategorie == 2) {
+        von = vonF;
+        nach = nachF;
+        datum = setDateF;
+    }
+    var minPreis;
+    var maxPreis;
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
