@@ -129,6 +129,7 @@ $(() => {
     offerArea = $("#offerArea");
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
+    addCarBTN = $("#addCarBTN");
 
 
     getAll();
@@ -232,7 +233,6 @@ function sendLocation(tracknum: number) {
                         tracknum,
                        lat,
                         lng
-
                     }),
                     success: () => {
                         showLocation(position.coords.latitude, position.coords.longitude);
@@ -278,22 +278,18 @@ function showLocation(lat: number, lng: number) {
 }
 
 function getAll() {
-
     $.ajax({
         url: '/anzeige',
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-
             renderOffersList(response.result);
             offerslist = response.result;
-
         },
         error: (response) => {
 
         },
     });
-
 }
 
 function createCar() {

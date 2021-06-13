@@ -109,6 +109,7 @@ $(function () {
     offerArea = $("#offerArea");
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
+    addCarBTN = $("#addCarBTN");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
