@@ -364,7 +364,7 @@ input[type="text"], input[type="password"] {
     padding-left:5px;
 }
 .containerSignin {
-    width: 500px;
+    width: 650px;
     height: 600px;
     margin: 130px auto;
     padding-top: 50px;
@@ -386,7 +386,6 @@ input[type="text"], input[type="password"] {
     font-size:18px;
     border:#fff solid 1px;
 }
-
 
 
 
