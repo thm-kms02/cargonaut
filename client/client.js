@@ -183,9 +183,10 @@ function createCar() {
         dataType: 'json',
         data: JSON.stringify({
             "name": name,
-            "year": year,
-            "vol": vol,
-            "weight": weight,
+            "jahr": year,
+            "volumen": vol,
+            "gewicht": weight,
+            "bild_pfad": picin
         }),
         success: function (response) {
             console.log("sucess");
@@ -405,8 +406,9 @@ function sendMessage() {
     });
 }
 function getmyMessages() {
+    var id;
     $.ajax({
-        url: '/messages/',
+        url: '/messages',
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
@@ -581,4 +583,8 @@ function login() {
             alert(response.responseJSON.message);
         },
     });
+}
+function getBewertungen() {
+}
+function postBewertung() {
 }

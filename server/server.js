@@ -9,6 +9,7 @@ var anzeigeRender_1 = require("../class/anzeigeRender");
 var kasse_1 = require("../class/kasse");
 var buchen_1 = require("../class/buchen");
 var session = require("express-session");
+var bewertung_1 = require("../class/bewertung");
 var app = express();
 var database = mysql.createConnection({
     host: 'localhost',
@@ -305,46 +306,47 @@ app.post('/create/fahrzeug', function (req, res) {
         }
     });
 });
-app.post('/create/bild', function (req, res) {
-    var bild_ID = req.body.bild_ID;
-    var pfad = req.body.pfad;
-    var data = [bild_ID, pfad];
-    var cQuery = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
+/*
+app.post('/create/bild', (req: Request, res: Response) => {
+    const bild_ID: string = req.body.bild_ID;
+    const pfad: string = req.body.pfad;
+    const data = [bild_ID, pfad]
+
+    const cQuery: string = "INSERT INTO bild (bild_ID, pfad ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
         if (err === null) {
             res.status(201);
             res.send(" bild wurde hinzugefügt");
-        }
-        else if (err.errno === 1062) {
+        } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        }
-        else {
+        } else {
             console.log(err);
             res.sendStatus(500);
         }
     });
+
 });
-app.post('/create/anzeige_bild', function (req, res) {
-    var anz_ID = req.body.anz_ID;
-    var b_id = req.body.b_id;
-    var data = [anz_ID, b_id];
-    var cQuery = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
-    database.query(cQuery, data, function (err) {
+
+app.post('/create/anzeige_bild', (req: Request, res: Response) => {
+    const anz_ID: string = req.body.anz_ID;
+    const b_id: string = req.body.b_id;
+    const data = [anz_ID, b_id]
+    const cQuery: string = "INSERT INTO anzeige_bild (anz_ID, b_id ) VALUES (?, ?);";
+    database.query(cQuery, data, (err) => {
         if (err === null) {
             res.status(201);
             res.send(" anzeige von Bilder  wurde erstellt");
-        }
-        else if (err.errno === 1062) {
+        } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        }
-        else {
+        } else {
             console.log(err);
             res.sendStatus(500);
         }
     });
 });
+*/
 app.post('/create/message', function (req, res) {
     var absender = req.body.absender;
     var empfaenger = req.body.empfaenger;
@@ -476,6 +478,44 @@ app.post('/anzeige/filter', function (req, res) {
             }
             console.log(anzeigen.length);
             res.send(anzeigen);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.post('/bewertung/post', function (req, res) {
+    var bewertung = new bewertung_1.Bewertung(session.user_id, req.body.id_empfaenger, req.body.bewertung, req.body.kommentar);
+    var data = [bewertung.id_verfasser, bewertung.id_empfaenger, bewertung.bewertung, bewertung.kommentar];
+    var cQuery = "INSERT INTO bewertung (id_verfasser, id_empfaenger, bewertung, kommentar) VALUES (?, ?, ?, ?) ";
+    database.query(cQuery, data, function (err, results) {
+        if (err === null) {
+            res.status(200);
+            res.send("Bewertung wurde gespeichert");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.get('/bewertung/get', function (req, res) {
+    var cQuery = "SELECT *,user.name from bewertung";
+    var bewertung = [];
+    database.query(cQuery, function (err, results) {
+        if (err === null) {
+            res.status(200);
+            bewertung = results;
+            res.send(bewertung);
         }
         else if (err.errno === 1062) {
             res.status(500);

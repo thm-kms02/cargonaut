@@ -10,6 +10,7 @@ import {AnzeigeRender} from "../class/anzeigeRender";
 import {Kasse} from "../class/kasse";
 import {Buchen} from "../class/buchen";
 import * as session from "express-session";
+import {Bewertung} from "../class/bewertung";
 
 const app = express();
 const database: Connection = mysql.createConnection({
@@ -319,6 +320,7 @@ app.post('/create/fahrzeug', (req: Request, res: Response) => {
 
 });
 
+/*
 app.post('/create/bild', (req: Request, res: Response) => {
     const bild_ID: string = req.body.bild_ID;
     const pfad: string = req.body.pfad;
@@ -358,6 +360,7 @@ app.post('/create/anzeige_bild', (req: Request, res: Response) => {
         }
     });
 });
+*/
 
 app.post('/create/message', (req: Request, res: Response) => {
     let absender: string = req.body.absender;
@@ -407,6 +410,7 @@ app.put('/update/user', (req: Request, res: Response) => {
         }
     });
 });
+
 app.post('/kasse', (req: Request, res: Response) => {
     const kasse: Kasse = new Kasse(req.body.user_id, req.body.anz_ID);
     let data = [kasse.user_id, kasse.anz_ID]
@@ -443,7 +447,6 @@ app.post('/buchen', (req: Request, res: Response) => {
         }
     });
 });
-
 
 app.post('/anzeige/filter', (req: Request, res: Response) => {
     let anzeigen:AnzeigeRender[]=[];
@@ -499,3 +502,41 @@ if (kategorie == undefined){
     });
 });
 
+app.post('/bewertung/post', (req:Request, res:Response)=>{
+let bewertung:Bewertung = new Bewertung(session.user_id,req.body.id_empfaenger,req.body.bewertung,req.body.kommentar);
+let data = [bewertung.id_verfasser,bewertung.id_empfaenger,bewertung.bewertung,bewertung.kommentar];
+let cQuery = "INSERT INTO bewertung (id_verfasser, id_empfaenger, bewertung, kommentar) VALUES (?, ?, ?, ?) ";
+database.query(cQuery, data,(err, results: any) => {
+    if (err === null) {
+        res.status(200);
+        res.send("Bewertung wurde gespeichert");
+    }
+
+    else if (err.errno === 1062) {
+        res.status(500);
+        res.send("Fehler");
+    } else {
+        console.log(err);
+        res.sendStatus(500);
+    }
+    });
+});
+
+app.get('/bewertung/get', (req:Request, res:Response)=>{
+    let  cQuery = "SELECT *,user.name from bewertung";
+    let  bewertung: Bewertung[]=[];
+    database.query(cQuery, (err, results: any) => {
+        if (err === null) {
+            res.status(200);
+            bewertung =results;
+            res.send(bewertung);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});

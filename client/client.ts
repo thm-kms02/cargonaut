@@ -222,10 +222,11 @@ function createCar() {
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-           "name": name,
-           "year": year,
-            "vol": vol,
-            "weight": weight,
+            "name": name,
+            "jahr": year,
+           "volumen" : vol,
+            "gewicht": weight,
+            "bild_pfad": picin
         }),
         success: (response) => {
             console.log("sucess");
@@ -455,8 +456,9 @@ function sendMessage() {
 }
 
 function getmyMessages() {
+    let id: number;
     $.ajax({
-        url: '/messages/',
+        url: '/messages',
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
@@ -715,3 +717,9 @@ function login(){
     });
 }
 
+function getBewertungen(){
+
+}
+function postBewertung(){
+
+}
