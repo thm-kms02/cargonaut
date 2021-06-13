@@ -363,9 +363,9 @@ app.post('/create/message', function (req, res) {
     });
 });
 app.post('/create/account', function (req, res) {
-    var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort, req.body.geburtsdatum);
-    var data = [user.email, user.name, user.handyNr, user.passwort, user.geburtsdatum];
-    var cQuery = "INSERT INTO user (email, name, handyNr, passwort, geburtsdatum) VALUES (?, ?, ?, ?, ?);";
+    var user = new user_1.User(req.body.email, req.body.name, req.body.passwort, req.body.geburtsdatum, req.body.bild);
+    var data = [user.email, user.name, user.passwort, user.geburtsdatum, req.body.bild];
+    var cQuery = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
             res.status(201);
@@ -525,5 +525,11 @@ app.get('/bewertung/get', function (req, res) {
             console.log(err);
             res.sendStatus(500);
         }
+    });
+});
+app.delete('/logout', function (req, res) {
+    session.destroy(function () {
+        res.clearCookie("connect.sid");
+        res.send("Sie wurden abgemeldet");
     });
 });

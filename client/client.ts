@@ -20,6 +20,7 @@ let mapArea: JQuery;
 let testbutton: JQuery;
 let filternBTN:JQuery;
 let loginBTN:JQuery;
+let registryBTN:JQuery;
 
 let person: number;
 let von: string;
@@ -56,6 +57,7 @@ $(() => {
     loginArea = $("#containerLogin");
     profileArea = $("#profileArea");
     offerArea = $("#offerArea");
+    registryBTN = $("#registryBTN");
 
     getAll();
 
@@ -107,6 +109,10 @@ $(() => {
     filternBTN.on('click', () =>{
         getFilter();
     })
+
+    registryBTN.on('click', () =>{
+        registry();
+    })
 });
 
 function getTrackingRole() {
@@ -128,20 +134,6 @@ function getTrackingRole() {
 
 }
 
-function logout() {
-    $.ajax({
-        url: '/session/',
-        type: 'DELETE',
-        dataType: 'json',
-        success: (response) => {
-
-
-        },
-        error: (response) => {
-
-        },
-    });
-}
 
 function goTrack(role: number, tracknum: number) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
@@ -745,6 +737,20 @@ function login(){
         },
     });
 }
+function logout() {
+    $.ajax({
+        url: '/logout',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: (response) => {
+            alert(response.message)
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
+}
 
 function getBewertungen(){
     $.ajax({
@@ -771,6 +777,33 @@ function postBewertung(){
         data: JSON.stringify({
             "bewertung": bewertung,
             "kommentar": kommentar
+        }),
+        success: (response) => {
+            alert(response.message)
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
+}
+
+function registry(){
+let email:string = String($('#registryMail').val()).trim().toLowerCase();
+let name :string = String($('#registryName').val());
+let password :string = String($('#registryPassword').val()).trim();
+let birthday:string = String($('#registryBirthday').val());
+let img:string = "bilder/profil_default.png";
+    $.ajax({
+        url: '/create/account',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "email": email,
+            "name": name,
+            "passwort":password,
+            "geburtsdatum":birthday,
+            "bild":img
         }),
         success: (response) => {
             alert(response.message)
