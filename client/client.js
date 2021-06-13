@@ -1,20 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var mainarea;
-var addOfferArea;
-var createOfferBTN;
-var submitOfferBtn;
-var saveBTN;
-var saveBTN2;
-var fahrzeugDropTaxi;
-var fahrzeugDropLieferung;
+//Navbar html-Elements:
+var homeButton;
 var trackbutton;
+//Login-Page html-Elements:
+var loginArea;
+var loginBTN;
+var inputLoginEmail;
+var inputLoginPassword;
+//Register-Page html-Elements
+var registryBTN;
+//Offers Page html-Elements:
+var mainarea;
+var filternBTN;
+var createOfferBTN;
+//Payment-Page html-Elements:
+var offerArea;
+//Cargo-Modal-Page html-Elements:
+var fahrzeugDropLieferung;
+var saveBTN2;
+//Person-Transport-Modal-Page html-Elements:
+var fahrzeugDropTaxi;
+var saveBTN;
+//Create-Offer-Page html-Elements:
+var addOfferArea;
+var submitOfferBtn;
+//Tracking-Page html-Elements:
 var trackNumButton;
 var mapArea;
-var testbutton;
-var filternBTN;
-var loginBTN;
-var registryBTN;
+//Profile-Page html-Elements:
+var profileArea;
+//Global Variables:
 var person;
 var von;
 var nach;
@@ -28,9 +44,6 @@ var gesamtgewichtIN;
 var ladeflaecheIN;
 var ladehoeheIN;
 var offerslist;
-var loginArea;
-var profileArea;
-var offerArea;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -42,20 +55,24 @@ $(function () {
     saveBTN2 = $("#saveBTN2");
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
-    testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
     loginBTN = $("#Buttonlogin");
-    filternBTN = $("#filtern");
+    filternBTN = $("#filterBTN");
     loginArea = $("#containerLogin");
     profileArea = $("#profileArea");
     offerArea = $("#offerArea");
+    homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
     offerArea.hide();
-    testbutton.on('click', function () {
+    homeButton.on('click', function () {
+        addOfferArea.hide();
+        profileArea.hide();
+        mainarea.show();
+        offerArea.hide();
     });
     trackNumButton.on('click', function () {
         getTrackingRole();
@@ -595,7 +612,8 @@ function login() {
             "passwort": passwort
         }),
         success: function (response) {
-            alert(response.message);
+            mainarea.show();
+            loginArea.hide();
         },
         error: function (response) {
             alert(response.responseJSON.message);

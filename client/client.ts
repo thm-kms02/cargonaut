@@ -6,22 +6,48 @@ import {Anzeige} from "../class/anzeige";
 // @ts-ignore
 import {} from 'google.maps';
 
-let mainarea: JQuery;
-let addOfferArea: JQuery;
-let createOfferBTN: JQuery;
-let submitOfferBtn: JQuery;
-let saveBTN: JQuery;
-let saveBTN2: JQuery;
-let fahrzeugDropTaxi: JQuery;
-let fahrzeugDropLieferung: JQuery;
+//Navbar html-Elements:
+let homeButton: JQuery;
 let trackbutton: JQuery;
-let trackNumButton: JQuery
-let mapArea: JQuery;
-let testbutton: JQuery;
-let filternBTN:JQuery;
+
+//Login-Page html-Elements:
+let loginArea: JQuery;
 let loginBTN:JQuery;
+let inputLoginEmail: JQuery;
+let inputLoginPassword: JQuery;
+
+//Register-Page html-Elements
 let registryBTN:JQuery;
 
+//Offers Page html-Elements:
+let mainarea: JQuery;
+let filternBTN:JQuery;
+let createOfferBTN: JQuery;
+
+//Payment-Page html-Elements:
+let offerArea: JQuery;
+
+
+//Cargo-Modal-Page html-Elements:
+let fahrzeugDropLieferung: JQuery;
+let saveBTN2: JQuery;
+
+//Person-Transport-Modal-Page html-Elements:
+let fahrzeugDropTaxi: JQuery;
+let saveBTN: JQuery;
+
+//Create-Offer-Page html-Elements:
+let addOfferArea: JQuery;
+let submitOfferBtn: JQuery;
+
+//Tracking-Page html-Elements:
+let trackNumButton: JQuery;
+let mapArea: JQuery;
+
+//Profile-Page html-Elements:
+let profileArea: JQuery;
+
+//Global Variables:
 let person: number;
 let von: string;
 let nach: string;
@@ -35,9 +61,9 @@ let gesamtgewichtIN: number;
 let ladeflaecheIN: number;
 let ladehoeheIN: number;
 let offerslist: Anzeige[];
-let loginArea: JQuery;
-let profileArea: JQuery;
-let offerArea: JQuery;
+
+
+
 
 $(() => {
     mainarea = $("#mainArea");
@@ -50,14 +76,15 @@ $(() => {
     saveBTN2 = $("#saveBTN2");
     trackbutton = $('#trackingButton');
     mapArea = $('#mapArea');
-    testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
     loginBTN = $("#Buttonlogin");
-    filternBTN = $("#filtern");
+    filternBTN = $("#filterBTN");
     loginArea = $("#containerLogin");
     profileArea = $("#profileArea");
     offerArea = $("#offerArea");
+    homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
+
 
     getAll();
 
@@ -66,10 +93,12 @@ $(() => {
     mainarea.hide();
     offerArea.hide();
 
-
-    testbutton.on('click', () => {
-
-    });
+    homeButton.on('click', () => {
+        addOfferArea.hide();
+        profileArea.hide();
+        mainarea.show();
+        offerArea.hide();
+    })
 
     trackNumButton.on('click', () => {
         getTrackingRole();
@@ -733,7 +762,8 @@ function login(){
             "passwort": passwort
         }),
         success: (response) => {
-            alert(response.message)
+            mainarea.show();
+            loginArea.hide();
         },
         error: (response) => {
            alert(response.responseJSON.message)
