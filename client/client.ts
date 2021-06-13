@@ -65,6 +65,24 @@ let inputNach2: JQuery;
 let inputLadehoehe: JQuery;
 let saveBTN2: JQuery;
 
+//Person-Transport-FILTER-Modal-Page html-Elements:
+let fahrzeugDropTaxiF: JQuery;
+let inputPersonenzahlF: JQuery;
+let inputVonF: JQuery;
+let inputDateF: JQuery;
+let inputNachF: JQuery;
+let saveBTNF: JQuery;
+
+//Cargo-FILTER-Modal-Page html-Elements:
+let fahrzeugDropLieferungF: JQuery;
+let inputGesamtgewichtF: JQuery;
+let inputVon2F: JQuery;
+let inputLadeflaecheF: JQuery;
+let inputDate2F: JQuery;
+let inputNach2F: JQuery;
+let inputLadehoeheF: JQuery;
+let saveBTN2F: JQuery;
+
 //Create-Offer-Page html-Elements:
 let addOfferArea: JQuery;
 let createOfferRadio: JQuery;
