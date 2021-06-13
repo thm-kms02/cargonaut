@@ -9,6 +9,7 @@ var loginBTN;
 var inputLoginEmail;
 var inputLoginPassword;
 //Register-Page html-Elements
+var registryModal;
 var registryMail;
 var registryName;
 var registryPassword;
@@ -134,6 +135,7 @@ $(function () {
     offerArea = $("#offerArea");
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
+    registryModal = $('#exampleModal');
     addCarBTN = $("#addCarBTN");
     inputPersonenzahlF = $("#inputPersonenzahlF");
     inputVonF = $("#inputVonF");
@@ -205,6 +207,7 @@ $(function () {
         getFilter();
     });
     registryBTN.on('click', function () {
+        registryModal.modal('hide');
         registry();
     });
 });
@@ -794,24 +797,29 @@ function registry() {
     var name = String($('#registryName').val());
     var password = String($('#registryPassword').val()).trim();
     var birthday = String($('#registryBirthday').val());
-    var img = "bilder/profil_default.png";
-    $.ajax({
-        url: '/create/account',
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-            "email": email,
-            "name": name,
-            "passwort": password,
-            "geburtsdatum": birthday,
-            "bild": img
-        }),
-        success: function (response) {
-            alert(response.message);
-        },
-        error: function (response) {
-            alert(response.responseJSON.message);
-        },
-    });
+    if (email != "" && name != "" && password != "" && birthday != "") {
+        var img = "bilder/profil_default.png";
+        $.ajax({
+            url: '/create/account',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                email: email,
+                name: name,
+                password: password,
+                birthday: birthday,
+                img: img
+            }),
+            success: function (response) {
+                alert("sucess");
+            },
+            error: function (response) {
+                alert("Error");
+            },
+        });
+    }
+    else {
+        alert("Bitte alle Eingabefelder ausfüllen!");
+    }
 }

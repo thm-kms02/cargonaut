@@ -11,6 +11,7 @@ import {Kasse} from "../class/kasse";
 import {Buchen} from "../class/buchen";
 import * as session from "express-session";
 import {Bewertung} from "../class/bewertung";
+import {domainToASCII} from "url";
 
 const app = express();
 const database: Connection = mysql.createConnection({
@@ -85,6 +86,18 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
             });
         }
     });
+});
+
+app.get('/read/offer/:id', (req: Request, res: Response) => {
+   const query = 'SELECT * FROM anzeige WHERE anzeige.id';
+   const data = [req.params.id];
+   database.query(query, data, (err: MysqlError, results: any) => {
+       if(err) {
+           res.status(500).send({err});
+       } else {
+           res.status(200).send({"result":results[0]});
+       }
+   });
 });
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
@@ -211,6 +224,23 @@ app.get('/user', (req: Request, res: Response) => {
 
     const query: string = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            res.status(200).send({
+                result: rows[0]
+            });
+
+        }
+    });
+});
+
+app.get('/difUser/:id', (req: Request, res: Response) => {
+
+    const query: string = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [req.params.id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
@@ -379,8 +409,8 @@ app.post('/create/message', (req: Request, res: Response) => {
 });
 
 app.post('/create/account', (req: Request, res: Response) => {
-    const user: User = new User(req.body.email, req.body.name, req.body.passwort, req.body.geburtsdatum, req.body.bild);
-    let data = [user.email, user.name, user.passwort, user.geburtsdatum, req.body.bild]
+    const user: User = new User(req.body.email, req.body.name, req.body.password, req.body.birthday, req.body.img);
+    let data = [user.email, user.name, user.passwort, user.geburtsdatum, user.profil_bild]
     let cQuery: string = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, (err, results: any) => {
         if (err === null) {

@@ -79,6 +79,18 @@ app.delete('/car/:carId', function (req, res) {
         }
     });
 });
+app.get('/read/offer/:id', function (req, res) {
+    var query = 'SELECT * FROM anzeige WHERE anzeige.id';
+    var data = [req.params.id];
+    database.query(query, data, function (err, results) {
+        if (err) {
+            res.status(500).send({ err: err });
+        }
+        else {
+            res.status(200).send({ "result": results[0] });
+        }
+    });
+});
 app.get('/trackingrole/:trackID', function (req, res) {
     session.user_id = 2;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
@@ -204,6 +216,21 @@ app.get('/anzeige', function (req, res) {
 app.get('/user', function (req, res) {
     var query = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            res.status(200).send({
+                result: rows[0]
+            });
+        }
+    });
+});
+app.get('/difUser/:id', function (req, res) {
+    var query = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [req.params.id], function (err, rows) {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
@@ -364,8 +391,8 @@ app.post('/create/message', function (req, res) {
     });
 });
 app.post('/create/account', function (req, res) {
-    var user = new user_1.User(req.body.email, req.body.name, req.body.passwort, req.body.geburtsdatum, req.body.bild);
-    var data = [user.email, user.name, user.passwort, user.geburtsdatum, req.body.bild];
+    var user = new user_1.User(req.body.email, req.body.name, req.body.password, req.body.birthday, req.body.img);
+    var data = [user.email, user.name, user.passwort, user.geburtsdatum, user.profil_bild];
     var cQuery = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
