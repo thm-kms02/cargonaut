@@ -14,6 +14,7 @@ var mapArea;
 var testbutton;
 var filternBTN;
 var loginBTN;
+var registryBTN;
 var person;
 var von;
 var nach;
@@ -48,6 +49,7 @@ $(function () {
     loginArea = $("#containerLogin");
     profileArea = $("#profileArea");
     offerArea = $("#offerArea");
+    registryBTN = $("#registryBTN");
     getAll();
     addOfferArea.hide();
     loginArea.hide();
@@ -88,6 +90,9 @@ $(function () {
     filternBTN.on('click', function () {
         getFilter();
     });
+    registryBTN.on('click', function () {
+        registry();
+    });
 });
 function getTrackingRole() {
     event.preventDefault();
@@ -99,17 +104,6 @@ function getTrackingRole() {
         dataType: 'json',
         success: function (response) {
             goTrack(response.trackRole, trackNum);
-        },
-        error: function (response) {
-        },
-    });
-}
-function logout() {
-    $.ajax({
-        url: '/session/',
-        type: 'DELETE',
-        dataType: 'json',
-        success: function (response) {
         },
         error: function (response) {
         },
@@ -606,7 +600,47 @@ function login() {
         },
     });
 }
+function logout() {
+    $.ajax({
+        url: '/logout',
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (response) {
+            alert(response.message);
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
+}
 function getBewertungen() {
 }
 function postBewertung() {
+}
+function registry() {
+    var email = String($('#registryMail').val()).trim().toLowerCase();
+    var name = String($('#registryName').val());
+    var password = String($('#registryPassword').val()).trim();
+    var birthday = String($('#registryBirthday').val());
+    var img = "bilder/profil_default.png";
+    $.ajax({
+        url: '/create/account',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "email": email,
+            "name": name,
+            "passwort": password,
+            "geburtsdatum": birthday,
+            "bild": img
+        }),
+        success: function (response) {
+            alert(response.message);
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
 }

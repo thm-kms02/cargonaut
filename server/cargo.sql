@@ -23,7 +23,6 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
-
 --
 -- Tabellenstruktur für Tabelle `anzeige`
 --
@@ -210,21 +209,22 @@ CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `handyNr` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `passwort` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+  `passwort` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `geburtsdatum` date DEFAULT NULL,
+  `bild` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `user`
 --
 
-INSERT INTO `user` (`user_id`, `email`, `name`, `handyNr`, `passwort`) VALUES
-(1, 'root@gmail.com', 'Test User', '01743485938', 'root'),
-(2, 'fast-Driver@gmail.com', 'Thomas Müller', '01949383234', 'Blanco99'),
-(3, 'Bandigo@gmail.com', 'Bernd Wender', '012483193493', 'B239djak3?!'),
-(4, 'hyper@gmail.com', 'Lukas Hohl', '1029343943', 'jd3nd93kqn'),
-(5, 'onur@gmail.com', 'Onur Dede', '0239913290321', 'ksnai3dnaj3n3'),
-(6, 'travel-alg@gmail.com', 'Trevor Denkins', '013839452923', 'nofiann3f932nds93');
+INSERT INTO `user` (`user_id`, `email`, `name`, `passwort`, `geburtsdatum`, `bild`) VALUES
+(1, 'root@gmail.com', 'Test User', 'root', '1994-12-05', 'bilder/profil_default.png'),
+(2, 'fast-Driver@gmail.com', 'Thomas Müller', 'Blanco99', '1990-06-01', 'bilder/profil_default.png'),
+(3, 'Bandigo@gmail.com', 'Bernd Wender', 'B239djak3?!', '1990-09-09', 'bilder/profil_default.png'),
+(4, 'hyper@gmail.com', 'Lukas Hohl', 'jd3nd93kqn', '1994-12-19', 'bilder/profil_default.png'),
+(5, 'onur@gmail.com', 'Onur Dede', 'ksnai3dnaj3n3', '1994-10-19', 'bilder/profil_default.png'),
+(6, 'travel-alg@gmail.com', 'Trevor Denkins', 'nofiann3f932nds93', '1994-10-10', 'bilder/profil_default.png');
 
 --
 -- Indizes der exportierten Tabellen
