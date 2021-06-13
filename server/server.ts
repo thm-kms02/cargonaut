@@ -11,6 +11,7 @@ import {Kasse} from "../class/kasse";
 import {Buchen} from "../class/buchen";
 import * as session from "express-session";
 import {Bewertung} from "../class/bewertung";
+import {domainToASCII} from "url";
 
 const app = express();
 const database: Connection = mysql.createConnection({
@@ -85,6 +86,18 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
             });
         }
     });
+});
+
+app.get('/read/offer/:id', (req: Request, res: Response) => {
+   const query = 'SELECT * FROM anzeige WHERE anzeige.id';
+   const data = [req.params.id];
+   database.query(query, data, (err: MysqlError, results: any) => {
+       if(err) {
+           res.status(500).send({err});
+       } else {
+           res.status(200).send({results});
+       }
+   });
 });
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {

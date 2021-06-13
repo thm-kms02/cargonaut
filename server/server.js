@@ -79,6 +79,18 @@ app.delete('/car/:carId', function (req, res) {
         }
     });
 });
+app.get('/read/offer/:id', function (req, res) {
+    var query = 'SELECT * FROM anzeige WHERE anzeige.id';
+    var data = [req.params.id];
+    database.query(query, data, function (err, results) {
+        if (err) {
+            res.status(500).send({ err: err });
+        }
+        else {
+            res.status(200).send({ results: results });
+        }
+    });
+});
 app.get('/trackingrole/:trackID', function (req, res) {
     session.user_id = 2;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
