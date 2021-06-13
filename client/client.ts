@@ -77,6 +77,7 @@ $(() => {
 
     });
 
+
     submitOfferBtn.on('click', () => {
         addAnzeige();
     });
@@ -215,18 +216,18 @@ function createCar() {
     let vol: number = Number(volin.val());
     let weight: number = Number(weightin.val());
 
-    let fzg = new Fahrzeug("",1,1,1,"");
+
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-           "name": fzg.name,
-           "year": fzg.jahr,
-            "vol": fzg.volumen,
-            "weight": fzg.gewicht,
-            "pic_path": fzg.bild_pfad,
+            "name": name,
+            "jahr": year,
+           "volumen" : vol,
+            "gewicht": weight,
+            "bild_pfad": picin
         }),
         success: (response) => {
             console.log("sucess");
@@ -456,8 +457,9 @@ function sendMessage() {
 }
 
 function getmyMessages() {
+    let id: number;
     $.ajax({
-        url: '/messages/',
+        url: '/messages',
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
@@ -716,3 +718,9 @@ function login(){
     });
 }
 
+function getBewertungen(){
+
+}
+function postBewertung(){
+
+}
