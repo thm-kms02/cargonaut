@@ -40,7 +40,7 @@ $(function () {
     mapArea = $('#mapArea');
     testbutton = $('#testbutton');
     trackNumButton = $('#tracking');
-    loginBTN = $("#anmelden");
+    loginBTN = $("#Buttonlogin");
     filternBTN = $("#filtern");
     getAll();
     addOfferArea.hide();
@@ -576,8 +576,9 @@ function inputFahrzeugDropLieferung(fahrzeugListe) {
     }
 }
 function login() {
-    var email = "root@gmail.com";
-    var passwort = "root";
+    event.preventDefault();
+    var email = String($('#loginEmail').val()).trim().toLowerCase();
+    var passwort = String($('#loginPasswort').val()).trim();
     $.ajax({
         url: '/login',
         type: 'POST',

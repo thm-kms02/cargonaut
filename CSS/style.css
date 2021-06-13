@@ -9,7 +9,7 @@
 }
 
 .an{
-margin: 50px;
+    margin: 50px;
     padding-top: 20px;
 }
 
@@ -386,6 +386,3 @@ input[type="text"], input[type="password"] {
     font-size:18px;
     border:#fff solid 1px;
 }
-
-
-
