@@ -61,7 +61,7 @@ $(() => {
 
     addOfferArea.hide();
     loginArea.hide();
-    profileArea.hide();
+    //profileArea.hide();
     //mainarea.hide();
     offerArea.hide();
 
@@ -588,7 +588,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn btn-dark btn-sm">Zum Angebot</button>
+                            <button class="btn niceButton">Zum Angebot</button>
                         </div>
                     </div>
                 </div>
