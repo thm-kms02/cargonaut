@@ -89,7 +89,7 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
 });
 
 app.get('/read/offer/:id', (req: Request, res: Response) => {
-   const query = 'SELECT * FROM anzeige WHERE anzeige.id';
+   const query = 'SELECT * FROM anzeige, user WHERE anzeige.id = ? AND anzeige.user_id = user.user_id';
    const data = [req.params.id];
    database.query(query, data, (err: MysqlError, results: any) => {
        if(err) {
@@ -578,3 +578,5 @@ app.delete('/logout',(req:Request,res:Response)=>{
         res.send("Sie wurden abgemeldet")
     });
 });
+
+

@@ -34,6 +34,7 @@ let filterPrizeMin: JQuery;
 let filterPrizeMax: JQuery;
 let filternBTN:JQuery;
 let createOfferBTN: JQuery;
+let offerTableForm: JQuery;
 
 //Payment-Page html-Elements:
 let offerArea: JQuery;
@@ -75,6 +76,7 @@ let inputNachF: JQuery;
 let saveBTNF: JQuery;
 
 //Cargo-FILTER-Modal-Page html-Elements:
+let fahrzeugDropLieferungF: JQuery;
 let inputGesamtgewichtF: JQuery;
 let inputVon2F: JQuery;
 let inputLadeflaecheF: JQuery;
@@ -112,27 +114,17 @@ let addCarAttributeWeight: JQuery;
 
 //Global Variables:
 let person: number;
-let personF:number;
 let von: string;
-let vonF: string;
 let nach: string;
-let nachF: string;
 let setDate: string;
-let setDateF: string;
 let von2: string;
-let von2F: string;
 let nach2: string;
-let nach2F: string;
 let setDate2: string;
-let setDate2F: string;
 let fahrzeugID: number;
 let fahrzeugID2: number;
 let gesamtgewichtIN: number;
-let gesamtgewichtF: number;
 let ladeflaecheIN: number;
-let ladeflaecheF: number;
 let ladehoeheIN: number;
-let ladehoeheF: number;
 let offerslist: Anzeige[];
 
 
@@ -159,34 +151,17 @@ $(() => {
     registryBTN = $("#registryBTN");
     registryModal = $('#exampleModal');
     addCarBTN = $("#addCarBTN");
-    inputPersonenzahlF = $("#inputPersonenzahlF");
-    inputVonF  = $("#inputVonF");
-    inputNachF = $("#inputNachF");
-    inputDateF = $("#inputDateF");
-   inputGesamtgewichtF = $("#inputGesamtgewichtF");
-   inputVon2F = $("#inputVon2F");
-   inputLadeflaecheF = $("#inputLadeflaecheF");
-   inputDate2F = $("#inputDate2F");
-   inputNach2F = $("#inputNach2F");
-   inputLadehoeheF = $("#inputLadehoeheF");
-   inputPersonenzahl = $("#inputPersonenzahl");
-   inputVon  = $("#inputVon");
-   inputNach = $("#inputNach");
-   inputDate = $("#inputDate");
-   inputGesamtgewicht = $("#inputGesamtgewicht");
-   inputLadeflaeche  = $("#inputLadeflaecheF");
-   inputLadehoehe = $("#inputLadehoehe");
-   inputVon2 = $("#inputVon2");
-   inputNach2 =  $("#inputNach2");
-   inputDate2 = $("#inputDate2");
+    offerTableForm = $("#offerTableForm");
 
 
-       getAll();
+    getAll();
 
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
     offerArea.hide();
+
+    offerTableForm.on('click','.testBTN', renderOfferPage)
 
     homeButton.on('click', () => {
         addOfferArea.hide();
@@ -217,14 +192,8 @@ $(() => {
     saveBTN.on('click', () => {
         saveValuesTaxi();
     });
-    saveBTNF.on('click',()=>{
-       saveValuesTaxiFilter();
-    });
     saveBTN2.on('click', () => {
         saveValuesLieferung();
-    });
-    saveBTN2F.on('click', () => {
-        saveValuesLieferungFilter();
     });
     fahrzeugDropTaxi.on('click', () => {
         getFahrzeugDropTaxi();
@@ -413,62 +382,36 @@ function deleteCar(id: number) {
 }
 
 function saveValuesTaxi() {
-    person = Number($(inputPersonenzahl).val());
-    von = String($(inputVon).val()).trim();
-    nach = String($(inputNach).val()).trim();
+    person = Number($('#inputPersonenzahl').val());
+    von = String($('#inputVon').val()).trim();
+    nach = String($('#inputNach').val()).trim();
     fahrzeugID = Number($('.custom-select').val());
-    setDate = String($(inputDate).val()).trim();
-}
-function saveValuesTaxiFilter() {
- personF = Number($(inputPersonenzahlF).val());
-    vonF = String($(inputVonF).val()).trim();
-    nachF = String($(inputNachF).val()).trim();
-    setDateF = String($(inputDateF).val()).trim();
+    setDate = String($('#inputDate').val()).trim();
 }
 
 function saveValuesLieferung() {
-    gesamtgewichtIN = Number($(inputGesamtgewicht).val())
-    setDate2 = String($(inputDate2).val()).trim();
-    von2 = String($(inputVon2).val()).trim();
-    nach2 = String($(inputNach2).val()).trim();
-    ladeflaecheIN = Number($(inputLadeflaeche).val());
-    ladehoeheIN = Number($(inputLadehoehe).val());
+    gesamtgewichtIN = Number($('#inputGesamtgewicht').val())
+    setDate2 = String($('#inputDate2').val()).trim();
+    von2 = String($('#inputVon2').val()).trim();
+    nach2 = String($('#inputNach2').val()).trim();
+    ladeflaecheIN = Number($('#inputLadeflaeche').val());
+    ladehoeheIN = Number($('#inputLadehoehe').val());
     fahrzeugID2 = Number($('.custom-select2').val());
-}
-function saveValuesLieferungFilter() {
-   gesamtgewichtF = Number($(inputGesamtgewichtF).val())
-    setDate2F =String($(inputDate2F).val())
-    von2F = String($(inputVon2F).val()).trim();
-    nach2F = String($(inputNach2F).val()).trim();
-    ladeflaecheF = Number($(inputLadeflaecheF).val());
-    ladehoeheF = Number($(inputLadehoeheF).val());
 }
 
 function getFilter() {
     let ang_ges: number = 0;
     let kategorie: number = 1 ; //1 = ladungsbeförderung, 2 = personenbeförderung
+    let minPreis: number;
+    let maxPreis: number;
     let von: string;
     let nach: string;
     let datum: string;
     let anzeigenRender:AnzeigeRender[]=[];
-    let personen:number = personF;
-    let ladeflaeche:number = ladeflaecheF;
-    let ladehoehe:number = ladehoeheF;
-    let ladungsgewicht:number = gesamtgewichtF;
-
-    if (kategorie == 1){
-       von = von2F;
-       nach = nach2F;
-       datum = setDate2F;
-    }
-    if (kategorie == 2){
-        von = vonF;
-        nach = nachF;
-        datum = setDateF;
-    }
-    let minPreis: number;
-    let maxPreis: number;
-
+    let personen:number ;
+    let ladeflaeche:number;
+    let ladehoehe:number;
+    let ladungsgewicht:number;
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -759,7 +702,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn niceButton" data-offer-id="${anz.id}">Zum Angebot</button>
+                            <button class="btn niceButton testBTN" form="offerTableForm" data-offer-id="${anz.id}">Zum Angebot</button>
                         </div>
                     </div>
                 </div>
@@ -792,7 +735,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn btn-sm niceButton" data-offer-id="${anz.id}">Zum Angebot</button>
+                            <button class="btn niceButton testBTN" form="offerTableForm" data-offer-id="${anz.id}">Zum Angebot</button>
                         </div>
                     </div>
                 </div>
@@ -950,35 +893,64 @@ function postBewertung(){
 }
 
 function registry(){
+    let email:string = String($('#registryMail').val()).trim().toLowerCase();
+    let name :string = String($('#registryName').val());
+    let password :string = String($('#registryPassword').val()).trim();
+    let birthday:string = String($('#registryBirthday').val());
+    if(email!=""&&name!=""&&password!=""&&birthday!="") {
+    let img:string = "bilder/profil_default.png";
 
+        $.ajax({
+            url: '/create/account',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+            email,
+               name,
+                password,
+                birthday,
+                img
+            }),
+            success: (response) => {
+                alert("sucess");
+            },
+            error: (response) => {
+                alert("Error");
+            },
+        });
+    } else {
+        alert("Bitte alle Eingabefelder ausfüllen!");
+    }
+}
 
-let email:string = String($('#registryMail').val()).trim().toLowerCase();
-let name :string = String($('#registryName').val());
-let password :string = String($('#registryPassword').val()).trim();
-let birthday:string = String($('#registryBirthday').val());
-if(email!=""&&name!=""&&password!=""&&birthday!="") {
-let img:string = "bilder/profil_default.png";
+function renderOfferPage(event: Event) {
+    event.preventDefault();
+    const id: number = $(event.currentTarget).data("offer-id");
+    console.log(id);
+    companyName = $("#companyName");
+    rating= $("#rating");
+    countRating= $("#countRating");
+    offerPicture= $("#offerPicture");
+    offerDescription = $('#offerDescription');
 
-    $.ajax({
-        url: '/create/account',
-        type: 'POST',
+    $.ajax( {
+        url: '/read/offer/' + id,
+        type: 'GET',
         contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-        email,
-           name,
-            password,
-            birthday,
-            img
-        }),
         success: (response) => {
-            alert("sucess");
+            addOfferArea.hide();
+            profileArea.hide();
+            mainarea.hide();
+            offerArea.show();
+            console.log(response.result);
+            companyName.text(response.result.name);
+            offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
+                response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+
         },
         error: (response) => {
-            alert("Error");
-        },
-    });
-} else {
-    alert("Bitte alle Eingabefelder ausfüllen!");
-}
+            console.log(response);
+        }
+    })
 }

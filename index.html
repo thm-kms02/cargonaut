@@ -246,22 +246,24 @@
             <div class="col-1"></div>
             <!--Liste mit allen Aufträgen-->
             <div class="col-5">
-                <table class="table table-borderless">
-                    <thead>
-                    <tr>
-                        <th>
-                            <div class="card text-center" style="background-color: #f5f6f6">
-                                <div class="card-body">
-                                    <button id="createOfferBTN" class="btn niceButton">Angebot erstellen</button>
+                <form id="offerTableForm">
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="card text-center" style="background-color: #f5f6f6">
+                                    <div class="card-body">
+                                        <button id="createOfferBTN" class="btn niceButton">Angebot erstellen</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody id="offersTableBody">
-                    <!--Hier wird die Liste reingerendert-->
-                    </tbody>
-                </table>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="offersTableBody">
+                        <!--Hier wird die Liste reingerendert-->
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
@@ -457,9 +459,9 @@
                 <div class="row">
                     <div class="col-6">
                         <div>
-                            <span id="companyName">BSM Gmbh</span>
-                            <span id="rating">4/5 Sterne</span>
-                            <span id="countRating">(100)</span>
+                            <span id="companyName"></span>
+                            <span id="rating"></span>
+                            <span id="countRating"></span>
                         </div>
                         <div>
                             <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%"

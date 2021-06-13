@@ -25,6 +25,7 @@ var filterPrizeMin;
 var filterPrizeMax;
 var filternBTN;
 var createOfferBTN;
+var offerTableForm;
 //Payment-Page html-Elements:
 var offerArea;
 var companyName;
@@ -61,6 +62,7 @@ var inputDateF;
 var inputNachF;
 var saveBTNF;
 //Cargo-FILTER-Modal-Page html-Elements:
+var fahrzeugDropLieferungF;
 var inputGesamtgewichtF;
 var inputVon2F;
 var inputLadeflaecheF;
@@ -94,27 +96,17 @@ var addCarAttributeCargoArea;
 var addCarAttributeWeight;
 //Global Variables:
 var person;
-var personF;
 var von;
-var vonF;
 var nach;
-var nachF;
 var setDate;
-var setDateF;
 var von2;
-var von2F;
 var nach2;
-var nach2F;
 var setDate2;
-var setDate2F;
 var fahrzeugID;
 var fahrzeugID2;
 var gesamtgewichtIN;
-var gesamtgewichtF;
 var ladeflaecheIN;
-var ladeflaecheF;
 var ladehoeheIN;
-var ladehoeheF;
 var offerslist;
 $(function () {
     mainarea = $("#mainArea");
@@ -137,31 +129,13 @@ $(function () {
     registryBTN = $("#registryBTN");
     registryModal = $('#exampleModal');
     addCarBTN = $("#addCarBTN");
-    inputPersonenzahlF = $("#inputPersonenzahlF");
-    inputVonF = $("#inputVonF");
-    inputNachF = $("#inputNachF");
-    inputDateF = $("#inputDateF");
-    inputGesamtgewichtF = $("#inputGesamtgewichtF");
-    inputVon2F = $("#inputVon2F");
-    inputLadeflaecheF = $("#inputLadeflaecheF");
-    inputDate2F = $("#inputDate2F");
-    inputNach2F = $("#inputNach2F");
-    inputLadehoeheF = $("#inputLadehoeheF");
-    inputPersonenzahl = $("#inputPersonenzahl");
-    inputVon = $("#inputVon");
-    inputNach = $("#inputNach");
-    inputDate = $("#inputDate");
-    inputGesamtgewicht = $("#inputGesamtgewicht");
-    inputLadeflaeche = $("#inputLadeflaecheF");
-    inputLadehoehe = $("#inputLadehoehe");
-    inputVon2 = $("#inputVon2");
-    inputNach2 = $("#inputNach2");
-    inputDate2 = $("#inputDate2");
+    offerTableForm = $("#offerTableForm");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
     offerArea.hide();
+    offerTableForm.on('click', '.testBTN', renderOfferPage);
     homeButton.on('click', function () {
         addOfferArea.hide();
         profileArea.hide();
@@ -185,14 +159,8 @@ $(function () {
     saveBTN.on('click', function () {
         saveValuesTaxi();
     });
-    saveBTNF.on('click', function () {
-        saveValuesTaxiFilter();
-    });
     saveBTN2.on('click', function () {
         saveValuesLieferung();
-    });
-    saveBTN2F.on('click', function () {
-        saveValuesLieferungFilter();
     });
     fahrzeugDropTaxi.on('click', function () {
         getFahrzeugDropTaxi();
@@ -354,58 +322,34 @@ function deleteCar(id) {
     });
 }
 function saveValuesTaxi() {
-    person = Number($(inputPersonenzahl).val());
-    von = String($(inputVon).val()).trim();
-    nach = String($(inputNach).val()).trim();
+    person = Number($('#inputPersonenzahl').val());
+    von = String($('#inputVon').val()).trim();
+    nach = String($('#inputNach').val()).trim();
     fahrzeugID = Number($('.custom-select').val());
-    setDate = String($(inputDate).val()).trim();
-}
-function saveValuesTaxiFilter() {
-    personF = Number($(inputPersonenzahlF).val());
-    vonF = String($(inputVonF).val()).trim();
-    nachF = String($(inputNachF).val()).trim();
-    setDateF = String($(inputDateF).val()).trim();
+    setDate = String($('#inputDate').val()).trim();
 }
 function saveValuesLieferung() {
-    gesamtgewichtIN = Number($(inputGesamtgewicht).val());
-    setDate2 = String($(inputDate2).val()).trim();
-    von2 = String($(inputVon2).val()).trim();
-    nach2 = String($(inputNach2).val()).trim();
-    ladeflaecheIN = Number($(inputLadeflaeche).val());
-    ladehoeheIN = Number($(inputLadehoehe).val());
+    gesamtgewichtIN = Number($('#inputGesamtgewicht').val());
+    setDate2 = String($('#inputDate2').val()).trim();
+    von2 = String($('#inputVon2').val()).trim();
+    nach2 = String($('#inputNach2').val()).trim();
+    ladeflaecheIN = Number($('#inputLadeflaeche').val());
+    ladehoeheIN = Number($('#inputLadehoehe').val());
     fahrzeugID2 = Number($('.custom-select2').val());
-}
-function saveValuesLieferungFilter() {
-    gesamtgewichtF = Number($(inputGesamtgewichtF).val());
-    setDate2F = String($(inputDate2F).val());
-    von2F = String($(inputVon2F).val()).trim();
-    nach2F = String($(inputNach2F).val()).trim();
-    ladeflaecheF = Number($(inputLadeflaecheF).val());
-    ladehoeheF = Number($(inputLadehoeheF).val());
 }
 function getFilter() {
     var ang_ges = 0;
     var kategorie = 1; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var minPreis;
+    var maxPreis;
     var von;
     var nach;
     var datum;
     var anzeigenRender = [];
-    var personen = personF;
-    var ladeflaeche = ladeflaecheF;
-    var ladehoehe = ladehoeheF;
-    var ladungsgewicht = gesamtgewichtF;
-    if (kategorie == 1) {
-        von = von2F;
-        nach = nach2F;
-        datum = setDate2F;
-    }
-    if (kategorie == 2) {
-        von = vonF;
-        nach = nachF;
-        datum = setDateF;
-    }
-    var minPreis;
-    var maxPreis;
+    var personen;
+    var ladeflaeche;
+    var ladehoehe;
+    var ladungsgewicht;
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -659,11 +603,11 @@ function renderOffersList(offerList) {
 function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
     var card;
     if (ueberschrift === "Personenbeförderung") {
-        card = $("\n        <tr>\n            <td>\n                <div class=\"card\" style=\"background-color: #f5f6f6\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Personenanzahl: " + menge + "</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
+        card = $("\n        <tr>\n            <td>\n                <div class=\"card\" style=\"background-color: #f5f6f6\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Personenanzahl: " + menge + "</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
         return card;
     }
     else {
-        card = $("\n        <tr>\n            <td>\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + anz.bild_pfad + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Ladefl\u00E4che: " + anz.ladeflaeche + " m\u00B2</span></p>\n                                <p class=\"textListComponent\"><span>Ladeh\u00F6he: " + anz.ladehoehe + " cm</span></p>\n                                 <p class=\"textListComponent\"><span>Ladegewicht: " + anz.ladungsgewicht + " Kg</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn btn-sm niceButton\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
+        card = $("\n        <tr>\n            <td>\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + anz.bild_pfad + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Ladefl\u00E4che: " + anz.ladeflaeche + " m\u00B2</span></p>\n                                <p class=\"textListComponent\"><span>Ladeh\u00F6he: " + anz.ladehoehe + " cm</span></p>\n                                 <p class=\"textListComponent\"><span>Ladegewicht: " + anz.ladungsgewicht + " Kg</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
         return card;
     }
 }
@@ -822,4 +766,32 @@ function registry() {
     else {
         alert("Bitte alle Eingabefelder ausfüllen!");
     }
+}
+function renderOfferPage(event) {
+    event.preventDefault();
+    var id = $(event.currentTarget).data("offer-id");
+    console.log(id);
+    companyName = $("#companyName");
+    rating = $("#rating");
+    countRating = $("#countRating");
+    offerPicture = $("#offerPicture");
+    offerDescription = $('#offerDescription');
+    $.ajax({
+        url: '/read/offer/' + id,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (response) {
+            addOfferArea.hide();
+            profileArea.hide();
+            mainarea.hide();
+            offerArea.show();
+            console.log(response.result);
+            companyName.text(response.result.name);
+            offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
+                response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
 }
