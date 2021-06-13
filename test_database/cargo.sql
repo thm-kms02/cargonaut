@@ -245,6 +245,8 @@ ALTER TABLE `anzeige`
   ADD KEY `user_id` (`user_id`),
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
 
+
+
 --
 -- Indizes für die Tabelle `bewertung`
 --

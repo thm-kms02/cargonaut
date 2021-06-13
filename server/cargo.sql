@@ -23,6 +23,7 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+
 --
 -- Tabellenstruktur für Tabelle `anzeige`
 --
