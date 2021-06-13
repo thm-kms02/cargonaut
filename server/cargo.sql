@@ -53,6 +53,21 @@ INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `z
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `bewertung`
+--
+
+CREATE TABLE `bewertung` (
+  `id` int(11) NOT NULL,
+  `id_buchen` int(11) NOT NULL,
+  `id_verfasser` int(11) NOT NULL,
+  `id_empfaenger` int(11) NOT NULL,
+  `bewertung` int(1) NOT NULL,
+  `kommentar` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `buchungen`
 --
 
@@ -169,8 +184,8 @@ INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
 (3, 1),
 (5, 10);
 
-
 -- --------------------------------------------------------
+
 --
 -- Tabellenstruktur für Tabelle `tracking`
 --
@@ -185,6 +200,7 @@ CREATE TABLE `tracking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
+
 --
 -- Tabellenstruktur für Tabelle `user`
 --
@@ -220,6 +236,15 @@ ALTER TABLE `anzeige`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `id_fahrzeug` (`id_fahrzeug`);
+
+--
+-- Indizes für die Tabelle `bewertung`
+--
+ALTER TABLE `bewertung`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_buchen` (`id_buchen`),
+  ADD KEY `id_verfasser` (`id_verfasser`),
+  ADD KEY `id_empfaenger` (`id_empfaenger`);
 
 --
 -- Indizes für die Tabelle `buchungen`
@@ -272,12 +297,6 @@ ALTER TABLE `tracking`
   ADD KEY `writer` (`writer`);
 
 --
--- AUTO_INCREMENT für Tabelle `tracking`
---
-ALTER TABLE `tracking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
-
---
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
@@ -293,6 +312,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `anzeige`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT für Tabelle `bewertung`
+--
+ALTER TABLE `bewertung`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
@@ -319,6 +344,12 @@ ALTER TABLE `nachricht`
   MODIFY `nachricht_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT für Tabelle `tracking`
+--
+ALTER TABLE `tracking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
@@ -334,6 +365,14 @@ ALTER TABLE `user`
 ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `bewertung`
+--
+ALTER TABLE `bewertung`
+  ADD CONSTRAINT `bewertung_ibfk_1` FOREIGN KEY (`id_buchen`) REFERENCES `buchungen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bewertung_ibfk_2` FOREIGN KEY (`id_verfasser`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bewertung_ibfk_3` FOREIGN KEY (`id_empfaenger`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `buchungen`
@@ -365,7 +404,6 @@ ALTER TABLE `lieferung`
 --
 ALTER TABLE `personenbefoerderung`
   ADD CONSTRAINT `personenbefoerderung_ibfk_1` FOREIGN KEY (`anz_ID`) REFERENCES `anzeige` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
 
 --
 -- Constraints der Tabelle `tracking`
