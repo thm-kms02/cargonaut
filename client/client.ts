@@ -345,6 +345,7 @@ function getFilter() {
         },
     });
 }
+
 function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string, datum:string):AnzeigeRender[]{
     let filteredAnzeigen:AnzeigeRender[]=[];
     for (let i=0;i<anzeigen.length;i++){
@@ -364,6 +365,7 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
 
 return filteredAnzeigen;
 }
+
 function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     let filteredTaxi:AnzeigeRender[]=[];
     for (let i=0; i<anzeigen.length;i++){
@@ -374,6 +376,7 @@ function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     }
 return filteredTaxi;
 }
+
 function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewicht):AnzeigeRender[]{
     let filteredCargo:AnzeigeRender[]=[];
     for (let i=0;i< anzeigen.length;i++){
@@ -388,6 +391,7 @@ function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewi
     }
 return filteredCargo;
 }
+
 function addAnzeige() {
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
