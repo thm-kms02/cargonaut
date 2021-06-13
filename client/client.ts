@@ -77,6 +77,7 @@ $(() => {
 
     });
 
+
     submitOfferBtn.on('click', () => {
         addAnzeige();
     });
