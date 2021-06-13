@@ -62,9 +62,8 @@ $(() => {
     getAll();
 
     addOfferArea.hide();
-    loginArea.hide();
-    //profileArea.hide();
-    //mainarea.hide();
+    profileArea.hide();
+    mainarea.hide();
     offerArea.hide();
 
 
@@ -714,8 +713,8 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
 
 function login(){
     event.preventDefault();
-    let email = String($('#loginEmail').val()).trim().toLowerCase();
-    let passwort = String($('#loginPasswort').val()).trim()
+    let email = String($('#inputLoginEmail').val()).trim().toLowerCase();
+    let passwort = String($('#inputLoginPassword').val()).trim()
     $.ajax({
         url: '/login',
         type: 'POST',

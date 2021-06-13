@@ -52,9 +52,8 @@ $(function () {
     registryBTN = $("#registryBTN");
     getAll();
     addOfferArea.hide();
-    loginArea.hide();
-    //profileArea.hide();
-    //mainarea.hide();
+    profileArea.hide();
+    mainarea.hide();
     offerArea.hide();
     testbutton.on('click', function () {
     });
@@ -581,8 +580,8 @@ function inputFahrzeugDropLieferung(fahrzeugListe) {
 }
 function login() {
     event.preventDefault();
-    var email = String($('#loginEmail').val()).trim().toLowerCase();
-    var passwort = String($('#loginPasswort').val()).trim();
+    var email = String($('#inputLoginEmail').val()).trim().toLowerCase();
+    var passwort = String($('#inputLoginPassword').val()).trim();
     $.ajax({
         url: '/login',
         type: 'POST',
