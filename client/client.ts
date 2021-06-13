@@ -743,8 +743,36 @@ function login(){
 }
 
 function getBewertungen(){
-
+    $.ajax({
+        url: '/bewertung/',
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: (response) => {
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
 }
-function postBewertung(){
 
+function postBewertung(){
+    let bewertung: number = Number($('#').val());
+    let kommentar: string = String($('#kommentar').val()).trim();
+    $.ajax({
+        url: '/bewertung/post',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "bewertung": bewertung,
+            "kommentar": kommentar
+        }),
+        success: (response) => {
+            alert(response.message)
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
 }

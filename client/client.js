@@ -607,6 +607,35 @@ function login() {
     });
 }
 function getBewertungen() {
+    $.ajax({
+        url: '/bewertung/',
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (response) {
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
 }
 function postBewertung() {
+    var bewertung = Number($('#').val());
+    var kommentar = String($('#kommentar').val()).trim();
+    $.ajax({
+        url: '/bewertung/post',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "bewertung": bewertung,
+            "kommentar": kommentar
+        }),
+        success: function (response) {
+            alert(response.message);
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
 }
