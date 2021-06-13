@@ -363,9 +363,9 @@ app.post('/create/message', function (req, res) {
     });
 });
 app.post('/create/account', function (req, res) {
-    var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort);
-    var data = [user.email, user.name, user.handyNr, user.passwort];
-    var cQuery = "INSERT INTO user (email, name, handyNr, passwort) VALUES (?, ?, ?, ?);";
+    var user = new user_1.User(req.body.email, req.body.name, req.body.handyNr, req.body.passwort, req.body.geburtsdatum);
+    var data = [user.email, user.name, user.handyNr, user.passwort, user.geburtsdatum];
+    var cQuery = "INSERT INTO user (email, name, handyNr, passwort, geburtsdatum) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
             res.status(201);
