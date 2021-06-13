@@ -127,6 +127,7 @@ $(function () {
     homeButton = $(".homeButton");
     registryBTN = $("#registryBTN");
     registryModal = $('#exampleModal');
+    addCarBTN = $("#addCarBTN");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
