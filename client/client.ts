@@ -148,21 +148,25 @@ function sendLocation(tracknum: number) {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
+               let lat: number =  position.coords.latitude;
+                let lng : number = position.coords.longitude;
                 $.ajax({
                     url: '/create/location',
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify({
-                        "tracknum": tracknum,
-                        "lat": position.coords.latitude,
-                        "lng": position.coords.longitude
+                        tracknum,
+                       lat,
+                        lng
+
                     }),
                     success: () => {
                         showLocation(position.coords.latitude, position.coords.longitude);
                     },
                     error: (response) => {
-                        console.log("error");
+                        showLocation(lat, lng);
+                        alert("error");
                     },
                 });
             }

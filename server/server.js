@@ -80,7 +80,7 @@ app.delete('/car/:carId', function (req, res) {
     });
 });
 app.get('/trackingrole/:trackID', function (req, res) {
-    session.user_id = 39;
+    session.user_id = 2;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
     var data = [req.params.trackID];
     database.query(query, data, function (err, results) {
@@ -101,7 +101,7 @@ app.get('/trackingrole/:trackID', function (req, res) {
     });
 });
 app.get('/getGPS/:trackID', function (req, res) {
-    session.user_id = 39;
+    session.user_id = 1;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
     var data = [req.params.trackID];
     database.query(query, data, function (err, results) {
@@ -121,29 +121,30 @@ app.get('/getGPS/:trackID', function (req, res) {
 app.post('/create/location', function (req, res) {
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
     var data = [req.body.tracknum];
-    var tracking;
     database.query(query, data, function (err, results) {
         if (err) {
             res.status(500).send({ err: err });
         }
         else {
-            tracking = results;
+            if (results != undefined) {
+                if (results[0].writer == session.user_id) {
+                    var query1 = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?';
+                    var data1 = [req.body.lat, req.body.lng, req.body.tracknum];
+                    database.query(query1, data1, function (err, results) {
+                        if (err) {
+                            res.status(500).send({ err: err });
+                        }
+                        else {
+                            res.status(200).send();
+                        }
+                    });
+                }
+            }
+            else {
+                res.status(404).send({ "message": "Tracking number could not be found!" });
+            }
         }
     });
-    if (tracking != undefined) {
-        if (tracking[0].writer == session.user_id) {
-            var query1 = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?';
-            var data1 = [req.body.lat, req.body.lng, req.body.tracknum];
-            database.query(query1, data1, function (err, results) {
-                if (err) {
-                    res.status(500).send({ err: err });
-                }
-                else {
-                    res.status(200).send();
-                }
-            });
-        }
-    }
 });
 app.get('/anzeige', function (req, res) {
     var offerslist = [];

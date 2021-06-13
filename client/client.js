@@ -121,21 +121,24 @@ function goTrack(role, tracknum) {
 function sendLocation(tracknum) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
             $.ajax({
                 url: '/create/location',
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    "tracknum": tracknum,
-                    "lat": position.coords.latitude,
-                    "lng": position.coords.longitude
+                    tracknum: tracknum,
+                    lat: lat,
+                    lng: lng
                 }),
                 success: function () {
                     showLocation(position.coords.latitude, position.coords.longitude);
                 },
                 error: function (response) {
-                    console.log("error");
+                    showLocation(lat, lng);
+                    alert("error");
                 },
             });
         });

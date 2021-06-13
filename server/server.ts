@@ -88,7 +88,7 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
 });
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
-    session.user_id=39;
+    session.user_id=2;
     const query: string = 'SELECT * FROM tracking WHERE tracking.id =?';
     const data = [req.params.trackID];
 
@@ -109,7 +109,7 @@ app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
 });
 
 app.get('/getGPS/:trackID', (req: Request, res: Response) => {
-    session.user_id=39;
+    session.user_id=1;
 const query: string= 'SELECT * FROM tracking WHERE tracking.id =?'
     const data = [req.params.trackID];
 
@@ -129,27 +129,28 @@ const query: string= 'SELECT * FROM tracking WHERE tracking.id =?'
 app.post('/create/location', (req: Request, res: Response) => {
 const query: string = 'SELECT * FROM tracking WHERE tracking.id =?';
    const data = [req.body.tracknum];
-   let tracking: any;
    database.query(query, data,(err: MysqlError, results: any) => {
        if(err) {
            res.status(500).send({err});
        } else {
-           tracking = results;
+           if(results!=undefined) {
+               if(results[0].writer==session.user_id) {
+                   const query1: string = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?'
+                   const data1 = [req.body.lat, req.body.lng, req.body.tracknum];
+                   database.query(query1, data1, (err: MysqlError, results:any) => {
+                       if(err) {
+                           res.status(500).send({err});
+                       } else {
+                           res.status(200).send();
+                       }
+                   });
+               }
+           } else {
+               res.status(404).send({"message":"Tracking number could not be found!"});
+           }
        }
    });
-   if(tracking!=undefined) {
-       if(tracking[0].writer==session.user_id) {
-           const query1: string = 'UPDATE tracking SET lat=?, lng=? WHERE tracking.id=?'
-            const data1 = [req.body.lat, req.body.lng, req.body.tracknum];
-           database.query(query1, data1, (err: MysqlError, results:any) => {
-              if(err) {
-                  res.status(500).send({err});
-              } else {
-                  res.status(200).send();
-              }
-           });
-       }
-   }
+
 });
 
 app.get('/anzeige', (req: Request, res: Response) => {
