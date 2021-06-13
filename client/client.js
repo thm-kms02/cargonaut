@@ -120,21 +120,24 @@ function goTrack(role, tracknum) {
 function sendLocation(tracknum) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
             $.ajax({
                 url: '/create/location',
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    "tracknum": tracknum,
-                    "lat": position.coords.latitude,
-                    "lng": position.coords.longitude
+                    tracknum: tracknum,
+                    lat: lat,
+                    lng: lng
                 }),
                 success: function () {
                     showLocation(position.coords.latitude, position.coords.longitude);
                 },
                 error: function (response) {
-                    console.log("error");
+                    showLocation(lat, lng);
+                    alert("error");
                 },
             });
         });
@@ -614,8 +617,37 @@ function logout() {
     });
 }
 function getBewertungen() {
+    $.ajax({
+        url: '/bewertung/',
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (response) {
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
 }
 function postBewertung() {
+    var bewertung = Number($('#').val());
+    var kommentar = String($('#kommentar').val()).trim();
+    $.ajax({
+        url: '/bewertung/post',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "bewertung": bewertung,
+            "kommentar": kommentar
+        }),
+        success: function (response) {
+            alert(response.message);
+        },
+        error: function (response) {
+            alert(response.responseJSON.message);
+        },
+    });
 }
 function registry() {
     var email = String($('#registryMail').val()).trim().toLowerCase();

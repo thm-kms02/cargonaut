@@ -147,21 +147,25 @@ function sendLocation(tracknum: number) {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
+               let lat: number =  position.coords.latitude;
+                let lng : number = position.coords.longitude;
                 $.ajax({
                     url: '/create/location',
                     type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify({
-                        "tracknum": tracknum,
-                        "lat": position.coords.latitude,
-                        "lng": position.coords.longitude
+                        tracknum,
+                       lat,
+                        lng
+
                     }),
                     success: () => {
                         showLocation(position.coords.latitude, position.coords.longitude);
                     },
                     error: (response) => {
-                        console.log("error");
+                        showLocation(lat, lng);
+                        alert("error");
                     },
                 });
             }
@@ -336,6 +340,7 @@ function getFilter() {
         },
     });
 }
+
 function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string, datum:string):AnzeigeRender[]{
     let filteredAnzeigen:AnzeigeRender[]=[];
     for (let i=0;i<anzeigen.length;i++){
@@ -355,6 +360,7 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
 
 return filteredAnzeigen;
 }
+
 function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     let filteredTaxi:AnzeigeRender[]=[];
     for (let i=0; i<anzeigen.length;i++){
@@ -365,6 +371,7 @@ function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     }
 return filteredTaxi;
 }
+
 function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewicht):AnzeigeRender[]{
     let filteredCargo:AnzeigeRender[]=[];
     for (let i=0;i< anzeigen.length;i++){
@@ -379,6 +386,7 @@ function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewi
     }
 return filteredCargo;
 }
+
 function addAnzeige() {
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
@@ -748,10 +756,38 @@ function logout() {
 }
 
 function getBewertungen(){
-
+    $.ajax({
+        url: '/bewertung/',
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: (response) => {
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
 }
-function postBewertung(){
 
+function postBewertung(){
+    let bewertung: number = Number($('#').val());
+    let kommentar: string = String($('#kommentar').val()).trim();
+    $.ajax({
+        url: '/bewertung/post',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            "bewertung": bewertung,
+            "kommentar": kommentar
+        }),
+        success: (response) => {
+            alert(response.message)
+        },
+        error: (response) => {
+            alert(response.responseJSON.message)
+        },
+    });
 }
 
 function registry(){
