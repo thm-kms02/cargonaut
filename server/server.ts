@@ -95,7 +95,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
        if(err) {
            res.status(500).send({err});
        } else {
-           res.status(200).send({results});
+           res.status(200).send({"result":results[0]});
        }
    });
 });
@@ -224,6 +224,23 @@ app.get('/user', (req: Request, res: Response) => {
 
     const query: string = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            res.status(200).send({
+                result: rows[0]
+            });
+
+        }
+    });
+});
+
+app.get('/difUser/:id', (req: Request, res: Response) => {
+
+    const query: string = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [req.params.id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err

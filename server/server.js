@@ -87,7 +87,7 @@ app.get('/read/offer/:id', function (req, res) {
             res.status(500).send({ err: err });
         }
         else {
-            res.status(200).send({ results: results });
+            res.status(200).send({ "result": results[0] });
         }
     });
 });
@@ -216,6 +216,21 @@ app.get('/anzeige', function (req, res) {
 app.get('/user', function (req, res) {
     var query = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            res.status(200).send({
+                result: rows[0]
+            });
+        }
+    });
+});
+app.get('/difUser/:id', function (req, res) {
+    var query = "SELECT * FROM user WHERE user_id=?";
+    database.query(query, [req.params.id], function (err, rows) {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
