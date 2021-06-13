@@ -25,23 +25,55 @@ let registryBTN:JQuery;
 
 //Offers Page html-Elements:
 let mainarea: JQuery;
+let filterForOfferRadio: JQuery;
+let filterForSearchRadio: JQuery;
+let filterForCargoRadio: JQuery;
+let filterForTransportRadio: JQuery;
+let filterPrizeMin: JQuery;
+let filterPrizeMax: JQuery;
 let filternBTN:JQuery;
 let createOfferBTN: JQuery;
 
 //Payment-Page html-Elements:
 let offerArea: JQuery;
-
-
-//Cargo-Modal-Page html-Elements:
-let fahrzeugDropLieferung: JQuery;
-let saveBTN2: JQuery;
+let companyName: JQuery;
+let rating: JQuery;
+let countRating: JQuery;
+let offerPicture: JQuery;
+let contactBTN: JQuery
+let markBTN: JQuery;
+let toProfileBTN: JQuery;
+let sendOfferBTN: JQuery;
+let bookBTN: JQuery;
+let offerDescription: JQuery;
 
 //Person-Transport-Modal-Page html-Elements:
 let fahrzeugDropTaxi: JQuery;
+let inputPersonenzahl: JQuery;
+let inputVon: JQuery;
+let inputDate: JQuery;
+let inputNach: JQuery;
 let saveBTN: JQuery;
+
+//Cargo-Modal-Page html-Elements:
+let fahrzeugDropLieferung: JQuery;
+let inputGesamtgewicht: JQuery;
+let inputVon2: JQuery;
+let inputLadeflaeche: JQuery;
+let inputDate2: JQuery;
+let inputNach2: JQuery;
+let inputLadehoehe: JQuery;
+let saveBTN2: JQuery;
 
 //Create-Offer-Page html-Elements:
 let addOfferArea: JQuery;
+let createOfferRadio: JQuery;
+let createSearchRadio: JQuery;
+let createCargoRadio: JQuery;
+let createTransportRadio: JQuery;
+let inputDescription: JQuery;
+let inputPrize: JQuery;
+let inputPictures: JQuery;
 let submitOfferBtn: JQuery;
 
 //Tracking-Page html-Elements:
@@ -50,6 +82,15 @@ let mapArea: JQuery;
 
 //Profile-Page html-Elements:
 let profileArea: JQuery;
+let profilePicture: JQuery;
+let uploadProfilePicture: JQuery;
+let profileName: JQuery;
+let profileRating: JQuery;
+let addCarBTN: JQuery;
+let addCarAttributeModel: JQuery;
+let addCarAttributeYear: JQuery;
+let addCarAttributeCargoArea: JQuery;
+let addCarAttributeWeight: JQuery;
 
 //Global Variables:
 let person: number;
@@ -635,7 +676,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn niceButton">Zum Angebot</button>
+                            <button class="btn niceButton" data-offer-id="${anz.id}">Zum Angebot</button>
                         </div>
                     </div>
                 </div>
@@ -668,7 +709,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn btn-sm niceButton">Zum Angebot</button>
+                            <button class="btn btn-sm niceButton" data-offer-id="${anz.id}">Zum Angebot</button>
                         </div>
                     </div>
                 </div>

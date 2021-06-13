@@ -229,13 +229,13 @@
                     <span>Preis</span>
                     <div class="col-5">
                         <label>
-                            <input type="number" class="form-control" placeholder="von">
+                            <input type="number" class="form-control" id="flilterPrizeMin" placeholder="von">
                         </label>
                     </div>
                     <div class="col-2">-</div>
                     <div class="col-5">
                         <label>
-                            <input type="number" class="form-control" placeholder="bis">
+                            <input type="number" class="form-control" id="filterPrizeMax" placeholder="bis">
                         </label>
                     </div>
                     <div style="text-align: center; margin-top: 5%;">
@@ -277,17 +277,17 @@
                     <div class="col-2"></div>
                     <div class="col-3">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="showtype" id="inlineRadio1"
+                            <input class="form-check-input" type="radio" name="showtype" id="createOfferRadio"
                                    value="option1">
-                            <label class="form-check-label" for="inlineRadio1">Anbieten</label>
+                            <label class="form-check-label" for="createOfferRadio">Anbieten</label>
                         </div>
                     </div>
                     <div class="col-1"></div>
                     <div class="col-3">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="showtype" id="inlineRadio2"
+                            <input class="form-check-input" type="radio" name="showtype" id="createSearchRadio"
                                    value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Suchen</label>
+                            <label class="form-check-label" for="createSearchRadio">Suchen</label>
                         </div>
                     </div>
                 </div>
@@ -300,16 +300,16 @@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" data-bs-toggle="modal"
                                    data-bs-target="#personenbefoerderungModal" type="radio" name="service"
-                                   id="inlineRadio3" value="option1">
-                            <label class="form-check-label" for="inlineRadio3">Personenbeförderung</label>
+                                   id="createCargoRadio" value="option1">
+                            <label class="form-check-label" for="createCargoRadio">Personenbeförderung</label>
                         </div>
                     </div>
                     <div class="col-1"></div>
                     <div class="col-3">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" data-bs-toggle="modal" data-bs-target="#transportModal"
-                                   type="radio" name="service" id="inlineRadio4" value="option2">
-                            <label class="form-check-label" for="inlineRadio4">Lieferung</label>
+                                   type="radio" name="service" id="createTransportRadio" value="option2">
+                            <label class="form-check-label" for="createTransportRadio">Lieferung</label>
                         </div>
                     </div>
                 </div>
@@ -319,7 +319,7 @@
                     </div>
                     <div class="col-2"></div>
                     <div class="col-7">
-                        <textarea id="inputBeschreibung" class="form-control" aria-label="description textarea"></textarea>
+                        <textarea id="inputDescription" class="form-control" aria-label="description textarea"></textarea>
                     </div>
                 </div>
                 <div class="row createFiledParts">
@@ -328,7 +328,7 @@
                     </div>
                     <div class="col-2"></div>
                     <div class="col-2">
-                        <input id="inputPrice" class="form-control" type="number" aria-label="">
+                        <input id="inputPrize" class="form-control" type="number" aria-label="">
                     </div>
                     <div class="col-2">
                         <span class="pricing2">€</span>
@@ -341,7 +341,7 @@
                     </div>
                     <div class="col-2"></div>
                     <div class="col-4">
-                        <input class="form-control" type="file" aria-label="">
+                        <input class="form-control" id="inputPictures" type="file" aria-label="">
                     </div>
                     <div class="col-3"></div>
                 </div>
@@ -363,11 +363,11 @@
                         <div>
                             <img id="profilePicture" src="assets/" alt="ProfilePicture">
                         </div>
-                        <input class="form-control" type="file" aria-label="">
+                        <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
                     <div class="col-9">
-                        <h1 id="profileName">Colin Kristen</h1>
-                        <span id="profileRating">5</span><span>/5 Sterne</span>
+                        <h1 id="profileName"></h1>
+                        <span id="profileRating"></span><span>/5 Sterne</span>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
