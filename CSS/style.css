@@ -189,6 +189,11 @@
     background-color:#666;
 }
 
+.niceButton {
+    background-color: #276678;
+    color: white;
+}
+
 
 
 
@@ -349,7 +354,7 @@
 .containerLogin {
     width:500px;
     height: 450px;
-    margin:130px auto;
+    margin: auto;
     padding-top:50px;
     text-align: center;
     background-color: #F6F5F5;
@@ -366,7 +371,7 @@ input[type="text"], input[type="password"] {
 .containerSignin {
     width: 650px;
     height: 600px;
-    margin: 130px auto;
+    margin: auto;
     padding-top: 50px;
     text-align: center;
     background-color: #F6F5F5;

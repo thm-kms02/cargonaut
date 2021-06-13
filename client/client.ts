@@ -3,6 +3,7 @@ import {Fahrzeug} from "../class/fahrzeug";
 import {Anzeige} from "../class/anzeige";
 
 ///declare module 'google.maps'; in node_modules/@types/google.maps/index.d.ts ganz unten einfügen
+// @ts-ignore
 import {} from 'google.maps';
 
 let mainarea: JQuery;
@@ -33,7 +34,9 @@ let gesamtgewichtIN: number;
 let ladeflaecheIN: number;
 let ladehoeheIN: number;
 let offerslist: Anzeige[];
-
+let loginArea: JQuery;
+let profileArea: JQuery;
+let offerArea: JQuery;
 
 $(() => {
     mainarea = $("#mainArea");
@@ -50,10 +53,18 @@ $(() => {
     trackNumButton = $('#tracking');
     loginBTN = $("#Buttonlogin");
     filternBTN = $("#filtern");
+    loginArea = $("#containerLogin");
+    profileArea = $("#profileArea");
+    offerArea = $("#offerArea");
 
     getAll();
 
     addOfferArea.hide();
+    loginArea.hide();
+    profileArea.hide();
+    //mainarea.hide();
+    offerArea.hide();
+
 
     testbutton.on('click', () => {
 
@@ -558,7 +569,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
          card = $(`
         <tr>
             <td>
-                <div class="card">
+                <div class="card" style="background-color: #f5f6f6">
                     <div class="card-body">
                         <h5 class="card-title">${ueberschrift}</h5>
                         <div class="row">
@@ -610,7 +621,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                             </div>
                         </div>
                         <div class="alignRight">
-                            <button class="btn btn-dark btn-sm">Zum Angebot</button>
+                            <button class="btn btn-sm niceButton">Zum Angebot</button>
                         </div>
                     </div>
                 </div>
