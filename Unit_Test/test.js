@@ -67,7 +67,7 @@ describe("Post /create/Account", async () => {
 });
 *
  */
-mocha_1.describe("post/login", function () { return __awaiter(void 0, void 0, void 0, function () {
+mocha_1.describe("POST/login", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("login into the system", function (done) {
             var login = {
@@ -87,32 +87,14 @@ mocha_1.describe("post/login", function () { return __awaiter(void 0, void 0, vo
         return [2 /*return*/];
     });
 }); });
-mocha_1.describe("Messages", function () { return __awaiter(void 0, void 0, void 0, function () {
+mocha_1.describe("DELETE/session", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        it("Erstellt eine Nachricht", function (done) {
-            var message = {
-                absender: "test66@gmail.com",
-                empfaenger: "test@gmail21.commm",
-                inhalt: "Nachrichten test"
-            };
+        it("login into the system", function (done) {
             chain
                 .request("http://localhost:8080")
-                .post("/create/message")
-                .send(message)
+                .delete("/logout")
                 .end(function (err, response) {
                 console.log(response.status);
-                response.should.have.status(201);
-                done();
-            });
-        });
-        it("Holt Nachrichten eines Benutzers", function (done) {
-            var message = "test@gmail21.commm";
-            chain
-                .request("http://localhost:8080")
-                .get("/messages/" + message)
-                .send()
-                .end(function (err, response) {
-                console.log(response.body);
                 response.should.have.status(200);
                 done();
             });
@@ -120,110 +102,168 @@ mocha_1.describe("Messages", function () { return __awaiter(void 0, void 0, void
         return [2 /*return*/];
     });
 }); });
-mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
+mocha_1.describe("GET/Anzeigen", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
-            var fahrzeug = {
-                user_id: 31,
-                name: "VW Golf",
-                jahr: 2010,
-                volumen: 500,
-                gewicht: 1500,
-                bild_pfad: "bilder/img.pn"
-            };
+        it("get all Offers", function (done) {
             chain
                 .request("http://localhost:8080")
-                .post("/create/fahrzeug")
-                .send(fahrzeug)
+                .get("/anzeige")
                 .end(function (err, response) {
                 console.log(response.status);
-                response.should.have.status(201);
+                response.should.have.status(200);
                 done();
             });
         });
         return [2 /*return*/];
     });
 }); });
-mocha_1.describe("Post /create/Anzeige", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("Soll eine Anzeige für Personenbefoerderung erstellen", function (done) {
-            var anzeige = {
-                user_id: 31,
-                ang_ges: 0,
-                datum: "2021-06-23",
-                preis: 300,
-                start: "Gießen",
-                ziel: "Hamburg",
-                beschreibung: "TestTestTestTest",
-                id_fahrzeug: 1,
-                personen: 4,
-                ladeflaeche: 0,
-                ladungsgewicht: 0,
-                ladehoehe: 0,
-            };
-            chain
-                .request("http://localhost:8080")
-                .post("/create/anzeige")
-                .send(anzeige)
-                .end(function (err, response) {
+/*
+describe("POST /create/Anzeige", async () => {
+    it("Soll eine Anzeige für Personenbefoerderung erstellen", (done) => {
+        const anzeige = {
+            user_id: 2,
+            ang_ges: 0,
+            datum:"2021-06-23",
+            preis: 300,
+            start: "Berlin",
+            ziel: "Ulm",
+            beschreibung: "Unit-test",
+            id_fahrzeug:1,
+            personen: 4,
+            ladeflaeche: 0,
+            ladungsgewicht: 0,
+            ladehoehe: 0,
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/create/anzeige")
+            .send(anzeige)
+            .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(201);
-                done();
+                done()
             });
-        });
-        it("Soll eine Anzeige für Lieferung erstellen", function (done) {
-            var anzeige = {
-                user_id: 31,
-                ang_ges: 0,
-                datum: "2021-06-23",
-                preis: 300,
-                start: "Gießen",
-                ziel: "Hamburg",
-                beschreibung: "TestTestTestTest",
-                id_fahrzeug: 1,
-                personen: 0,
-                ladeflaeche: 3,
-                ladungsgewicht: 3,
-                ladehoehe: 3,
+    });
+});
+*/
+mocha_1.describe("GET/read/offer", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("get Offer from id", function (done) {
+            var read = {
+                id: 1
             };
             chain
                 .request("http://localhost:8080")
-                .post("/create/anzeige")
-                .send(anzeige)
+                .get("/read/offer/:id")
+                .send(read)
                 .end(function (err, response) {
                 console.log(response.status);
-                response.should.have.status(201);
+                response.should.have.status(200);
                 done();
             });
         });
         return [2 /*return*/];
     });
 }); });
-mocha_1.describe("Get/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/];
+/*bug difUSer/:id
+describe("GET/user/profil", async () => {
+    it("get user profil", (done) => {
+        const profil = {
+           id: 3
+        }
+        chain
+            .request("http://localhost:8080")
+            .get("/difUser/:id")
+            .send(profil)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(200);
+                done()
+            });
     });
-}); });
-mocha_1.describe("Post/Kasse/hinzufuegen", function () { return __awaiter(void 0, void 0, void 0, function () {
+});
+*/
+mocha_1.describe("anzeige/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        it("Fügt Anzeige in die Kasse", function (done) {
-            var kasse = {
-                user_id: 1,
-                anz_ID: 1
+        it("filtert anzeigen", function (done) {
+            var filter = {
+                ang_ges: 1,
+                kategorie: 1
             };
             chain
                 .request("http://localhost:8080")
-                .post("/kasse")
-                .send(kasse)
+                .post("/anzeige/filter")
+                .send(filter)
                 .end(function (err, response) {
                 console.log(response.status);
-                response.should.have.status(201);
+                response.should.have.status(200);
                 done();
             });
         });
         return [2 /*return*/];
     });
 }); });
+mocha_1.describe("GET/user", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("get all data from session user", function (done) {
+            var user = {
+                id: 1
+            };
+            chain
+                .request("http://localhost:8080")
+                .get("/user")
+                .send(user)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(200);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
+/* Aufgrund von Session nicht mehr testbar
+describe("Post/create/fahrzeug", async  () => {
+    it('create a car', function (done) {
+        const fahrzeug = {
+            user_id:1,
+            name: "VW Touran",
+            year:2010,
+            vol: 500,
+            weight: 1500,
+            pic_path: "bilder/img.png"
+        };
+
+        chain
+            .request("http://localhost:8080")
+            .post("/create/fahrzeug")
+            .send(fahrzeug)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+
+            });
+    });
+});
+describe("delete/fahrzeug", async  () => {
+    it('delete a car', function (done) {
+        const fahrzeug = {
+           id:5
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/car/:carId")
+            .send(fahrzeug)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+
+            });
+    });
+});
+*/
 mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("bucht eine Anzeige aus der Kasse", function (done) {
@@ -243,17 +283,16 @@ mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, voi
         return [2 /*return*/];
     });
 }); });
-mocha_1.describe("anzeige/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
+mocha_1.describe("GET/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        it("meldet nutzer an", function (done) {
-            var filter = {
-                ang_ges: true,
-                kategorie: 0
+        it("get cars", function (done) {
+            var car = {
+                email: "root@gmail.com"
             };
             chain
                 .request("http://localhost:8080")
-                .post("/anzeige/filter")
-                .send(filter)
+                .get("/fahrzeug")
+                .send(car)
                 .end(function (err, response) {
                 console.log(response.status);
                 response.should.have.status(200);

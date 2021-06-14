@@ -94,10 +94,10 @@ app.post('/login', (req: express.Request, res: express.Response) => {
 });
 
 app.delete('/logout',(req:Request,res:Response)=>{
-    session.destroy(() => {
+        session.destroy;
         res.clearCookie("connect.sid");
         res.send("Sie wurden abgemeldet")
-    });
+
 });
 
 // routs for get all Offers, create Offers, read a offer, filter offers
