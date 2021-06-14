@@ -84,10 +84,9 @@ app.post('/login', function (req, res) {
     });
 });
 app.delete('/logout', function (req, res) {
-    session.destroy(function () {
-        res.clearCookie("connect.sid");
-        res.send("Sie wurden abgemeldet");
-    });
+    session.destroy;
+    res.clearCookie("connect.sid");
+    res.send("Sie wurden abgemeldet");
 });
 // routs for get all Offers, create Offers, read a offer, filter offers
 app.get('/anzeige', function (req, res) {
