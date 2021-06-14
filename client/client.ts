@@ -116,6 +116,11 @@ let addCarAttributeYear: JQuery;
 let addCarAttributeCargoArea: JQuery;
 let addCarAttributeWeight: JQuery;
 
+///OfferDetailPage
+let offerPageButtons: JQuery;
+let offerControlForm: JQuery;
+
+
 //Global Variables:
 let person: number;
 let personF:number;
@@ -167,7 +172,7 @@ $(() => {
     addCarBTN = $("#addCarBTN");
     offerTableForm = $("#offerTableForm");
     inputPersonenzahlF = $("#inputPersonenzahlF");
-    inputVonF = $("#inputVonF");
+    inputVonF  = $("#inputVonF");
     inputNachF = $("#inputNachF");
     inputDateF = $("#inputDateF");
     inputGesamtgewichtF = $("#inputGesamtgewichtF");
@@ -177,19 +182,21 @@ $(() => {
     inputNach2F = $("#inputNach2F");
     inputLadehoeheF = $("#inputLadehoeheF");
     inputPersonenzahl = $("#inputPersonenzahl");
-    inputVon = $("#inputVon");
+    inputVon  = $("#inputVon");
     inputNach = $("#inputNach");
     inputDate = $("#inputDate");
     inputGesamtgewicht = $("#inputGesamtgewicht");
-    inputLadeflaeche = $("#inputLadeflaeche");
+    inputLadeflaeche  = $("#inputLadeflaeche");
     inputLadehoehe = $("#inputLadehoehe");
     inputVon2 = $("#inputVon2");
-    inputNach2 = $("#inputNach2");
+    inputNach2 =  $("#inputNach2");
     inputDate2 = $("#inputDate2");
-    inputMinPrice = $("#flilterPrizeMin");
+    inputMinPrice =$("#flilterPrizeMin");
     inputMaxPrice = $("#filterPrizeMax");
     saveBTNF = $("#saveBTNF");
     saveBTN2F = $("#saveBTN2F");
+    offerPageButtons = $('#offerPageButton');
+    offerControlForm = $('#offerControlForm');
 
     getAll();
 
@@ -198,7 +205,9 @@ $(() => {
     mainarea.hide();
     offerArea.hide();
 
-    offerTableForm.on('click', '.testBTN', renderOfferPage)
+    offerControlForm.on('click', '.userProfil', getDifUser)
+
+    offerTableForm.on('click','.testBTN', renderOfferPage)
 
     homeButton.on('click', () => {
         addOfferArea.hide();
@@ -212,7 +221,7 @@ $(() => {
     });
 
     trackbutton.on('click', () => {
-        showMap();
+       showMap();
     });
 
     createOfferBTN.on('click', () => {
@@ -240,15 +249,15 @@ $(() => {
         getFahrzeugDropLieferung();
     });
 
-    loginBTN.on('click', () => {
+    loginBTN.on('click', () =>{
         login();
 
     });
-    filternBTN.on('click', () => {
+    filternBTN.on('click', () =>{
         getFilter();
-    });
+    })
 
-    registryBTN.on('click', () => {
+    registryBTN.on('click', () =>{
         registryModal.modal('hide');
         registry();
 
@@ -256,14 +265,15 @@ $(() => {
     saveBTNF.on('click',()=>{
         saveValuesTaxiFilter();
     });
-    saveBTN2F.on('click',()=>{
+    saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
-        alert("hello");
     });
 });
 
 
-function getDifUser(id: number): any{
+function getDifUser(event){
+    event.preventDefault();
+    const id: any = $(event.currentTarget).data("user-id");
     $.ajax({
         url: '/difUser/'+id,
         type: 'GET',
@@ -274,7 +284,7 @@ function getDifUser(id: number): any{
         renderProfil(response.user, response.cars);
         },
         error: (err) => {
-            return false;
+           alert("err");
         },
     });
 }
@@ -820,10 +830,10 @@ function dateConvert(datum: string): string { // yyyy-mm-dd to dd.mm.yyyy
 }
 
 function renderAnzeige(anz: AnzeigeRender) {
+
     const offersListBody: JQuery = $("#offersTableBody");
     let ueberschrift: string;
     let menge: string;
-
     let datumSqlFormat: string = String((anz.datum).split("", 10)).replace(/,/g, "");
     let datumEuropaFormat: string = dateConvert(datumSqlFormat);
     let fahrzeugName:string;
@@ -856,12 +866,10 @@ function renderOffersList(offerList: AnzeigeRender[]) {
         alert("Die Suche liefert keine Ergebnisse");
     }
     offersListBody.empty();
-
     for (let i = 0; i < offerList.length; i++) {
         renderAnzeige(offerList[i]);
 
     }
-
 }
 
 function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
@@ -1115,14 +1123,16 @@ function registry(){
     }
 }
 
-function renderOfferPage(event: Event) {
+function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
+    console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
     countRating= $("#countRating");
-    offerPicture= $("#offerPicture");
+    offerPicture= $("#offerPic");
     offerDescription = $('#offerDescription');
+    offerPageButtons = $('#offerPageButton');
 
     $.ajax( {
         url: '/read/offer/' + id,
@@ -1133,9 +1143,26 @@ function renderOfferPage(event: Event) {
             profileArea.hide();
             mainarea.hide();
             offerArea.show();
-            companyName.text(response.result.name);
+            console.log(response.result);
+            companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
                 response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+
+            offerPicture.empty();
+            offerPageButtons.empty()
+
+
+            let pic: JQuery = $(` <img id="offerPicture" src=${response.result.bild_pfad} style="margin-top: 5%"
+                                 alt="ExamplePicture">`);
+            let buttons: JQuery = $(`<button data-user-id="${response.result.user_id}" class="btn w-75 userProfil"
+                                    style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
+                            </button>
+                            <br>
+                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75"
+                                    style="background-color: #276678; color: white; margin-top: 5%">Buchen
+                            </button>`)
+            offerPicture.append(pic);
+            offerPageButtons.append(buttons);
 
         },
         error: (response) => {
