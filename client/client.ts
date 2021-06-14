@@ -1123,6 +1123,7 @@ function registry(){
     }
 }
 
+
 function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
