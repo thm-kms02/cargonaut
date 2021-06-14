@@ -243,6 +243,49 @@ mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, voi
         return [2 /*return*/];
     });
 }); });
+mocha_1.describe("Post/localisation", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("localisation", function (done) {
+            var local = {
+                tracknum: 1
+            };
+            chain
+                .request("http://localhost:8080")
+                .get("/create/location")
+                .send(local)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(404);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
+mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
+            var fahrzeug = {
+                user_id: 31,
+                name: "VW Golf",
+                jahr: 2010,
+                volumen: 500,
+                gewicht: 1500,
+                bild_pfad: "bilder/img.pn"
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/create/fahrzeug")
+                .send(fahrzeug)
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
 mocha_1.describe("anzeige/filter", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("meldet nutzer an", function (done) {

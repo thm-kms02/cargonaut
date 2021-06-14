@@ -200,6 +200,49 @@ describe("Post/Kasse/buchen", async () =>{
     });
 });
 
+describe("Post/localisation", async () =>{
+    it("localisation", (done) => {
+        const local= {
+            tracknum:1
+
+        };
+        chain
+            .request("http://localhost:8080")
+            .get("/create/location")
+            .send(local)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(404);
+                done()
+            });
+    });
+});
+
+
+describe("Post/create/fahrzeug", async  () => {
+    it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
+        const fahrzeug = {
+            user_id: 31,
+            name: "VW Golf",
+            jahr:2010,
+            volumen: 500,
+            gewicht: 1500,
+            bild_pfad: "bilder/img.pn"
+        };
+
+        chain
+            .request("http://localhost:8080")
+            .post("/create/fahrzeug")
+            .send(fahrzeug)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+
+            });
+    });
+});
+
 describe("anzeige/filter", async () =>{
     it("meldet nutzer an", (done) => {
         const filter= {
