@@ -389,7 +389,6 @@ app.get('/trackingrole/:trackID', function (req, res) {
     });
 });
 app.get('/getGPS/:trackID', function (req, res) {
-    session.user_id = 1;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
     var data = [req.params.trackID];
     database.query(query, data, function (err, results) {

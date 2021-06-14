@@ -411,7 +411,6 @@ app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
 });
 
 app.get('/getGPS/:trackID', (req: Request, res: Response) => {
-    session.user_id=1;
     const query: string= 'SELECT * FROM tracking WHERE tracking.id =?'
     const data = [req.params.trackID];
 
