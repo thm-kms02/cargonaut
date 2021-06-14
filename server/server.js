@@ -502,7 +502,7 @@ app.post('/anzeige/filter', function (req, res) {
         if (err === null) {
             res.status(200);
             for (var i = 0; i < results.length; i++) {
-                anzeigen.push(new anzeigeRender_1.AnzeigeRender(results[i].user_id, results[i].ang_ges, results[i].datum, results[i].preis, results[i].start, results[i].ziel, results[i].beschreibung, results[i].id_fahrzeug, results[i].personen, results[i].ladeflaeche, results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild_pfad));
+                anzeigen.push(new anzeigeRender_1.AnzeigeRender(results[i].user_id, results[i].ang_ges, results[i].datum, results[i].preis, results[i].start, results[i].ziel, results[i].beschreibung, results[i].id_fahrzeug, results[i].personen, results[i].ladeflaeche, results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild_pfad, results[i].id));
             }
             console.log(anzeigen.length);
             res.send(anzeigen);
