@@ -109,8 +109,8 @@ mocha_1.describe("Messages", function () { return __awaiter(void 0, void 0, void
             var message = "test@gmail21.commm";
             chain
                 .request("http://localhost:8080")
-                .get("/messages/" + message)
-                .send()
+                .get("/messages/")
+                .send(message)
                 .end(function (err, response) {
                 console.log(response.body);
                 response.should.have.status(200);

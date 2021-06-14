@@ -70,8 +70,8 @@ describe("Messages", async () => {
         const message = "test@gmail21.commm";
         chain
             .request("http://localhost:8080")
-            .get("/messages/" + message)
-            .send()
+            .get("/messages/")
+            .send(message)
             .end((err, response) => {
                 console.log(response.body);
                 response.should.have.status(200);
@@ -199,7 +199,6 @@ describe("Post/Kasse/buchen", async () =>{
             });
     });
 });
-
 
 describe("anzeige/filter", async () =>{
     it("meldet nutzer an", (done) => {
