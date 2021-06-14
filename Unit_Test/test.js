@@ -262,6 +262,25 @@ mocha_1.describe("Post/localisation", function () { return __awaiter(void 0, voi
         return [2 /*return*/];
     });
 }); });
+mocha_1.describe("getGPS with trackID", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        it("getGPS with trackID", function (done) {
+            var local = {
+                trackID: 1
+            };
+            chain
+                .request("http://localhost:8080")
+                .post("/getGPS/" + local)
+                .send()
+                .end(function (err, response) {
+                console.log(response.status);
+                response.should.have.status(404);
+                done();
+            });
+        });
+        return [2 /*return*/];
+    });
+}); });
 mocha_1.describe("Post/create/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it('soll Fahrzeug erstellen/hinzufuegen', function (done) {

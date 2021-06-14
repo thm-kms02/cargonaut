@@ -218,6 +218,24 @@ describe("Post/localisation", async () =>{
     });
 });
 
+describe("getGPS with trackID", async () =>{
+    it("getGPS with trackID", (done) => {
+        const local= {
+            trackID:1
+
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/getGPS/"+local)
+            .send()
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(404);
+                done()
+            });
+    });
+});
+
 
 describe("Post/create/fahrzeug", async  () => {
     it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
