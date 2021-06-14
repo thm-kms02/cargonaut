@@ -116,6 +116,11 @@ let addCarAttributeYear: JQuery;
 let addCarAttributeCargoArea: JQuery;
 let addCarAttributeWeight: JQuery;
 
+///OfferDetailPage
+let offerPageButtons: JQuery;
+let offerControlForm: JQuery;
+
+
 //Global Variables:
 let person: number;
 let personF:number;
@@ -188,6 +193,8 @@ $(() => {
     inputDate2 = $("#inputDate2");
     inputMinPrice =$("#flilterPrizeMin");
     inputMaxPrice = $("#filterPrizeMax");
+    offerPageButtons = $('#offerPageButton');
+    offerControlForm = $('#offerControlForm');
 
     getAll();
 
@@ -195,6 +202,8 @@ $(() => {
     profileArea.hide();
     mainarea.hide();
     offerArea.hide();
+
+    offerControlForm.on('click', '.userProfil', getDifUser)
 
     offerTableForm.on('click','.testBTN', renderOfferPage)
 
@@ -260,7 +269,9 @@ $(() => {
 });
 
 
-function getDifUser(id: number): any{
+function getDifUser(event){
+    event.preventDefault();
+    const id: any = $(event.currentTarget).data("user-id");
     $.ajax({
         url: '/difUser/'+id,
         type: 'GET',
@@ -271,7 +282,7 @@ function getDifUser(id: number): any{
         renderProfil(response.user, response.cars);
         },
         error: (err) => {
-            return false;
+           alert("err");
         },
     });
 }
@@ -1107,15 +1118,16 @@ function registry(){
     }
 }
 
-function renderOfferPage(event: Event) {
+function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
     console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
     countRating= $("#countRating");
-    offerPicture= $("#offerPicture");
+    offerPicture= $("#offerPic");
     offerDescription = $('#offerDescription');
+    offerPageButtons = $('#offerPageButton');
 
     $.ajax( {
         url: '/read/offer/' + id,
@@ -1127,9 +1139,25 @@ function renderOfferPage(event: Event) {
             mainarea.hide();
             offerArea.show();
             console.log(response.result);
-            companyName.text(response.result.name);
+            companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
                 response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+
+            offerPicture.empty();
+            offerPageButtons.empty()
+
+
+            let pic: JQuery = $(` <img id="offerPicture" src=${response.result.bild_pfad} style="margin-top: 5%"
+                                 alt="ExamplePicture">`);
+            let buttons: JQuery = $(`<button data-user-id="${response.result.user_id}" class="btn w-75 userProfil"
+                                    style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
+                            </button>
+                            <br>
+                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75"
+                                    style="background-color: #276678; color: white; margin-top: 5%">Buchen
+                            </button>`)
+            offerPicture.append(pic);
+            offerPageButtons.append(buttons);
 
         },
         error: (response) => {

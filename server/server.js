@@ -80,7 +80,7 @@ app.delete('/car/:carId', function (req, res) {
     });
 });
 app.get('/read/offer/:id', function (req, res) {
-    var query = 'SELECT * FROM anzeige, user WHERE anzeige.id = ? AND anzeige.user_id = user.user_id';
+    var query = 'SELECT * FROM anzeige, user, fahrzeug WHERE anzeige.id = ? AND anzeige.user_id = user.user_id AND anzeige.id_fahrzeug = fahrzeug.id';
     var data = [req.params.id];
     database.query(query, data, function (err, results) {
         if (err) {

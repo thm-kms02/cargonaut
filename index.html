@@ -452,6 +452,7 @@
     </div>
 
     <div id="offerArea" class="area">
+        <form id="offerControlForm">
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8" style="background-color: #f6f5f5">
@@ -462,26 +463,17 @@
                             <span id="rating"></span>
                             <span id="countRating"></span>
                         </div>
-                        <div>
+                        <div id="offerPic">
                             <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%"
                                  alt="ExamplePicture">
                         </div>
                     </div>
                     <div class="col-1"></div>
                     <div class="col-5">
-                        <div>
-                            <img id="contactBTN" src="assets/contact-btn.png" alt="Contact" class="btn" width="80"
-                                 height="70">
-                            <img id="markBTN" src="assets/mark-btn.png" alt="Contact" class="btn" width="57" height="70"
-                                 style="margin-left: 5%">
-                        </div>
-                        <div>
-                            <button id="profileBTN" class="btn w-75"
+
+                        <div id="offerPageButton">
+                            <button id="profileBTN" class="btn w-75 userProfil"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
-                            </button>
-                            <br>
-                            <button id="sendOfferBTN" class="btn w-75"
-                                    style="background-color: #276678; color: white; margin-top: 5%">Angebot abgeben
                             </button>
                             <br>
                             <button id="bookBTN" class="btn w-75"
@@ -490,12 +482,13 @@
                         </div>
                     </div>
                 </div>
-                <textarea id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
+                <textarea style="height: 200px; margin-top: 20px" id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
 
             </div>
             <div class="col-2"></div>
 
         </div>
+        </form>
     </div>
 </div>
 

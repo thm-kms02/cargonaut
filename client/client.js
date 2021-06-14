@@ -95,6 +95,9 @@ var addCarAttributeModel;
 var addCarAttributeYear;
 var addCarAttributeCargoArea;
 var addCarAttributeWeight;
+///OfferDetailPage
+var offerPageButtons;
+var offerControlForm;
 //Global Variables:
 var person;
 var personF;
@@ -163,11 +166,14 @@ $(function () {
     inputDate2 = $("#inputDate2");
     inputMinPrice = $("#flilterPrizeMin");
     inputMaxPrice = $("#filterPrizeMax");
+    offerPageButtons = $('#offerPageButton');
+    offerControlForm = $('#offerControlForm');
     getAll();
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
     offerArea.hide();
+    offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
     homeButton.on('click', function () {
         addOfferArea.hide();
@@ -218,7 +224,9 @@ $(function () {
         saveValuesLieferungFilter();
     });
 });
-function getDifUser(id) {
+function getDifUser(event) {
+    event.preventDefault();
+    var id = $(event.currentTarget).data("user-id");
     $.ajax({
         url: '/difUser/' + id,
         type: 'GET',
@@ -228,7 +236,7 @@ function getDifUser(id) {
             renderProfil(response.user, response.cars);
         },
         error: function (err) {
-            return false;
+            alert("err");
         },
     });
 }
@@ -889,8 +897,9 @@ function renderOfferPage(event) {
     companyName = $("#companyName");
     rating = $("#rating");
     countRating = $("#countRating");
-    offerPicture = $("#offerPicture");
+    offerPicture = $("#offerPic");
     offerDescription = $('#offerDescription');
+    offerPageButtons = $('#offerPageButton');
     $.ajax({
         url: '/read/offer/' + id,
         type: 'GET',
@@ -901,9 +910,15 @@ function renderOfferPage(event) {
             mainarea.hide();
             offerArea.show();
             console.log(response.result);
-            companyName.text(response.result.name);
+            companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
                 response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+            offerPicture.empty();
+            offerPageButtons.empty();
+            var pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
+            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
+            offerPicture.append(pic);
+            offerPageButtons.append(buttons);
         },
         error: function (response) {
             console.log(response);
