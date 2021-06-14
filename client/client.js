@@ -55,14 +55,15 @@ var inputNach2;
 var inputLadehoehe;
 var saveBTN2;
 //Person-Transport-FILTER-Modal-Page html-Elements:
-var fahrzeugDropTaxiF;
 var inputPersonenzahlF;
 var inputVonF;
 var inputDateF;
 var inputNachF;
 var saveBTNF;
+// Filter-Standard:
+var inputMinPrice;
+var inputMaxPrice;
 //Cargo-FILTER-Modal-Page html-Elements:
-var fahrzeugDropLieferungF;
 var inputGesamtgewichtF;
 var inputVon2F;
 var inputLadeflaecheF;
@@ -160,6 +161,8 @@ $(function () {
     inputVon2 = $("#inputVon2");
     inputNach2 = $("#inputNach2");
     inputDate2 = $("#inputDate2");
+    inputMinPrice = $("#flilterPrizeMin");
+    inputMaxPrice = $("#filterPrizeMax");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
@@ -387,38 +390,42 @@ function deleteCar(id) {
     });
 }
 function saveValuesTaxi() {
-    person = Number($(inputPersonenzahl).val());
-    von = String($(inputVon).val()).trim();
-    nach = String($(inputNach).val()).trim();
+    person = Number(inputPersonenzahl.val());
+    von = String(inputVon.val()).trim();
+    nach = String(inputNach.val()).trim();
     fahrzeugID = Number($('.custom-select').val());
-    setDate = String($(inputDate).val()).trim();
+    setDate = String(inputDate.val()).trim();
 }
 function saveValuesTaxiFilter() {
-    personF = Number($(inputPersonenzahlF).val());
-    vonF = String($(inputVonF).val()).trim();
-    nachF = String($(inputNachF).val()).trim();
-    setDateF = String($(inputDateF).val()).trim();
+    personF = Number(inputPersonenzahlF.val());
+    vonF = String(inputVonF.val()).trim();
+    nachF = String(inputNachF.val()).trim();
+    setDateF = String(inputDateF.val()).trim();
 }
 function saveValuesLieferung() {
-    gesamtgewichtIN = Number($(inputGesamtgewicht).val());
-    setDate2 = String($(inputDate2).val()).trim();
-    von2 = String($(inputVon2).val()).trim();
-    nach2 = String($(inputNach2).val()).trim();
-    ladeflaecheIN = Number($(inputLadeflaeche).val());
-    ladehoeheIN = Number($(inputLadehoehe).val());
+    gesamtgewichtIN = Number(inputGesamtgewicht.val());
+    setDate2 = String(inputDate2.val()).trim();
+    von2 = String(inputVon2.val()).trim();
+    nach2 = String(inputNach2.val()).trim();
+    ladeflaecheIN = Number(inputLadeflaeche.val());
+    ladehoeheIN = Number(inputLadehoehe.val());
     fahrzeugID2 = Number($('.custom-select2').val());
 }
 function saveValuesLieferungFilter() {
-    gesamtgewichtF = Number($(inputGesamtgewichtF).val());
-    setDate2F = String($(inputDate2F).val());
-    von2F = String($(inputVon2F).val()).trim();
-    nach2F = String($(inputNach2F).val()).trim();
-    ladeflaecheF = Number($(inputLadeflaecheF).val());
-    ladehoeheF = Number($(inputLadehoeheF).val());
+    gesamtgewichtF = Number(inputGesamtgewichtF.val());
+    setDate2F = String(inputDate2F.val());
+    von2F = String(inputVon2F.val()).trim();
+    nach2F = String(inputNach2F.val()).trim();
+    ladeflaecheF = Number(inputLadeflaecheF.val());
+    ladehoeheF = Number(inputLadehoeheF.val());
 }
 function getFilter() {
-    var ang_ges = 0;
-    var kategorie = 1; //1 = ladungsbeförderung, 2 = personenbeförderung
+    var radOffer = $('#filterForOfferRadio:checked');
+    var radSearch = $('#filterForSerachRadio:checked');
+    var radTaxi = $('#filterForSerachRadio:checked');
+    var radCargo = $('#filterForTransportRadio:checked');
+    var ang_ges;
+    var kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
     var von;
     var nach;
     var datum;
@@ -427,6 +434,18 @@ function getFilter() {
     var ladeflaeche = ladeflaecheF;
     var ladehoehe = ladehoeheF;
     var ladungsgewicht = gesamtgewichtF;
+    if (radOffer.val() == "option1") {
+        ang_ges = 0;
+    }
+    else if (radSearch.val() == "option2") {
+        ang_ges = 1;
+    }
+    if (radCargo.val() == "option1") {
+        kategorie = 1;
+    }
+    else if (radTaxi.val() == "option2") {
+        kategorie = 2;
+    }
     if (kategorie == 1) {
         von = von2F;
         nach = nach2F;
@@ -437,8 +456,9 @@ function getFilter() {
         nach = nachF;
         datum = setDateF;
     }
-    var minPreis;
-    var maxPreis;
+    var minPreis = Number(inputMinPrice.val());
+    var maxPreis = Number(inputMaxPrice.val());
+    console.log(ang_ges, kategorie);
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -449,10 +469,12 @@ function getFilter() {
             "kategorie": kategorie
         }),
         success: function (response) {
+            console.log(response.length);
             var serverAnzeigen;
             serverAnzeigen = response;
             anzeigenRender = filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
             if (kategorie == undefined) {
+                console.log(" kategorie alle", anzeigenRender.length);
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 1) {
@@ -460,7 +482,9 @@ function getFilter() {
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 2) {
+                console.log(anzeigenRender + "aaa");
                 anzeigenRender = filternTaxi(anzeigenRender, personen);
+                console.log(anzeigenRender + "bbb");
                 renderOffersList(anzeigenRender);
             }
         },
