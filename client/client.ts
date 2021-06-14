@@ -10,6 +10,9 @@ import {User} from "../class/user";
 //Navbar html-Elements:
 let homeButton: JQuery;
 let trackbutton: JQuery;
+let signupBtn:JQuery;
+let logoutbtn:JQuery;
+let profilbtn:JQuery;
 
 //Login-Page html-Elements:
 let loginArea: JQuery;
@@ -199,9 +202,13 @@ $(() => {
     offerControlForm = $('#offerControlForm');
     inputDescription = $("#inputDescription");
     inputPrize = $("#inputPrice");
+    signupBtn=$("#SignupBtn");
+    logoutbtn=$("#LogoutBtn");
+    profilbtn=$("#profil");
 
     getAll();
-
+    logoutbtn.hide();
+    trackbutton.hide();
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
@@ -257,6 +264,14 @@ $(() => {
     loginBTN.on('click', () =>{
         login();
 
+    });
+    logoutbtn.on('click',()=>{
+        logout();
+    });
+    profilbtn.on('click',()=>{
+        mainarea.hide();
+        profileArea.show();
+        renderprofil();
     });
     filternBTN.on('click', () =>{
         getFilter();
@@ -1038,11 +1053,15 @@ function login(){
         success: (response) => {
             mainarea.show();
             loginArea.hide();
+            signupBtn.hide();
+            trackbutton.show();
+            logoutbtn.show();
         },
         error: (response) => {
            alert(response.responseJSON.message)
         },
     });
+
 }
 
 function logout() {
@@ -1052,10 +1071,10 @@ function logout() {
         contentType: 'application/json',
         dataType: 'json',
         success: (response) => {
-            alert(response.message)
         },
-        error: (response) => {
-            alert(response.responseJSON.message)
+        error: (err) => {
+            loginArea.show();
+            location.reload();
         },
     });
 }
@@ -1174,4 +1193,7 @@ function renderOfferPage(event) {
             console.log(response);
         }
     })
+}
+function renderprofil(){
+
 }

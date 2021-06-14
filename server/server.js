@@ -85,7 +85,7 @@ app.post('/login', function (req, res) {
 });
 app.delete('/logout', function (req, res) {
     session.destroy;
-    res.clearCookie("connect.sid");
+    res.clearCookie('connect.sid', { path: '/' });
     res.send("Sie wurden abgemeldet");
 });
 // routs for get all Offers, create Offers, read a offer, filter offers
@@ -435,33 +435,31 @@ app.post('/create/location', function (req, res) {
     });
 });
 // routs for get and send Messages
-app.get('/messages', function (req, res) {
-    var query = "SELECT * FROM nachricht WHERE empfaenger_id=?";
-    var data = [session.user_id];
-    database.query(query, data, function (err, rows) {
+/*app.get('/messages', (req: Request, res: Response) => {
+    let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
+    let data = [session.user_id];
+    database.query(query, data, (err: MysqlError, rows: any) => {
         if (err === null) {
-            res.status(200).send({ result: rows });
-        }
-        else {
-            res.status(500).send({ err: err });
+            res.status(200).send({result: rows});
+        } else {
+            res.status(500).send({err});
         }
     });
-});
-app.post('/create/message', function (req, res) {
-    var absender = req.body.absender;
-    var empfaenger = req.body.empfaenger;
-    var inhalt = req.body.inhalt;
-    var cquery = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
-    var data = [absender, empfaenger, inhalt];
-    database.query(cquery, data, function (err) {
+});*/
+/*app.post('/create/message', (req: Request, res: Response) => {
+    let absender: string = req.body.absender;
+    let empfaenger: string = req.body.empfaenger;
+    let inhalt: string = req.body.inhalt;
+    let cquery: string = "INSERT INTO nachricht (absender_id, empfaenger_id, inhalt) VALUES (?,?,?);";
+    let data = [absender, empfaenger, inhalt];
+    database.query(cquery, data, (err: MysqlError) => {
         if (err === null) {
-            res.status(201).send({ "message": "Message created" });
-        }
-        else {
-            res.status(500).send({ err: err });
+            res.status(201).send({"message": "Message created"});
+        } else {
+            res.status(500).send({err});
         }
     });
-});
+});*/
 //routs for buying
 app.post('/kasse', function (req, res) {
     var kasse = new kasse_1.Kasse(req.body.user_id, req.body.anz_ID);

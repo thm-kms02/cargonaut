@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //Navbar html-Elements:
 var homeButton;
 var trackbutton;
+var signupBtn;
+var logoutbtn;
+var profilbtn;
 //Login-Page html-Elements:
 var loginArea;
 var loginBTN;
@@ -172,7 +175,12 @@ $(function () {
     offerControlForm = $('#offerControlForm');
     inputDescription = $("#inputDescription");
     inputPrize = $("#inputPrice");
+    signupBtn = $("#SignupBtn");
+    logoutbtn = $("#LogoutBtn");
+    profilbtn = $("#profil");
     getAll();
+    logoutbtn.hide();
+    trackbutton.hide();
     addOfferArea.hide();
     profileArea.hide();
     mainarea.hide();
@@ -219,6 +227,14 @@ $(function () {
     });
     loginBTN.on('click', function () {
         login();
+    });
+    logoutbtn.on('click', function () {
+        logout();
+    });
+    profilbtn.on('click', function () {
+        mainarea.hide();
+        profileArea.show();
+        renderprofil();
     });
     filternBTN.on('click', function () {
         getFilter();
@@ -820,6 +836,9 @@ function login() {
         success: function (response) {
             mainarea.show();
             loginArea.hide();
+            signupBtn.hide();
+            trackbutton.show();
+            logoutbtn.show();
         },
         error: function (response) {
             alert(response.responseJSON.message);
@@ -833,10 +852,10 @@ function logout() {
         contentType: 'application/json',
         dataType: 'json',
         success: function (response) {
-            alert(response.message);
         },
-        error: function (response) {
-            alert(response.responseJSON.message);
+        error: function (err) {
+            loginArea.show();
+            location.reload();
         },
     });
 }
@@ -938,4 +957,6 @@ function renderOfferPage(event) {
             console.log(response);
         }
     });
+}
+function renderprofil() {
 }

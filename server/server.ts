@@ -94,10 +94,9 @@ app.post('/login', (req: express.Request, res: express.Response) => {
 });
 
 app.delete('/logout',(req:Request,res:Response)=>{
-        session.destroy;
-        res.clearCookie("connect.sid");
-        res.send("Sie wurden abgemeldet")
-
+    session.destroy;
+        res.clearCookie('connect.sid', { path: '/' });
+        res.send("Sie wurden abgemeldet");
 });
 
 // routs for get all Offers, create Offers, read a offer, filter offers
@@ -456,7 +455,7 @@ app.post('/create/location', (req: Request, res: Response) => {
 });
 
 // routs for get and send Messages
-app.get('/messages', (req: Request, res: Response) => {
+/*app.get('/messages', (req: Request, res: Response) => {
     let query: string = "SELECT * FROM nachricht WHERE empfaenger_id=?"
     let data = [session.user_id];
     database.query(query, data, (err: MysqlError, rows: any) => {
@@ -466,9 +465,9 @@ app.get('/messages', (req: Request, res: Response) => {
             res.status(500).send({err});
         }
     });
-});
+});*/
 
-app.post('/create/message', (req: Request, res: Response) => {
+/*app.post('/create/message', (req: Request, res: Response) => {
     let absender: string = req.body.absender;
     let empfaenger: string = req.body.empfaenger;
     let inhalt: string = req.body.inhalt;
@@ -481,7 +480,7 @@ app.post('/create/message', (req: Request, res: Response) => {
             res.status(500).send({err});
         }
     });
-});
+});*/
 
 //routs for buying
 
