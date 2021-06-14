@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns="http://www.w3.org/1999/html">
 <head>
     <script>const exports = {};</script>
     <script async
@@ -181,64 +181,66 @@
 
     <div id="mainArea" class="area">
         <div class="row">
-            <div class="col-2"></div>
+            <div class="col-1"></div>
             <!--Filterbereich-->
-            <div class="col-2" style="background-color: #f6f5f5; border-radius: 10px">
-                <div style="margin-top: 3%">
-                    <span>Angebotstyp</span>
-                    <fieldset class="form-group">
-                        <div style="margin-left: 11%">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="filterForOfferRadio" value="option1">
-                                <label class="form-check-label" for="filterForOfferRadio">
-                                    Angebot
-                                </label>
+            <div class="col-3">
+                <div class="filterArea" style="background-color: #f6f5f5; border-radius: 10px">
+                    <div style="margin-top: 3%;">
+                        <span>Angebotstyp</span>
+                        <fieldset class="form-group">
+                            <div style="margin-left: 11%">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="filterForOfferRadio" value="option1">
+                                    <label class="form-check-label" for="filterForOfferRadio">
+                                        Angebot
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="filterForSerachRadio" value="option2">
+                                    <label class="form-check-label" for="filterForSerachRadio">
+                                        Gesucht
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="filterForSerachRadio" value="option2">
-                                <label class="form-check-label" for="filterForSerachRadio">
-                                    Gesucht
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div>
-                    <span>Service</span>
-                    <fieldset class="form-group">
-                        <div style="margin-left: 11%">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForCargoRadio" value="option1" data-bs-toggle="modal"
-                                       data-bs-target="#transportModalF">
-                                <label class="form-check-label" for="filterForCargoRadio">
-                                    Lieferung
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForTransportRadio" value="option2" data-bs-toggle="modal"
-                                       data-bs-target="#personenbefoerderungModalF">
-                                <label class="form-check-label" for="filterForTransportRadio">
-                                    Personenbeförderung
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="row">
-                    <span>Preis</span>
-                    <div class="col-5">
-                        <label>
-                            <input type="number" class="form-control" id="flilterPrizeMin" placeholder="von">
-                        </label>
+                        </fieldset>
                     </div>
-                    <div class="col-2">-</div>
-                    <div class="col-5">
-                        <label>
-                            <input type="number" class="form-control" id="filterPrizeMax" placeholder="bis">
-                        </label>
+                    <div>
+                        <span>Service</span>
+                        <fieldset class="form-group">
+                            <div style="margin-left: 11%">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForCargoRadio" value="option1" data-bs-toggle="modal"
+                                           data-bs-target="#transportModalF">
+                                    <label class="form-check-label" for="filterForCargoRadio">
+                                        Lieferung
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForTransportRadio" value="option2" data-bs-toggle="modal"
+                                           data-bs-target="#personenbefoerderungModalF">
+                                    <label class="form-check-label" for="filterForTransportRadio">
+                                        Personenbeförderung
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
-                    <div style="text-align: center; margin-top: 5%;">
-                        <button class="btn niceButton" id="filterBTN">Filtern</button>
+                    <div class="row">
+                        <span>Preis</span>
+                        <div class="col-5">
+                            <label>
+                                <input type="number" class="form-control" id="flilterPrizeMin" placeholder="von">
+                            </label>
+                        </div>
+                        <div class="col-2">-</div>
+                        <div class="col-5">
+                            <label>
+                                <input type="number" class="form-control" id="filterPrizeMax" placeholder="bis">
+                            </label>
+                        </div>
+                        <div style="text-align: center; margin-top: 5%;">
+                            <button class="btn niceButton btn-lg" id="filterBTN">Filtern</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -453,12 +455,13 @@
 
     <div id="offerArea" class="area">
         <form id="offerControlForm">
-        <div class="row">
-            <div class="col-2"></div>
-            <div class="col-8" style="background-color: #f6f5f5">
-                <div class="row">
-                    <div class="col-6">
-                        <div>
+            <div class="row">
+                <div class="col-2">
+                </div>
+                <div class="col-8" style="background-color: #f6f5f5">
+                    <div class="row">
+                        <div class="col-6">
+                         <div>
                             <span id="companyName"></span>
                             <span id="rating"></span>
                             <span id="countRating"></span>
@@ -467,27 +470,34 @@
                             <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%"
                                  alt="ExamplePicture">
                         </div>
+                        </div>
+                    <div class="col-1">
+
                     </div>
-                    <div class="col-1"></div>
                     <div class="col-5">
 
                         <div id="offerPageButton">
-                            <button id="profileBTN" class="btn w-75 userProfil"
+                            <div>
+                            <button id="profileBTN" class="btn w-75"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
-                            <button id="bookBTN" class="btn w-75"
-                                    style="background-color: #276678; color: white; margin-top: 5%">Buchen
-                            </button>
+
+                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                                <br>
+                                <button id="bookBTN" class="btn w-75"
+                                        style="background-color: #276678; color: white; margin-top: 5%">Buchen
+                                </button>
+                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <textarea style="height: 200px; margin-top: 20px" id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
-
-            </div>
+                    </div>
             <div class="col-2"></div>
 
-        </div>
+         </div>
+            </div>
         </form>
     </div>
 </div>
@@ -714,11 +724,37 @@
                         <div id="mapArea"></div>
                     </div>
                 </form>
+                <button class="btn niceButton" data-bs-dismiss="modal" id="btnfeedback" data-target="#feedback" data-toggle="modal">Feedback</button>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedbackLabel" aria-hidden="true" style="margin-top: auto">
+    <button type="button" class="close btn-lg" data-dismiss="modal" aria-label="Close" style="color: white">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-dialog" role="document">
+        <div class="containerFeedback" id="containerfeedback" >
+            <div class="containerinhalt">
+                <h1 style=" color: #276678">Feedback</h1>
+                <div class="rating">
+                    <input name="stars" id="e1" type="radio"><label for="e1">☆</label>
+                    <input name="stars" id="e2" type="radio"><label for="e2">☆</label>
+                    <input name="stars" id="e3" type="radio"><label for="e3">☆</label>
+                    <input name="stars" id="e4" type="radio"><label for="e4">☆</label>
+                    <input name="stars" id="e5" type="radio"><label for="e5">☆</label>
+                </div>
+                <div class="input-group" style="padding-left: 5%;padding-right: 5%; height: 200px">
+                    <textarea class="form-control" aria-label="With textarea" placeholder="Bitte hier ihr Feedback abgegeben..."></textarea>
+                </div>
+                <br>
+                <br>
+                <button type="submit" id="Buttonfeedback" class="btn btn-dark ">Abschicken</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Footer -->
 <div class="footer-clean">
     <footer>
@@ -760,5 +796,6 @@
         </div>
     </footer>
 </div>
+
 </body>
 </html>
