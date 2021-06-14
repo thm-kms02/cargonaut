@@ -229,6 +229,8 @@ app.get('/user', function (req, res) {
     });
 });
 app.get('/difUser/:id', function (req, res) {
+    var user;
+    var carsList = [];
     var query = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [req.params.id], function (err, rows) {
         if (err) {
@@ -237,8 +239,20 @@ app.get('/difUser/:id', function (req, res) {
             });
         }
         else {
-            res.status(200).send({
-                result: rows[0]
+            user = new user_1.User(rows[0].email, rows[0].name, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            var query1 = "SELECT * FROM fahrzeug WHERE fahrzeug.user_id=?";
+            var data1 = [req.params.id];
+            database.query(query1, data1, function (err, rows) {
+                if (err) {
+                    res.status(500).send({ err: err });
+                }
+                else {
+                    rows.forEach(function (row) {
+                        var car = new fahrzeug_1.Fahrzeug(row.name, row.jahr, row.volumen, row.gewicht, row.bild_pfad, row.id);
+                        carsList.push(car);
+                    });
+                    res.status(200).send({ "user": user, "cars": carsList });
+                }
             });
         }
     });

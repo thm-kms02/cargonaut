@@ -149,9 +149,9 @@ $(function () {
         showMap();
     });
     createOfferBTN.on('click', function () {
+        event.preventDefault();
         mainarea.hide();
         addOfferArea.show();
-        sendMessage();
     });
     submitOfferBtn.on('click', function () {
         addAnzeige();
@@ -179,6 +179,35 @@ $(function () {
         registry();
     });
 });
+function getDifUser(id) {
+    $.ajax({
+        url: '/difUser/' + id,
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (response) {
+            renderProfil(response.user, response.cars);
+        },
+        error: function (err) {
+            return false;
+        },
+    });
+}
+function renderProfil(user, cars) {
+    profileArea.empty();
+    var newProfil = $("   \n        <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                \n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                                \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>\n   ");
+    profileArea.append(newProfil);
+    var carsTableBody = $('#carsTableBody');
+    for (var _i = 0, cars_1 = cars; _i < cars_1.length; _i++) {
+        var car = cars_1[_i];
+        var elem = $(" <tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <img class=\"card-img\" src=" + car.bild_pfad + " alt=\"Card image cap\">\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\">" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\">" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\">" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\">" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
+        carsTableBody.append(elem);
+    }
+    addOfferArea.hide();
+    mainarea.hide();
+    offerArea.hide();
+    profileArea.show();
+}
 function getTrackingRole() {
     event.preventDefault();
     var trackNumIn = $('#feld');
@@ -421,7 +450,7 @@ function filternCargo(anzeigen, ladeflaeche, ladehoehe, ladungsgewicht) {
 function addAnzeige() {
     var rad1 = $('#inlineRadio1:checked');
     var rad2 = $('#inlineRadio2:checked');
-    var beschIn = $('#inputBeschreibung');
+    var beschIn = $('#inputDescription');
     var priceIn = $('#inputPrice');
     var ang_ges = true;
     var beschreibung = String(beschIn.val()).trim();
@@ -434,7 +463,7 @@ function addAnzeige() {
     var ladeflaeche;
     var ladungsgewicht;
     var ladehoehe;
-    if (person != 0) {
+    if (person > 0) {
         start = von;
         ziel = nach;
         datum = setDate;
@@ -481,8 +510,8 @@ function addAnzeige() {
         success: function (response) {
             console.log("sucess");
         },
-        error: function (response) {
-            console.log("error");
+        error: function (err) {
+            console.log(err);
         },
     });
 }
@@ -610,6 +639,8 @@ function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
         card = $("\n        <tr>\n            <td>\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + anz.bild_pfad + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Ladefl\u00E4che: " + anz.ladeflaeche + " m\u00B2</span></p>\n                                <p class=\"textListComponent\"><span>Ladeh\u00F6he: " + anz.ladehoehe + " cm</span></p>\n                                 <p class=\"textListComponent\"><span>Ladegewicht: " + anz.ladungsgewicht + " Kg</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
         return card;
     }
+}
+function openOwnProfile() {
 }
 function getFahrzeugDropTaxi() {
     var inputFahrzeug = String($('.custom-select').val()).trim();

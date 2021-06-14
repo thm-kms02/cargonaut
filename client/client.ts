@@ -5,6 +5,7 @@ import {Anzeige} from "../class/anzeige";
 ///declare module 'google.maps'; in node_modules/@types/google.maps/index.d.ts ganz unten einfügen
 // @ts-ignore
 import {} from 'google.maps';
+import {User} from "../class/user";
 
 //Navbar html-Elements:
 let homeButton: JQuery;
@@ -179,9 +180,10 @@ $(() => {
     });
 
     createOfferBTN.on('click', () => {
+        event.preventDefault();
         mainarea.hide();
         addOfferArea.show();
-     sendMessage();
+
 
     });
 
@@ -203,6 +205,7 @@ $(() => {
     });
     loginBTN.on('click', () =>{
         login();
+
     });
     filternBTN.on('click', () =>{
         getFilter();
@@ -214,6 +217,99 @@ $(() => {
 
     })
 });
+
+
+function getDifUser(id: number): any{
+    $.ajax({
+        url: '/difUser/'+id,
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+
+        success: (response) => {
+        renderProfil(response.user, response.cars);
+        },
+        error: (err) => {
+            return false;
+        },
+    });
+}
+
+
+function renderProfil(user: User,cars: Fahrzeug[]) {
+    profileArea.empty()
+    let newProfil: JQuery = $(`   
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8" style="background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%">
+                <div class="row">
+                    <div class="col-3">
+                        <!--Profilbildbereich-->
+                        <div>
+                            <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
+                        </div>
+                        <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+                    </div>
+                    <div class="col-9">
+                        <h1 id="profileName">${user.name}</h1>
+                        <span id="profileRating"></span><span>/5 Sterne</span>
+                        <div style="margin-top: 10%; margin-left: 30%">
+                            <h3>Fahrzeuge</h3>
+                            <table class="table table-borderless">
+                                <thead>
+                                
+                                </thead>
+                                <tbody id="carsTableBody">
+                                <!--Hier wird die Liste reingerendert-->
+                                
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+   `);
+    profileArea.append(newProfil);
+    let carsTableBody: JQuery = $('#carsTableBody');
+    for(let car of cars) {
+        let elem: JQuery =$(` <tr>
+                                    <td>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <img class="card-img" src=${car.bild_pfad} alt="Card image cap">
+                                                    </div>
+                                                    <div class="col-4" style="text-align: center">
+                                                        <div class="carAttribute">
+                                                            <span class="carAttributeModel">${car.name}</span>
+                                                        </div>
+                                                        <div class="carAttribute">
+                                                            <span class="carAttributeYear">${car.jahr}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4" style="text-align: center">
+                                                        <div class="carAttribute">
+                                                            <span class="carAttributeCargoArea">${car.volumen}</span>
+                                                        </div>
+                                                        <div class="carAttribute">
+                                                            <span class="carAttributeWeight">${car.gewicht}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>`);
+        carsTableBody.append(elem);
+    }
+    addOfferArea.hide();
+    mainarea.hide();
+    offerArea.hide();
+    profileArea.show();
+}
 
 function getTrackingRole() {
     event.preventDefault();
@@ -490,7 +586,7 @@ return filteredCargo;
 function addAnzeige() {
     let rad1: JQuery = $('#inlineRadio1:checked');
     let rad2: JQuery = $('#inlineRadio2:checked');
-    let beschIn: JQuery = $('#inputBeschreibung');
+    let beschIn: JQuery = $('#inputDescription');
     let priceIn: JQuery = $('#inputPrice');
     let ang_ges: boolean = true;
     let beschreibung: string = String(beschIn.val()).trim();
@@ -503,7 +599,7 @@ function addAnzeige() {
     let ladeflaeche: number;
     let ladungsgewicht: number;
     let ladehoehe: number;
-    if (person != 0 ) {
+    if (person > 0 ) {
         start = von;
         ziel = nach;
         datum = setDate;
@@ -549,8 +645,8 @@ function addAnzeige() {
         success: (response) => {
             console.log("sucess");
         },
-        error: (response) => {
-            console.log("error");
+        error: (err) => {
+            console.log(err);
         },
     });
 }
@@ -744,6 +840,10 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
     `);
  return card;
     }
+
+}
+
+function openOwnProfile() {
 
 }
 

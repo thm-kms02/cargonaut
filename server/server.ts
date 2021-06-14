@@ -238,7 +238,8 @@ app.get('/user', (req: Request, res: Response) => {
 });
 
 app.get('/difUser/:id', (req: Request, res: Response) => {
-
+let user : User;
+let carsList: Fahrzeug[] = [];
     const query: string = "SELECT * FROM user WHERE user_id=?";
     database.query(query, [req.params.id], (err: MysqlError, rows: any) => {
         if (err) {
@@ -246,13 +247,24 @@ app.get('/difUser/:id', (req: Request, res: Response) => {
                 message: 'Database request failed: ' + err
             });
         } else {
-            res.status(200).send({
-                result: rows[0]
+            user = new User(rows[0].email, rows[0].name, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            const query1: string = "SELECT * FROM fahrzeug WHERE fahrzeug.user_id=?";
+            const data1 = [req.params.id];
+            database.query(query1, data1,(err: MysqlError, rows:any) => {
+                if(err) {
+                    res.status(500).send({err});
+                } else {
+                    rows.forEach((row) => {
+                        let car: Fahrzeug = new Fahrzeug(row.name, row.jahr, row.volumen, row.gewicht, row.bild_pfad, row.id)
+                        carsList.push(car);
+                    });
+                    res.status(200).send({"user":user, "cars":carsList});
+                }
             });
-
         }
     });
 });
+
 
 app.get('/fahrzeug', (req: Request, res: Response) => {
 
@@ -578,5 +590,3 @@ app.delete('/logout',(req:Request,res:Response)=>{
         res.send("Sie wurden abgemeldet")
     });
 });
-
-
