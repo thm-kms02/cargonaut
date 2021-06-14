@@ -197,6 +197,8 @@ $(() => {
     saveBTN2F = $("#saveBTN2F");
     offerPageButtons = $('#offerPageButton');
     offerControlForm = $('#offerControlForm');
+    inputDescription = $("#inputDescription");
+    inputPrize = $("#inputPrice");
 
     getAll();
 
@@ -228,13 +230,16 @@ $(() => {
         event.preventDefault();
         mainarea.hide();
         addOfferArea.show();
-
-
     });
 
-
     submitOfferBtn.on('click', () => {
+        let emptyText: string = "";
         addAnzeige();
+        document.getElementById('inputDescription');
+        inputDescription.text(emptyText);
+        inputPrize.text(emptyText);
+        addOfferArea.hide;
+        mainarea.show();
     });
     saveBTN.on('click', () => {
         saveValuesTaxi();
@@ -381,7 +386,6 @@ function getTrackingRole() {
 
         },
     });
-
 }
 
 

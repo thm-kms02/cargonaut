@@ -181,64 +181,66 @@
 
     <div id="mainArea" class="area">
         <div class="row">
-            <div class="col-2"></div>
+            <div class="col-1"></div>
             <!--Filterbereich-->
-            <div class="col-2" style="background-color: #f6f5f5; border-radius: 10px">
-                <div style="margin-top: 3%">
-                    <span>Angebotstyp</span>
-                    <fieldset class="form-group">
-                        <div style="margin-left: 11%">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="filterForOfferRadio" value="option1">
-                                <label class="form-check-label" for="filterForOfferRadio">
-                                    Angebot
-                                </label>
+            <div class="col-3">
+                <div class="filterArea" style="background-color: #f6f5f5; border-radius: 10px">
+                    <div style="margin-top: 3%;">
+                        <span>Angebotstyp</span>
+                        <fieldset class="form-group">
+                            <div style="margin-left: 11%">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="filterForOfferRadio" value="option1">
+                                    <label class="form-check-label" for="filterForOfferRadio">
+                                        Angebot
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="filterForSerachRadio" value="option2">
+                                    <label class="form-check-label" for="filterForSerachRadio">
+                                        Gesucht
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="filterForSerachRadio" value="option2">
-                                <label class="form-check-label" for="filterForSerachRadio">
-                                    Gesucht
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div>
-                    <span>Service</span>
-                    <fieldset class="form-group">
-                        <div style="margin-left: 11%">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForCargoRadio" value="option1" data-bs-toggle="modal"
-                                       data-bs-target="#transportModalF">
-                                <label class="form-check-label" for="filterForCargoRadio">
-                                    Lieferung
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForTransportRadio" value="option2" data-bs-toggle="modal"
-                                       data-bs-target="#personenbefoerderungModalF">
-                                <label class="form-check-label" for="filterForTransportRadio">
-                                    Personenbeförderung
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="row">
-                    <span>Preis</span>
-                    <div class="col-5">
-                        <label>
-                            <input type="number" class="form-control" id="flilterPrizeMin" placeholder="von">
-                        </label>
+                        </fieldset>
                     </div>
-                    <div class="col-2">-</div>
-                    <div class="col-5">
-                        <label>
-                            <input type="number" class="form-control" id="filterPrizeMax" placeholder="bis">
-                        </label>
+                    <div>
+                        <span>Service</span>
+                        <fieldset class="form-group">
+                            <div style="margin-left: 11%">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForCargoRadio" value="option1" data-bs-toggle="modal"
+                                           data-bs-target="#transportModalF">
+                                    <label class="form-check-label" for="filterForCargoRadio">
+                                        Lieferung
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios2" id="filterForTransportRadio" value="option2" data-bs-toggle="modal"
+                                           data-bs-target="#personenbefoerderungModalF">
+                                    <label class="form-check-label" for="filterForTransportRadio">
+                                        Personenbeförderung
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
-                    <div style="text-align: center; margin-top: 5%;">
-                        <button class="btn niceButton" id="filterBTN">Filtern</button>
+                    <div class="row">
+                        <span>Preis</span>
+                        <div class="col-5">
+                            <label>
+                                <input type="number" class="form-control" id="flilterPrizeMin" placeholder="von">
+                            </label>
+                        </div>
+                        <div class="col-2">-</div>
+                        <div class="col-5">
+                            <label>
+                                <input type="number" class="form-control" id="filterPrizeMax" placeholder="bis">
+                            </label>
+                        </div>
+                        <div style="text-align: center; margin-top: 5%;">
+                            <button class="btn niceButton btn-lg" id="filterBTN">Filtern</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -473,12 +475,20 @@
 
                         <div id="offerPageButton">
                             <button id="profileBTN" class="btn w-75 userProfil"
+                        <div>
+                            <button id="profileBTN" class="btn w-75"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
                             <button id="bookBTN" class="btn w-75"
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>
+                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                                <br>
+                                <button id="bookBTN" class="btn w-75"
+                                        style="background-color: #276678; color: white; margin-top: 5%">Buchen
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

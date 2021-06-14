@@ -9,12 +9,12 @@ const host = require("../server/server");
 
 chain.should();
 chain.use(chaiHttps);
-/*  Tests müssen auf neue Datensätze angepasst werden
+ /*
 describe("Post /create/Account", async () => {
-    it("Erstellt ein Account", (done) => {
+    it("create a new account", (done) => {
         const account = { // email vor test/push immer ändern (unique)
-            email: "test72@gmail.comm",
-            name: "Max Mustermann",
+            email: "test3@gmail.com",
+            name: "Test Testermann",
             handyNr:"+49293204803",
             passwort:"test1234"
         };
@@ -25,6 +25,25 @@ describe("Post /create/Account", async () => {
             .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(201);
+                done()
+            });
+    });
+});
+*
+  */
+describe("post/login", async () =>{
+    it("login into the system", (done) => {
+        const login= {
+            email:'root@gmail.com',
+            passwort:'root',
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/login")
+            .send(login)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(200);
                 done()
             });
     });
@@ -51,8 +70,8 @@ describe("Messages", async () => {
         const message = "test@gmail21.commm";
         chain
             .request("http://localhost:8080")
-            .get("/messages/" + message)
-            .send()
+            .get("/messages/")
+            .send(message)
             .end((err, response) => {
                 console.log(response.body);
                 response.should.have.status(200);
@@ -180,21 +199,64 @@ describe("Post/Kasse/buchen", async () =>{
             });
     });
 });
-*/
-describe("post/login", async () =>{
-    it("meldet nutzer an", (done) => {
-        const login= {
-            email:'root@gmail.com',
-            passwort:'root',
+
+describe("Post/localisation", async () =>{
+    it("localisation", (done) => {
+        const local= {
+            tracknum:1
+
         };
         chain
             .request("http://localhost:8080")
-            .post("/login")
-            .send(login)
+            .get("/create/location")
+            .send(local)
             .end((err, response) => {
                 console.log(response.status);
-                response.should.have.status(200);
+                response.should.have.status(404);
                 done()
+            });
+    });
+});
+
+describe("getGPS with trackID", async () =>{
+    it("getGPS with trackID", (done) => {
+        const local= {
+            trackID:1
+
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/getGPS/"+local)
+            .send()
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(404);
+                done()
+            });
+    });
+});
+
+
+describe("Post/create/fahrzeug", async  () => {
+    it('soll Fahrzeug erstellen/hinzufuegen', function (done) {
+        const fahrzeug = {
+            user_id: 31,
+            name: "VW Golf",
+            jahr:2010,
+            volumen: 500,
+            gewicht: 1500,
+            bild_pfad: "bilder/img.pn"
+        };
+
+        chain
+            .request("http://localhost:8080")
+            .post("/create/fahrzeug")
+            .send(fahrzeug)
+            .end((err, response) => {
+                console.log(response.status);
+                response.should.have.status(201);
+                done();
+
             });
     });
 });

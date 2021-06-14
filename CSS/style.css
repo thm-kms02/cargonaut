@@ -393,7 +393,6 @@
     border:#fff solid 1px;
     margin-right: 10px;
 }
-
 #registryBTN {
     background-color: #276678;
     width:150px;
@@ -473,4 +472,9 @@
     font-size:18px;
     border:#fff solid 1px;
     margin-left: 10px;
+}
+
+.filterArea {
+    padding: 9%;
+
 }
