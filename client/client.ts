@@ -167,7 +167,7 @@ $(() => {
     addCarBTN = $("#addCarBTN");
     offerTableForm = $("#offerTableForm");
     inputPersonenzahlF = $("#inputPersonenzahlF");
-    inputVonF  = $("#inputVonF");
+    inputVonF = $("#inputVonF");
     inputNachF = $("#inputNachF");
     inputDateF = $("#inputDateF");
     inputGesamtgewichtF = $("#inputGesamtgewichtF");
@@ -177,17 +177,19 @@ $(() => {
     inputNach2F = $("#inputNach2F");
     inputLadehoeheF = $("#inputLadehoeheF");
     inputPersonenzahl = $("#inputPersonenzahl");
-    inputVon  = $("#inputVon");
+    inputVon = $("#inputVon");
     inputNach = $("#inputNach");
     inputDate = $("#inputDate");
     inputGesamtgewicht = $("#inputGesamtgewicht");
-    inputLadeflaeche  = $("#inputLadeflaeche");
+    inputLadeflaeche = $("#inputLadeflaeche");
     inputLadehoehe = $("#inputLadehoehe");
     inputVon2 = $("#inputVon2");
-    inputNach2 =  $("#inputNach2");
+    inputNach2 = $("#inputNach2");
     inputDate2 = $("#inputDate2");
-    inputMinPrice =$("#flilterPrizeMin");
+    inputMinPrice = $("#flilterPrizeMin");
     inputMaxPrice = $("#filterPrizeMax");
+    saveBTNF = $("#saveBTNF");
+    saveBTN2F = $("#saveBTN2F");
 
     getAll();
 
@@ -196,7 +198,7 @@ $(() => {
     mainarea.hide();
     offerArea.hide();
 
-    offerTableForm.on('click','.testBTN', renderOfferPage)
+    offerTableForm.on('click', '.testBTN', renderOfferPage)
 
     homeButton.on('click', () => {
         addOfferArea.hide();
@@ -210,7 +212,7 @@ $(() => {
     });
 
     trackbutton.on('click', () => {
-       showMap();
+        showMap();
     });
 
     createOfferBTN.on('click', () => {
@@ -238,15 +240,15 @@ $(() => {
         getFahrzeugDropLieferung();
     });
 
-    loginBTN.on('click', () =>{
+    loginBTN.on('click', () => {
         login();
 
     });
-    filternBTN.on('click', () =>{
+    filternBTN.on('click', () => {
         getFilter();
-    })
+    });
 
-    registryBTN.on('click', () =>{
+    registryBTN.on('click', () => {
         registryModal.modal('hide');
         registry();
 
@@ -254,8 +256,9 @@ $(() => {
     saveBTNF.on('click',()=>{
         saveValuesTaxiFilter();
     });
-    saveBTN2F.on('click', () => {
+    saveBTN2F.on('click',()=>{
         saveValuesLieferungFilter();
+        alert("hello");
     });
 });
 
@@ -587,7 +590,6 @@ function getFilter() {
     }
     let minPreis: number = Number(inputMinPrice.val());
     let maxPreis: number = Number(inputMaxPrice.val());
- console.log(ang_ges, kategorie)
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -598,20 +600,16 @@ function getFilter() {
             "kategorie":kategorie
         }),
         success: (response) => {
-            console.log(response.length)
             let serverAnzeigen:AnzeigeRender[];
             serverAnzeigen =response;
             anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
             if(kategorie == undefined){
-                console.log(" kategorie alle",  anzeigenRender.length)
                 renderOffersList(anzeigenRender);
             }if (kategorie ==1){
                 anzeigenRender = filternCargo(anzeigenRender,ladeflaeche,ladehoehe,ladungsgewicht);
                 renderOffersList(anzeigenRender);
             }if (kategorie ==2) {
-                console.log(anzeigenRender + "aaa");
                 anzeigenRender=filternTaxi(anzeigenRender,personen);
-                console.log(anzeigenRender + "bbb");
                 renderOffersList(anzeigenRender);
             }
         },
@@ -623,28 +621,31 @@ function getFilter() {
 
 function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:number,von:string,nach:string, datum:string):AnzeigeRender[]{
     let filteredAnzeigen:AnzeigeRender[]=[];
+    let j: number = 0;
     for (let i=0;i<anzeigen.length;i++){
-                if (anzeigen[i].preis == minPreis || minPreis === undefined) {
-                    if (anzeigen[i].preis == maxPreis || maxPreis === undefined) {
-                        if (anzeigen[i].datum == datum || datum === undefined) {
-                            if (anzeigen[i].start == von || von === undefined) {
-                                if (anzeigen[i].ziel == nach || nach === undefined) {
-                                    filteredAnzeigen[i] = anzeigen[i];
+                if (anzeigen[i].preis == minPreis || minPreis === 0 ) {
+                    if (anzeigen[i].preis == maxPreis || maxPreis === 0 ) {
+                        if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
+                            if (anzeigen[i].start == von || von === "" || von === undefined) {
+                                if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
+                                    filteredAnzeigen[j] = anzeigen[i];
+                                    j++;
                                 }
                             }
                         }
                     }
                 }
     }
-
 return filteredAnzeigen;
 }
 
 function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     let filteredTaxi:AnzeigeRender[]=[];
+    let j:number = 0;
     for (let i=0; i<anzeigen.length;i++){
-            if (anzeigen[i].personen == personen || personen == undefined) {
-                filteredTaxi[i] = anzeigen[i];
+            if (anzeigen[i].personen == personen || personen == 0 || personen === undefined) {
+                filteredTaxi[j] = anzeigen[i];
+                j++;
             }
 
     }
@@ -653,12 +654,14 @@ return filteredTaxi;
 
 function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewicht):AnzeigeRender[]{
     let filteredCargo:AnzeigeRender[]=[];
+    let j:number =0 ;
     for (let i=0;i< anzeigen.length;i++){
 
-            if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche === undefined) {
-                if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe === undefined) {
-                    if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht === undefined) {
-                        filteredCargo[i] = anzeigen[i];
+            if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche==0 ||ladeflaeche === undefined) {
+                if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe==0 || ladehoehe === undefined) {
+                    if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht==0 || ladungsgewicht === undefined) {
+                        filteredCargo[j] = anzeigen[i];
+                        j++;
                     }
                 }
             }
@@ -817,10 +820,10 @@ function dateConvert(datum: string): string { // yyyy-mm-dd to dd.mm.yyyy
 }
 
 function renderAnzeige(anz: AnzeigeRender) {
-
     const offersListBody: JQuery = $("#offersTableBody");
     let ueberschrift: string;
     let menge: string;
+
     let datumSqlFormat: string = String((anz.datum).split("", 10)).replace(/,/g, "");
     let datumEuropaFormat: string = dateConvert(datumSqlFormat);
     let fahrzeugName:string;
@@ -849,11 +852,16 @@ function renderAnzeige(anz: AnzeigeRender) {
 
 function renderOffersList(offerList: AnzeigeRender[]) {
     const offersListBody: JQuery = $("#offersTableBody");
+    if (offerList.length ==0 || offerList === undefined ){
+        alert("Die Suche liefert keine Ergebnisse");
+    }
     offersListBody.empty();
+
     for (let i = 0; i < offerList.length; i++) {
         renderAnzeige(offerList[i]);
 
     }
+
 }
 
 function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
@@ -1110,7 +1118,6 @@ function registry(){
 function renderOfferPage(event: Event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
-    console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
     countRating= $("#countRating");
@@ -1126,7 +1133,6 @@ function renderOfferPage(event: Event) {
             profileArea.hide();
             mainarea.hide();
             offerArea.show();
-            console.log(response.result);
             companyName.text(response.result.name);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
                 response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);

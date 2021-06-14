@@ -163,6 +163,8 @@ $(function () {
     inputDate2 = $("#inputDate2");
     inputMinPrice = $("#flilterPrizeMin");
     inputMaxPrice = $("#filterPrizeMax");
+    saveBTNF = $("#saveBTNF");
+    saveBTN2F = $("#saveBTN2F");
     getAll();
     addOfferArea.hide();
     profileArea.hide();
@@ -216,6 +218,7 @@ $(function () {
     });
     saveBTN2F.on('click', function () {
         saveValuesLieferungFilter();
+        alert("hello");
     });
 });
 function getDifUser(id) {
@@ -458,7 +461,6 @@ function getFilter() {
     }
     var minPreis = Number(inputMinPrice.val());
     var maxPreis = Number(inputMaxPrice.val());
-    console.log(ang_ges, kategorie);
     $.ajax({
         url: '/anzeige/filter',
         type: 'POST',
@@ -469,12 +471,10 @@ function getFilter() {
             "kategorie": kategorie
         }),
         success: function (response) {
-            console.log(response.length);
             var serverAnzeigen;
             serverAnzeigen = response;
             anzeigenRender = filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
             if (kategorie == undefined) {
-                console.log(" kategorie alle", anzeigenRender.length);
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 1) {
@@ -482,9 +482,7 @@ function getFilter() {
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 2) {
-                console.log(anzeigenRender + "aaa");
                 anzeigenRender = filternTaxi(anzeigenRender, personen);
-                console.log(anzeigenRender + "bbb");
                 renderOffersList(anzeigenRender);
             }
         },
@@ -494,13 +492,15 @@ function getFilter() {
 }
 function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum) {
     var filteredAnzeigen = [];
+    var j = 0;
     for (var i = 0; i < anzeigen.length; i++) {
-        if (anzeigen[i].preis == minPreis || minPreis === undefined) {
-            if (anzeigen[i].preis == maxPreis || maxPreis === undefined) {
-                if (anzeigen[i].datum == datum || datum === undefined) {
-                    if (anzeigen[i].start == von || von === undefined) {
-                        if (anzeigen[i].ziel == nach || nach === undefined) {
-                            filteredAnzeigen[i] = anzeigen[i];
+        if (anzeigen[i].preis == minPreis || minPreis === 0) {
+            if (anzeigen[i].preis == maxPreis || maxPreis === 0) {
+                if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
+                    if (anzeigen[i].start == von || von === "" || von === undefined) {
+                        if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
+                            filteredAnzeigen[j] = anzeigen[i];
+                            j++;
                         }
                     }
                 }
@@ -511,20 +511,24 @@ function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum) {
 }
 function filternTaxi(anzeigen, personen) {
     var filteredTaxi = [];
+    var j = 0;
     for (var i = 0; i < anzeigen.length; i++) {
-        if (anzeigen[i].personen == personen || personen == undefined) {
-            filteredTaxi[i] = anzeigen[i];
+        if (anzeigen[i].personen == personen || personen == 0 || personen === undefined) {
+            filteredTaxi[j] = anzeigen[i];
+            j++;
         }
     }
     return filteredTaxi;
 }
 function filternCargo(anzeigen, ladeflaeche, ladehoehe, ladungsgewicht) {
     var filteredCargo = [];
+    var j = 0;
     for (var i = 0; i < anzeigen.length; i++) {
-        if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche === undefined) {
-            if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe === undefined) {
-                if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht === undefined) {
-                    filteredCargo[i] = anzeigen[i];
+        if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche == 0 || ladeflaeche === undefined) {
+            if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe == 0 || ladehoehe === undefined) {
+                if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht == 0 || ladungsgewicht === undefined) {
+                    filteredCargo[j] = anzeigen[i];
+                    j++;
                 }
             }
         }
@@ -708,6 +712,9 @@ function renderAnzeige(anz) {
 }
 function renderOffersList(offerList) {
     var offersListBody = $("#offersTableBody");
+    if (offerList.length == 0 || offerList === undefined) {
+        alert("Die Suche liefert keine Ergebnisse");
+    }
     offersListBody.empty();
     for (var i = 0; i < offerList.length; i++) {
         renderAnzeige(offerList[i]);
@@ -885,7 +892,6 @@ function registry() {
 function renderOfferPage(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("offer-id");
-    console.log(id);
     companyName = $("#companyName");
     rating = $("#rating");
     countRating = $("#countRating");
@@ -900,7 +906,6 @@ function renderOfferPage(event) {
             profileArea.hide();
             mainarea.hide();
             offerArea.show();
-            console.log(response.result);
             companyName.text(response.result.name);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
                 response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
