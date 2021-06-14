@@ -532,8 +532,8 @@ function filternCargo(anzeigen, ladeflaeche, ladehoehe, ladungsgewicht) {
     return filteredCargo;
 }
 function addAnzeige() {
-    var rad1 = $('#inlineRadio1:checked');
-    var rad2 = $('#inlineRadio2:checked');
+    var rad1 = $('#createOfferRadio:checked');
+    var rad2 = $('#createSearchRadio:checked');
     var beschIn = $('#inputDescription');
     var priceIn = $('#inputPrice');
     var ang_ges = true;
@@ -568,10 +568,10 @@ function addAnzeige() {
         ladehoehe = ladehoeheIN;
     }
     if (rad1.val() == "option1") {
-        ang_ges = true;
+        ang_ges = false;
     }
     else if (rad2.val() == "option2") {
-        ang_ges = false;
+        ang_ges = true;
     }
     $.ajax({
         url: '/create/anzeige',

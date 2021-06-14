@@ -667,8 +667,8 @@ return filteredCargo;
 }
 
 function addAnzeige() {
-    let rad1: JQuery = $('#inlineRadio1:checked');
-    let rad2: JQuery = $('#inlineRadio2:checked');
+    let rad1: JQuery = $('#createOfferRadio:checked');
+    let rad2: JQuery = $('#createSearchRadio:checked');
     let beschIn: JQuery = $('#inputDescription');
     let priceIn: JQuery = $('#inputPrice');
     let ang_ges: boolean = true;
@@ -702,9 +702,9 @@ function addAnzeige() {
         ladehoehe = ladehoeheIN;
     }
     if (rad1.val() == "option1") {
-        ang_ges = true;
-    } else if (rad2.val() == "option2") {
         ang_ges = false;
+    } else if (rad2.val() == "option2") {
+        ang_ges = true;
     }
     $.ajax({
         url: '/create/anzeige',
