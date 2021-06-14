@@ -551,8 +551,8 @@ function saveValuesLieferungFilter() {
 function getFilter() {
     let radOffer : JQuery = $('#filterForOfferRadio:checked');
     let radSearch: JQuery = $('#filterForSerachRadio:checked');
-    let radTaxi: JQuery = $('#filterForSerachRadio:checked');
-    let radCargo: JQuery = $('#filterForTransportRadio:checked');
+    let radTaxi: JQuery = $('#filterForTransportRadio:checked');
+    let radCargo: JQuery = $('#filterForCargoRadio:checked');
     let ang_ges: number;
     let kategorie: number; //1 = ladungsbeförderung, 2 = personenbeförderung
     let von: string;

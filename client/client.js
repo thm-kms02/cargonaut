@@ -422,8 +422,8 @@ function saveValuesLieferungFilter() {
 function getFilter() {
     var radOffer = $('#filterForOfferRadio:checked');
     var radSearch = $('#filterForSerachRadio:checked');
-    var radTaxi = $('#filterForSerachRadio:checked');
-    var radCargo = $('#filterForTransportRadio:checked');
+    var radTaxi = $('#filterForTransportRadio:checked');
+    var radCargo = $('#filterForCargoRadio:checked');
     var ang_ges;
     var kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
     var von;
