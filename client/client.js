@@ -156,7 +156,7 @@ $(function () {
     inputNach = $("#inputNach");
     inputDate = $("#inputDate");
     inputGesamtgewicht = $("#inputGesamtgewicht");
-    inputLadeflaeche = $("#inputLadeflaecheF");
+    inputLadeflaeche = $("#inputLadeflaeche");
     inputLadehoehe = $("#inputLadehoehe");
     inputVon2 = $("#inputVon2");
     inputNach2 = $("#inputNach2");
