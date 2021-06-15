@@ -702,7 +702,7 @@ function dateConvert(datum) {
     var yearTemp = [];
     var monthTemp = [];
     var dayTemp = [];
-    for (var i = 0; i < datum.length; i++) {
+    for (var i = 0; i < 10; i++) {
         if (i < 4) {
             yearTemp[i] = datum.charAt(i);
         }
@@ -951,7 +951,7 @@ function renderOfferPage(event) {
             console.log(response.result);
             companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
-                response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+                dateConvert(response.result.datum) + "\n \n" + "Beschreibung: " + response.result.beschreibung);
             offerPicture.empty();
             offerPageButtons.empty();
             var pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");

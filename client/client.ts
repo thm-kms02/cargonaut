@@ -840,7 +840,7 @@ function dateConvert(datum: string): string { // yyyy-mm-dd to dd.mm.yyyy
     let yearTemp: Array<string> = [];
     let monthTemp: Array<string> = [];
     let dayTemp: Array<string> = [];
-    for (let i = 0; i < datum.length; i++) {
+    for (let i = 0; i < 10; i++) {
         if (i < 4) {
             yearTemp[i] = datum.charAt(i);
         }
@@ -1176,7 +1176,7 @@ function renderOfferPage(event) {
             console.log(response.result);
             companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
-                response.result.datum + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+                dateConvert(response.result.datum) + "\n \n" + "Beschreibung: " + response.result.beschreibung);
 
             offerPicture.empty();
             offerPageButtons.empty()
