@@ -98,6 +98,7 @@ var addCarAttributeModel;
 var addCarAttributeYear;
 var addCarAttributeCargoArea;
 var addCarAttributeWeight;
+var addCarForm;
 ///OfferDetailPage
 var offerPageButtons;
 var offerControlForm;
@@ -178,6 +179,7 @@ $(function () {
     signupBtn = $("#SignupBtn");
     logoutbtn = $("#LogoutBtn");
     profilbtn = $("#profil");
+    addCarForm = $('#addCarForm');
     getAll();
     logoutbtn.hide();
     profilbtn.hide();
@@ -188,6 +190,7 @@ $(function () {
     offerArea.hide();
     offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
+    addCarForm.on('click', '.addCar', createCar);
     homeButton.on('click', function () {
         addOfferArea.hide();
         profileArea.hide();
@@ -250,10 +253,11 @@ $(function () {
     saveBTN2F.on('click', function () {
         saveValuesLieferungFilter();
     });
-    addCarBTN.on('click', function () {
-        console.log("Add Car");
-        createCar();
-    });
+    /*
+        addCarBTN.on('click', () => {
+            console.log("Add Car");
+            createCar;
+        });*/
 });
 function getDifUser(event) {
     event.preventDefault();
@@ -376,7 +380,8 @@ function getAll() {
         },
     });
 }
-function createCar() {
+function createCar(event) {
+    event.preventDefault();
     var namein = $('#addCarAttributeModel');
     var yearin = $('#addCarAttributeYear');
     var volin = $('#addCarAttributeCargoArea');
@@ -768,7 +773,7 @@ function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
 }
 function openOwnProfile(result) {
     profileArea.empty();
-    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + result.bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + result.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
+    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + result[0].bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + result[0].name3 + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                              <form id=\"addCarForm\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\" >\n                                                            <button form=\"addCarForm\" class=\"addCar\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                                 </button>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" form=\"addCarForm\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                                </form>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     result.forEach(function (car) {
@@ -978,7 +983,7 @@ function getProfil() {
         type: 'GET',
         contentType: 'application/json',
         success: function (response) {
-            openOwnProfile(response.result);
+            renderProfil(response.user, response.cars);
         },
         error: function (response) {
             console.log(response);

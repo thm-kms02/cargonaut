@@ -118,6 +118,7 @@ let addCarAttributeModel: JQuery;
 let addCarAttributeYear: JQuery;
 let addCarAttributeCargoArea: JQuery;
 let addCarAttributeWeight: JQuery;
+let addCarForm: JQuery;
 
 ///OfferDetailPage
 let offerPageButtons: JQuery;
@@ -205,6 +206,7 @@ $(() => {
     signupBtn=$("#SignupBtn");
     logoutbtn=$("#LogoutBtn");
     profilbtn=$("#profil");
+    addCarForm =$('#addCarForm');
 
     getAll();
     logoutbtn.hide();
@@ -215,16 +217,18 @@ $(() => {
     mainarea.hide();
     offerArea.hide();
 
-    offerControlForm.on('click', '.userProfil', getDifUser)
+    offerControlForm.on('click', '.userProfil', getDifUser);
 
-    offerTableForm.on('click','.testBTN', renderOfferPage)
+    offerTableForm.on('click','.testBTN', renderOfferPage);
+
+    addCarForm.on('click', '.addCar', createCar);
 
     homeButton.on('click', () => {
         addOfferArea.hide();
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
-    })
+    });
 
     trackNumButton.on('click', () => {
         getTrackingRole();
@@ -289,11 +293,11 @@ $(() => {
     saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
     });
-
+/*
     addCarBTN.on('click', () => {
         console.log("Add Car");
-        createCar();
-    })
+        createCar;
+    });*/
 });
 
 
@@ -497,7 +501,8 @@ function getAll() {
     });
 }
 
-function createCar() {
+function createCar(event) {
+    event.preventDefault();
     let namein: JQuery = $('#addCarAttributeModel');
     let yearin: JQuery = $('#addCarAttributeYear');
     let volin: JQuery = $('#addCarAttributeCargoArea');
@@ -967,7 +972,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 }
 
-function openOwnProfile(result: any) {
+function openOwnProfile(result: any[]) {
 profileArea.empty();
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
@@ -976,16 +981,17 @@ let newProfil: JQuery = $(`  <div class="row">
                     <div class="col-3">
                         <!--Profilbildbereich-->
                         <div>
-                            <img id="profilePicture" src=${result.bild} alt="ProfilePicture">
+                            <img id="profilePicture" src=${result[0].bild} alt="ProfilePicture">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
                     <div class="col-9">
-                        <h1 id="profileName">${result.name}</h1>
+                        <h1 id="profileName">${result[0].name3}</h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
+                              <form id="addCarForm">
                                 <thead>
                                 <tr>
                                     <th>
@@ -993,28 +999,30 @@ let newProfil: JQuery = $(`  <div class="row">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <div class="btn" id="addCarBTN">
+                                                        <div class="btn" id="addCarBTN" >
+                                                            <button form="addCarForm" class="addCar">
                                                             <img src="assets/AddCarBTN.png" height="80" width="80"
                                                                  alt="Add Car"/>
+                                                                 </button>
                                                         </div>
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <label>
                                                             <input class="form-control" id="addCarAttributeModel"
-                                                                   type="text" placeholder="Marke/Modell"/>
+                                                                   type="text" form="addCarForm" placeholder="Marke/Modell"/>
                                                         </label>
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeYear" type="text"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeYear" type="text"
                                                                    placeholder="Baujahr"/>
                                                         </label>
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeCargoArea"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeCargoArea"
                                                                    type="text" placeholder="Stauraum"/>
                                                         </label>
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeWeight"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeWeight"
                                                                    type="text" placeholder="Gewicht"/>
                                                         </label>
                                                     </div>
@@ -1028,6 +1036,7 @@ let newProfil: JQuery = $(`  <div class="row">
                                 <!--Hier wird die Liste reingerendert-->
                                
                                 </tbody>
+                                </form>
                             </table>
                         </div>
 
@@ -1307,7 +1316,7 @@ function getProfil(){
         type: 'GET',
         contentType: 'application/json',
         success: (response) => {
-            openOwnProfile(response.result);
+            renderProfil(response.user, response.cars);
         },
         error: (response) => {
             console.log(response);

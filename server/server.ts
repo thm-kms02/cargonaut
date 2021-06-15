@@ -298,15 +298,22 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 
 app.get('/user', (req: Request, res: Response) => {
 
-    const query: string = "SELECT fahrzeug.name AS name2, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
+    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
             });
         } else {
+            let user: User = new User(rows[0].email, rows[0].name3, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            let cars: Fahrzeug[] =[];
+            rows.forEach((car) => {
+                let newcar: Fahrzeug = new Fahrzeug(car.name2, car.jahr, car.volumen, car.gewicht, car.bild_pfad);
+                cars.push(newcar);
+            });
             res.status(200).send({
-                result: rows
+                "user":user,
+                "cars":cars
             });
 
         }

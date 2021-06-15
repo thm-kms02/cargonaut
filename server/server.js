@@ -285,7 +285,7 @@ app.post('/anzeige/filter', function (req, res) {
 });
 // routs for get user and update user
 app.get('/user', function (req, res) {
-    var query = "SELECT fahrzeug.name AS name2, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
+    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -293,8 +293,15 @@ app.get('/user', function (req, res) {
             });
         }
         else {
+            var user = new user_1.User(rows[0].email, rows[0].name3, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            var cars_1 = [];
+            rows.forEach(function (car) {
+                var newcar = new fahrzeug_1.Fahrzeug(car.name2, car.jahr, car.volumen, car.gewicht, car.bild_pfad);
+                cars_1.push(newcar);
+            });
             res.status(200).send({
-                result: rows
+                "user": user,
+                "cars": cars_1
             });
         }
     });
