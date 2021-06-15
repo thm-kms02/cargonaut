@@ -7,7 +7,6 @@ var user_1 = require("../class/user");
 var fahrzeug_1 = require("../class/fahrzeug");
 var anzeigeRender_1 = require("../class/anzeigeRender");
 var kasse_1 = require("../class/kasse");
-var buchen_1 = require("../class/buchen");
 var session = require("express-session");
 var bewertung_1 = require("../class/bewertung");
 var app = express();
@@ -482,26 +481,26 @@ app.post('/kasse', function (req, res) {
         }
     });
 });
-app.post('/buchen', function (req, res) {
-    var buchen = new buchen_1.Buchen(req.body.id_kasse);
-    var anzID = req.body.anzID;
-    var data = [buchen.id_kasse];
-    var cQuery = "INSERT INTO buchungen (id_kasse) VALUES (?);";
-    database.query(cQuery, data, function (err, results) {
+/*
+app.post('/buchen', (req: Request, res: Response) => {
+    const buchen: Buchen = new Buchen(req.body.id_kasse);
+    const anzID: number = req.body.anzID;
+    let data = [buchen.id_kasse]
+    let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
+    database.query(cQuery, data, (err, results: any) => {
         if (err === null) {
             res.status(201);
             res.send(" Anzeige wurde gebucht");
-        }
-        else if (err.errno === 1062) {
+        } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        }
-        else {
+        } else {
             console.log(err);
             res.sendStatus(500);
         }
     });
 });
+*/
 // routs for get rating and post rating
 app.get('/bewertung/get', function (req, res) {
     var cQuery = "SELECT *,user.name from bewertung";
@@ -530,6 +529,25 @@ app.post('/bewertung/post', function (req, res) {
         if (err === null) {
             res.status(200);
             res.send("Bewertung wurde gespeichert");
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+app.get('/bookings', function (req, res) {
+    var cQuery = "SELECT * from buchungen left JOIN user on buchungen.id_kauefer = user.user_id WHERE user.user_id = ? ";
+    var buchen = [];
+    database.query(cQuery, [session.user_id], function (err, results) {
+        if (err === null) {
+            res.status(200);
+            buchen = results;
+            res.send(buchen);
         }
         else if (err.errno === 1062) {
             res.status(500);
