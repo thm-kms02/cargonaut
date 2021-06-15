@@ -502,7 +502,7 @@ app.post('/kasse', (req: Request, res: Response) => {
         }
     });
 });
-
+/*
 app.post('/buchen', (req: Request, res: Response) => {
     const buchen: Buchen = new Buchen(req.body.id_kasse);
     const anzID: number = req.body.anzID;
@@ -521,7 +521,7 @@ app.post('/buchen', (req: Request, res: Response) => {
         }
     });
 });
-
+*/
 // routs for get rating and post rating
 
 app.get('/bewertung/get', (req:Request, res:Response)=>{
@@ -563,14 +563,14 @@ app.post('/bewertung/post', (req:Request, res:Response)=>{
     });
 });
 
-app.get('/bewertung/get', (req:Request, res:Response)=>{
-    let  cQuery = "SELECT * from buchung";
-    let  bewertung: Bewertung[]=[];
-    database.query(cQuery, (err, results: any) => {
+app.get('/bookings', (req:Request, res:Response)=>{
+    let  cQuery = "SELECT * from buchungen left JOIN user on buchungen.id_kauefer = user.user_id WHERE user.user_id = ? ";
+    let  buchen: Buchen[]=[];
+    database.query(cQuery,[session.user_id], (err, results: any) => {
         if (err === null) {
             res.status(200);
-            bewertung =results;
-            res.send(bewertung);
+            buchen =results;
+            res.send(buchen);
         }
         else if (err.errno === 1062) {
             res.status(500);
@@ -581,3 +581,4 @@ app.get('/bewertung/get', (req:Request, res:Response)=>{
         }
     });
 });
+
