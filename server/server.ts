@@ -564,13 +564,11 @@ app.post('/bewertung/post', (req:Request, res:Response)=>{
 });
 
 app.get('/bookings', (req:Request, res:Response)=>{
-    let  cQuery = "SELECT * from buchungen left JOIN user on buchungen.id_kauefer = user.user_id WHERE user.user_id = ? ";
-    let  buchen: Buchen[]=[];
+    let  cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum from buchungen left JOIN user on buchungen.id_kauefer = user.user_id LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE user.user_id = ? ";
     database.query(cQuery,[session.user_id], (err, results: any) => {
         if (err === null) {
             res.status(200);
-            buchen =results;
-            res.send(buchen);
+            res.send(results);
         }
         else if (err.errno === 1062) {
             res.status(500);

@@ -118,6 +118,8 @@ let addCarAttributeModel: JQuery;
 let addCarAttributeYear: JQuery;
 let addCarAttributeCargoArea: JQuery;
 let addCarAttributeWeight: JQuery;
+let ownBookingsBTN: JQuery;
+let buttonFeedback: JQuery;
 
 ///OfferDetailPage
 let offerPageButtons: JQuery;
@@ -148,6 +150,7 @@ let ladeflaecheF: number;
 let ladehoeheIN: number;
 let ladehoeheF: number;
 let offerslist: Anzeige[];
+let feedbackuserID: number;
 
 
 
@@ -205,6 +208,9 @@ $(() => {
     signupBtn=$("#SignupBtn");
     logoutbtn=$("#LogoutBtn");
     profilbtn=$("#profil");
+    ownBookingsBTN = $("#ownBookingsBTN");
+    buttonFeedback = $("#Buttonfeedback");
+    let fremdnutzerBTN: JQuery = $("#fremdnutzerBTN");
 
     getAll();
     logoutbtn.hide();
@@ -224,6 +230,11 @@ $(() => {
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
+    })
+
+    fremdnutzerBTN.on('click', () => {
+        feedbackuserID = $(event.currentTarget).data("user-id");
+
     })
 
     trackNumButton.on('click', () => {
@@ -293,7 +304,15 @@ $(() => {
     addCarBTN.on('click', () => {
         console.log("Add Car");
         createCar();
-    })
+    });
+
+    ownBookingsBTN.on('click', ()=> {
+        renderOwnBookings();
+    });
+
+    buttonFeedback.on('click', ()=> {
+        postBewertung();
+    });
 });
 
 
@@ -330,6 +349,7 @@ function renderProfil(user: User,cars: Fahrzeug[]) {
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
+                   
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
@@ -983,6 +1003,9 @@ let newProfil: JQuery = $(`  <div class="row">
                     <div class="col-9">
                         <h1 id="profileName">${result.name}</h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
+                        <button onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
+                            Meine Buchungen
+                        </button>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
@@ -1201,19 +1224,41 @@ function getBewertungen(){
 }
 
 function postBewertung(){
-    let bewertung: number = Number($('#').val());
-    let kommentar: string = String($('#kommentar').val()).trim();
+    event.preventDefault();
+
+    let bewertung: number = 0;
+    let radio1: JQuery = $("#e1:checked");
+    let radio2: JQuery = $("#e2:checked");
+    let radio3: JQuery = $("#e3:checked");
+    let radio4: JQuery = $("#e4:checked");
+    let radio5: JQuery = $("#e5:checked");
+    let kommentar: JQuery = $("#feedbackTextarea");
+
+    if(radio1.val() == 1) {
+        bewertung = 1;
+    } else if(radio2.val() == 2) {
+        bewertung = 2;
+    } else if(radio3.val() == 3) {
+        bewertung = 3;
+    } else if(radio4.val() == 4) {
+        bewertung = 4;
+    } else if(radio5.val() == 5) {
+        bewertung = 5;
+    }
+
+    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "bewertung": bewertung,
-            "kommentar": kommentar
+            feedbackuserID,
+            bewertung,
+            kommentar
         }),
         success: (response) => {
-            alert(response.message)
+            console.log("Bewertet")
         },
         error: (response) => {
             alert(response.responseJSON.message)
@@ -1308,6 +1353,38 @@ function getProfil(){
         contentType: 'application/json',
         success: (response) => {
             openOwnProfile(response.result);
+        },
+        error: (response) => {
+            console.log(response);
+        }
+    })
+}
+
+function renderOwnBookings() {
+    event.preventDefault();
+    let bookingsTable: JQuery = $("#bookingsTabelBody");
+    console.log("Hallo");
+
+    $.ajax({
+        url: '/bookings',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (response) => {
+            console.log(response);
+            bookingsTable.empty();
+            response.forEach((offer)=> {
+                let renderOffers: JQuery = $(`<tr>
+                                                      <th scope="row">${offer.user_id}</th>
+                                                      <th scope="row">${offer.start}</th>
+                                                      <th scope="row">${offer.ziel}</th>
+                                                      <th scope="row">${dateConvert(offer.datum)}</th>
+                                                     
+                                                      <td>
+                                                        <button id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
+                                                        </td>
+                                                    </tr>`);
+                bookingsTable.append(renderOffers)
+            })
         },
         error: (response) => {
             console.log(response);

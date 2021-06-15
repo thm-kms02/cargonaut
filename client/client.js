@@ -98,6 +98,8 @@ var addCarAttributeModel;
 var addCarAttributeYear;
 var addCarAttributeCargoArea;
 var addCarAttributeWeight;
+var ownBookingsBTN;
+var buttonFeedback;
 ///OfferDetailPage
 var offerPageButtons;
 var offerControlForm;
@@ -125,6 +127,7 @@ var ladeflaecheF;
 var ladehoeheIN;
 var ladehoeheF;
 var offerslist;
+var feedbackuserID;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -178,6 +181,9 @@ $(function () {
     signupBtn = $("#SignupBtn");
     logoutbtn = $("#LogoutBtn");
     profilbtn = $("#profil");
+    ownBookingsBTN = $("#ownBookingsBTN");
+    buttonFeedback = $("#Buttonfeedback");
+    var fremdnutzerBTN = $("#fremdnutzerBTN");
     getAll();
     logoutbtn.hide();
     profilbtn.hide();
@@ -193,6 +199,9 @@ $(function () {
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
+    });
+    fremdnutzerBTN.on('click', function () {
+        feedbackuserID = $(event.currentTarget).data("user-id");
     });
     trackNumButton.on('click', function () {
         getTrackingRole();
@@ -254,6 +263,12 @@ $(function () {
         console.log("Add Car");
         createCar();
     });
+    ownBookingsBTN.on('click', function () {
+        renderOwnBookings();
+    });
+    buttonFeedback.on('click', function () {
+        postBewertung();
+    });
 });
 function getDifUser(event) {
     event.preventDefault();
@@ -273,7 +288,7 @@ function getDifUser(event) {
 }
 function renderProfil(user, cars) {
     profileArea.empty();
-    var newProfil = $("   \n        <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                \n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                                \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>\n   ");
+    var newProfil = $("   \n        <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                   \n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                \n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                                \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>\n   ");
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     for (var _i = 0, cars_1 = cars; _i < cars_1.length; _i++) {
@@ -768,7 +783,7 @@ function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
 }
 function openOwnProfile(result) {
     profileArea.empty();
-    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + result.bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + result.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
+    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + result.bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + result.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <button onclick=\"renderOwnBookings()\" type=\"button\" class=\"btn niceButton\" data-toggle=\"modal\" data-target=\"#ownBookings\">\n                            Meine Buchungen\n                        </button>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     result.forEach(function (car) {
@@ -887,19 +902,42 @@ function getBewertungen() {
     });
 }
 function postBewertung() {
-    var bewertung = Number($('#').val());
-    var kommentar = String($('#kommentar').val()).trim();
+    event.preventDefault();
+    var bewertung = 0;
+    var radio1 = $("#e1:checked");
+    var radio2 = $("#e2:checked");
+    var radio3 = $("#e3:checked");
+    var radio4 = $("#e4:checked");
+    var radio5 = $("#e5:checked");
+    var kommentar = $("#feedbackTextarea");
+    if (radio1.val() == 1) {
+        bewertung = 1;
+    }
+    else if (radio2.val() == 2) {
+        bewertung = 2;
+    }
+    else if (radio3.val() == 3) {
+        bewertung = 3;
+    }
+    else if (radio4.val() == 4) {
+        bewertung = 4;
+    }
+    else if (radio5.val() == 5) {
+        bewertung = 5;
+    }
+    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "bewertung": bewertung,
-            "kommentar": kommentar
+            feedbackuserID: feedbackuserID,
+            bewertung: bewertung,
+            kommentar: kommentar
         }),
         success: function (response) {
-            alert(response.message);
+            console.log("Bewertet");
         },
         error: function (response) {
             alert(response.responseJSON.message);
@@ -979,6 +1017,27 @@ function getProfil() {
         contentType: 'application/json',
         success: function (response) {
             openOwnProfile(response.result);
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
+function renderOwnBookings() {
+    event.preventDefault();
+    var bookingsTable = $("#bookingsTabelBody");
+    console.log("Hallo");
+    $.ajax({
+        url: '/bookings',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (response) {
+            console.log(response);
+            bookingsTable.empty();
+            response.forEach(function (offer) {
+                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.user_id + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                     \n                                                      <td>\n                                                        <button id=\"fremdnutzerBTN\" data-user-id=\"" + offer.user_id + "\" class=\"btn btn-sm fremdBTN\" style=\"background-color: #276678; color: white\" data-bs-dismiss=\"modal\"  data-target=\"#feedback\" data-toggle=\"modal\">Feedback</button>\n                                                        </td>\n                                                    </tr>");
+                bookingsTable.append(renderOffers);
+            });
         },
         error: function (response) {
             console.log(response);

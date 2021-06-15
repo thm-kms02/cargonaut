@@ -137,7 +137,7 @@
                         <br>
                     </div>
                     <button type="submit" id="Buttoncancel" data-dismiss="modal" class="btn btn-dark">Abbrechen</button>
-                    <button type="submit" id="registryBTN" class="btn btn-dark">Registrieren</button>
+                    <button type="submit" id="registryBTN" data-dismiss="modal" class="btn btn-dark">Registrieren</button>
                 </div>
             </div>
         </div>
@@ -353,6 +353,7 @@
                     <div class="col-9">
                         <h1 id="profileName"></h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
+
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
@@ -396,35 +397,7 @@
                                 </thead>
                                 <tbody id="carsTableBody">
                                 <!--Hier wird die Liste reingerendert-->
-                                <tr>
-                                    <td>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <img class="card-img" src="bilder/img.png" alt="Card image cap">
-                                                    </div>
-                                                    <div class="col-4" style="text-align: center">
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeModel">Mercedes C63</span>
-                                                        </div>
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeYear">2020</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4" style="text-align: center">
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeCargoArea">200 Liter</span>
-                                                        </div>
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeWeight">800 kg</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -530,7 +503,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                <button type="button" class="btn btn-primary" id="saveBTN">Speichern</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBTN">Speichern</button>
             </div>
         </div>
     </div>
@@ -588,7 +561,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                <button type="button" class="btn btn-primary" id="saveBTN2">Speichern</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBTN2">Speichern</button>
             </div>
         </div>
     </div>
@@ -637,7 +610,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                <button type="button" class="btn btn-primary" id="saveBTN2F">Speichern</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBTN2F">Speichern</button>
             </div>
         </div>
     </div>
@@ -679,7 +652,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
-                <button type="button" class="btn btn-primary" id="saveBTNF">Speichern</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBTNF">Speichern</button>
             </div>
         </div>
     </div>
@@ -706,7 +679,6 @@
                         <div id="mapArea"></div>
                     </div>
                 </form>
-                <button class="btn niceButton" data-bs-dismiss="modal" id="btnfeedback" data-target="#feedback" data-toggle="modal">Feedback</button>
             </div>
         </div>
     </div>
@@ -723,24 +695,50 @@
                 <div class="containerinhalt">
                     <h1 style=" color: #276678">Feedback</h1>
                     <div class="rating">
-                        <input name="stars" id="e1" type="radio"><label for="e1">☆</label>
-                        <input name="stars" id="e2" type="radio"><label for="e2">☆</label>
-                        <input name="stars" id="e3" type="radio"><label for="e3">☆</label>
-                        <input name="stars" id="e4" type="radio"><label for="e4">☆</label>
-                        <input name="stars" id="e5" type="radio"><label for="e5">☆</label>
+                        <input name="stars" id="e1" type="radio" value="1"><label for="e1">☆</label>
+                        <input name="stars" id="e2" type="radio" value="2"><label for="e2">☆</label>
+                        <input name="stars" id="e3" type="radio" value="3"><label for="e3">☆</label>
+                        <input name="stars" id="e4" type="radio" value="4"><label for="e4">☆</label>
+                        <input name="stars" id="e5" type="radio" value="5"><label for="e5">☆</label>
                     </div>
                     <div class="input-group" style="padding-left: 5%;padding-right: 5%; height: 200px">
-                        <textarea class="form-control" aria-label="With textarea" placeholder="Bitte hier ihr Feedback abgegeben..."></textarea>
+                        <textarea class="form-control" id="feedbackTextarea" aria-label="With textarea" placeholder="Bitte hier ihr Feedback abgegeben..."></textarea>
                     </div>
                     <br>
                     <br>
-                    <button type="submit" id="Buttonfeedback" class="btn btn-dark ">Abschicken</button>
+                    <button type="submit" id="Buttonfeedback" data-bs-dismiss="modal" class="btn btn-dark ">Abschicken</button>
                 </div>
             </div>
     </div>
 
     </div>
 </div>
+
+<!-- Modal my bookings -->
+<div class="modal fade" id="ownBookings" tabindex="-1" role="dialog" aria-labelledby="ownBookings" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Meine Buchungen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless">
+                    <tbody id="bookingsTabelBody">
+                    <!--Hier wird die Liste reingerendert-->
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Footer -->
 <div class="footer-clean">
     <footer>

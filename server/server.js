@@ -541,13 +541,11 @@ app.post('/bewertung/post', function (req, res) {
     });
 });
 app.get('/bookings', function (req, res) {
-    var cQuery = "SELECT * from buchungen left JOIN user on buchungen.id_kauefer = user.user_id WHERE user.user_id = ? ";
-    var buchen = [];
+    var cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum from buchungen left JOIN user on buchungen.id_kauefer = user.user_id LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE user.user_id = ? ";
     database.query(cQuery, [session.user_id], function (err, results) {
         if (err === null) {
             res.status(200);
-            buchen = results;
-            res.send(buchen);
+            res.send(results);
         }
         else if (err.errno === 1062) {
             res.status(500);
