@@ -29,6 +29,87 @@ GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'dev'@'localhost';
 CREATE DATABASE IF NOT EXISTS `cargo` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `cargo`;
 
+
+--
+-- Tabellenstruktur für Tabelle `anzeige`
+--
+
+CREATE TABLE `anzeige` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `ang_ges` tinyint(1) NOT NULL,
+  `datum` date NOT NULL,
+  `preis` int(11) NOT NULL,
+  `start` varchar(255) NOT NULL,
+  `ziel` varchar(255) NOT NULL,
+  `beschreibung` varchar(255) NOT NULL,
+  `id_fahrzeug` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `anzeige`
+--
+
+INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `ziel`, `beschreibung`, `id_fahrzeug`) VALUES
+(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', 1),
+(2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
+(3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
+(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', 2),
+(5, 1, 1, '2021-06-17', 250, 'Aßlar', 'Wetzlar', 'Just do it', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `bewertung`
+--
+
+CREATE TABLE `bewertung` (
+  `id` int(11) NOT NULL,
+  `id_verfasser` int(11) NOT NULL,
+  `id_empfaenger` int(11) NOT NULL,
+  `bewertung` int(1) NOT NULL,
+  `kommentar` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `bewertung`
+--
+
+INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `kommentar`) VALUES
+(1, 1, 1, 1, 'Hi'),
+(2, 1, 1, 1, 'Hi'),
+(3, 1, 1, 1, 'Hi'),
+(4, 1, 1, 3, 'HI'),
+(5, 1, 1, 0, 'HI'),
+(6, 1, 2, 0, 'HI'),
+(7, 1, 1, 0, 'hiojöd'),
+(8, 1, 1, 4, 'fas'),
+(9, 1, 1, 2, 'fas'),
+(10, 1, 1, 5, 'gsa'),
+(11, 1, 1, 4, 'gsa'),
+(12, 1, 1, 3, 'gsa');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `buchungen`
+--
+
+CREATE TABLE `buchungen` (
+  `id` int(11) NOT NULL,
+  `id_kauefer` int(11) NOT NULL,
+  `id_anz` int(11) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `buchungen`
+--
+
+INSERT INTO `buchungen` (`id`, `id_kauefer`, `id_anz`, `datum`) VALUES
+(2, 1, 1, '2021-06-15 13:23:37'),
+(3, 1, 2, '2021-06-14 13:27:41');
+
 -- --------------------------------------------------------
 
 --
@@ -170,7 +251,6 @@ ALTER TABLE `anzeige`
 --
 ALTER TABLE `bewertung`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_buchen` (`id_buchen`),
   ADD KEY `id_verfasser` (`id_verfasser`),
   ADD KEY `id_empfaenger` (`id_empfaenger`);
 
@@ -238,13 +318,13 @@ ALTER TABLE `anzeige`
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
@@ -285,7 +365,6 @@ ALTER TABLE `anzeige`
 -- Constraints der Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  ADD CONSTRAINT `bewertung_ibfk_1` FOREIGN KEY (`id_buchen`) REFERENCES `buchungen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `bewertung_ibfk_2` FOREIGN KEY (`id_verfasser`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `bewertung_ibfk_3` FOREIGN KEY (`id_empfaenger`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
