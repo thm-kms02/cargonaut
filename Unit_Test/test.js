@@ -264,25 +264,24 @@ describe("delete/fahrzeug", async  () => {
     });
 });
 */
-mocha_1.describe("Post/Kasse/buchen", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("bucht eine Anzeige aus der Kasse", function (done) {
-            var buchen = {
-                id_kasse: 1,
-            };
-            chain
-                .request("http://localhost:8080")
-                .post("/buchen")
-                .send(buchen)
-                .end(function (err, response) {
+/*
+describe("Post/Kasse/buchen", async () =>{
+    it("bucht eine Anzeige aus der Kasse", (done) => {
+        const buchen= {
+            id_kasse: 1,
+        };
+        chain
+            .request("http://localhost:8080")
+            .post("/buchen")
+            .send(buchen)
+            .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(201);
-                done();
+                done()
             });
-        });
-        return [2 /*return*/];
     });
-}); });
+});
+*/
 mocha_1.describe("GET/fahrzeug", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         it("get cars", function (done) {

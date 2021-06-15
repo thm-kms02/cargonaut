@@ -217,7 +217,7 @@ describe("delete/fahrzeug", async  () => {
     });
 });
 */
-
+/*
 describe("Post/Kasse/buchen", async () =>{
     it("bucht eine Anzeige aus der Kasse", (done) => {
         const buchen= {
@@ -234,7 +234,7 @@ describe("Post/Kasse/buchen", async () =>{
             });
     });
 });
-
+*/
 describe("GET/fahrzeug", async () => {
     it("get cars", (done) => {
         const car = {
