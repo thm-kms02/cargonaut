@@ -71,6 +71,7 @@ app.post('/login', function (req, res) {
             if (passwort === rows[0].passwort) {
                 session.email = email;
                 session.user_id = rows[0].user_id;
+                console.log("UserID: " + session.user_id);
                 res.status(200).send({
                     message: 'Anmeldung war erfolgreich'
                 });
@@ -315,9 +316,11 @@ app.put('/update/user', function (req, res) {
 });
 // routs for create a car, get a car, delete a car
 app.post('/create/fahrzeug', function (req, res) {
-    var fahrzeug = new fahrzeug_1.Fahrzeug(session.user_id, req.body.name, req.body.year, req.body.vol, req.body.weight, req.body.pic_path);
-    var data = [fahrzeug.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht, fahrzeug.bild_pfad];
-    var cQuery = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht, bild_pfad ) VALUES (?, ?, ?, ?, ?, ?);";
+    console.log("UID: " + session.user_id);
+    var fahrzeug = new fahrzeug_1.Fahrzeug(req.body.name, req.body.year, req.body.vol, req.body.weight);
+    var data = [session.user_id, fahrzeug.name, fahrzeug.jahr, fahrzeug.volumen, fahrzeug.gewicht];
+    console.log(data);
+    var cQuery = "INSERT INTO fahrzeug (user_id, name, jahr, volumen, gewicht ) VALUES (?, ?, ?, ?, ?);";
     database.query(cQuery, data, function (err) {
         if (err === null) {
             res.status(201);

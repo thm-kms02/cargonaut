@@ -180,6 +180,7 @@ $(function () {
     profilbtn = $("#profil");
     getAll();
     logoutbtn.hide();
+    profilbtn.hide();
     trackbutton.hide();
     addOfferArea.hide();
     profileArea.hide();
@@ -210,8 +211,9 @@ $(function () {
         document.getElementById('inputDescription');
         inputDescription.text(emptyText);
         inputPrize.text(emptyText);
-        addOfferArea.hide;
+        addOfferArea.hide();
         mainarea.show();
+        getAll();
     });
     saveBTN.on('click', function () {
         saveValuesTaxi();
@@ -248,6 +250,10 @@ $(function () {
     });
     saveBTN2F.on('click', function () {
         saveValuesLieferungFilter();
+    });
+    addCarBTN.on('click', function () {
+        console.log("Add Car");
+        createCar();
     });
 });
 function getDifUser(event) {
@@ -372,26 +378,25 @@ function getAll() {
     });
 }
 function createCar() {
-    var namein = $('#0');
-    var yearin = $('#1');
-    var volin = $('#2');
-    var weightin = $('#3');
-    var picin = $('#4');
+    var namein = $('#addCarAttributeModel');
+    var yearin = $('#addCarAttributeYear');
+    var volin = $('#addCarAttributeCargoArea');
+    var weightin = $('#addCarAttributeWeight');
     var name = namein.val().toString().trim();
     var year = Number(yearin.val());
     var vol = Number(volin.val());
     var weight = Number(weightin.val());
+    console.log("Name: " + name, "Jahr: " + year, "Ladung: " + vol, "Gewicht: " + weight);
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "name": name,
-            "jahr": year,
-            "volumen": vol,
-            "gewicht": weight,
-            "bild_pfad": picin
+            name: name,
+            year: year,
+            vol: vol,
+            weight: weight
         }),
         success: function (response) {
             console.log("sucess");
@@ -839,6 +844,7 @@ function login() {
             signupBtn.hide();
             trackbutton.show();
             logoutbtn.show();
+            profilbtn.show();
         },
         error: function (response) {
             alert(response.responseJSON.message);

@@ -208,6 +208,7 @@ $(() => {
 
     getAll();
     logoutbtn.hide();
+    profilbtn.hide();
     trackbutton.hide();
     addOfferArea.hide();
     profileArea.hide();
@@ -245,8 +246,9 @@ $(() => {
         document.getElementById('inputDescription');
         inputDescription.text(emptyText);
         inputPrize.text(emptyText);
-        addOfferArea.hide;
+        addOfferArea.hide();
         mainarea.show();
+        getAll();
     });
     saveBTN.on('click', () => {
         saveValuesTaxi();
@@ -288,6 +290,11 @@ $(() => {
     saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
     });
+
+    addCarBTN.on('click', () => {
+        console.log("Add Car");
+        createCar();
+    })
 });
 
 
@@ -492,16 +499,17 @@ function getAll() {
 }
 
 function createCar() {
-    let namein: JQuery = $('#0');
-    let yearin: JQuery = $('#1');
-    let volin: JQuery = $('#2');
-    let weightin: JQuery = $('#3');
-    let picin: JQuery = $('#4');
+    let namein: JQuery = $('#addCarAttributeModel');
+    let yearin: JQuery = $('#addCarAttributeYear');
+    let volin: JQuery = $('#addCarAttributeCargoArea');
+    let weightin: JQuery = $('#addCarAttributeWeight');
 
     let name: string = namein.val().toString().trim();
     let year: number = Number(yearin.val());
     let vol: number = Number(volin.val());
     let weight: number = Number(weightin.val());
+
+    console.log("Name: " + name, "Jahr: " + year, "Ladung: " + vol, "Gewicht: " + weight);
 
 
     $.ajax({
@@ -510,11 +518,10 @@ function createCar() {
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "name": name,
-            "jahr": year,
-           "volumen" : vol,
-            "gewicht": weight,
-            "bild_pfad": picin
+            name,
+            year,
+            vol,
+            weight
         }),
         success: (response) => {
             console.log("sucess");
@@ -999,8 +1006,6 @@ function getFahrzeugDropLieferung() {
             },
 
         });
-
-
 }
 
 function inputFahrzeugDropTaxi(fahrzeugListe: Fahrzeug[]) {
@@ -1056,6 +1061,7 @@ function login(){
             signupBtn.hide();
             trackbutton.show();
             logoutbtn.show();
+            profilbtn.show();
         },
         error: (response) => {
            alert(response.responseJSON.message)
