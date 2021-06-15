@@ -210,7 +210,7 @@ $(() => {
     profilbtn=$("#profil");
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    let fremdnutzerBTN: JQuery = $("#fremdnutzerBTN");
+    let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
 
     getAll();
     logoutbtn.hide();
@@ -230,11 +230,6 @@ $(() => {
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
-    })
-
-    fremdnutzerBTN.on('click', () => {
-        feedbackuserID = $(event.currentTarget).data("user-id");
-
     })
 
     trackNumButton.on('click', () => {
@@ -315,6 +310,10 @@ $(() => {
     });
 });
 
+function testFunction() {
+    feedbackuserID = $(event.currentTarget).data("user-id");
+    console.log(feedbackuserID);
+}
 
 function getDifUser(event){
     event.preventDefault();
@@ -1380,7 +1379,7 @@ function renderOwnBookings() {
                                                       <th scope="row">${dateConvert(offer.datum)}</th>
                                                      
                                                       <td>
-                                                        <button id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
+                                                        <button onclick="testFunction()" id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdnutzerBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
                                                         </td>
                                                     </tr>`);
                 bookingsTable.append(renderOffers)

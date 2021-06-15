@@ -183,7 +183,7 @@ $(function () {
     profilbtn = $("#profil");
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    var fremdnutzerBTN = $("#fremdnutzerBTN");
+    var fremdnutzerBTN = $(".fremdnutzerBTN");
     getAll();
     logoutbtn.hide();
     profilbtn.hide();
@@ -199,9 +199,6 @@ $(function () {
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
-    });
-    fremdnutzerBTN.on('click', function () {
-        feedbackuserID = $(event.currentTarget).data("user-id");
     });
     trackNumButton.on('click', function () {
         getTrackingRole();
@@ -270,6 +267,10 @@ $(function () {
         postBewertung();
     });
 });
+function testFunction() {
+    feedbackuserID = $(event.currentTarget).data("user-id");
+    console.log(feedbackuserID);
+}
 function getDifUser(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("user-id");
@@ -1035,7 +1036,7 @@ function renderOwnBookings() {
             console.log(response);
             bookingsTable.empty();
             response.forEach(function (offer) {
-                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.user_id + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                     \n                                                      <td>\n                                                        <button id=\"fremdnutzerBTN\" data-user-id=\"" + offer.user_id + "\" class=\"btn btn-sm fremdBTN\" style=\"background-color: #276678; color: white\" data-bs-dismiss=\"modal\"  data-target=\"#feedback\" data-toggle=\"modal\">Feedback</button>\n                                                        </td>\n                                                    </tr>");
+                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.user_id + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                     \n                                                      <td>\n                                                        <button onclick=\"testFunction()\" id=\"fremdnutzerBTN\" data-user-id=\"" + offer.user_id + "\" class=\"btn btn-sm fremdnutzerBTN\" style=\"background-color: #276678; color: white\" data-bs-dismiss=\"modal\"  data-target=\"#feedback\" data-toggle=\"modal\">Feedback</button>\n                                                        </td>\n                                                    </tr>");
                 bookingsTable.append(renderOffers);
             });
         },
