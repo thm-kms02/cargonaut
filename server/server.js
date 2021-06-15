@@ -541,3 +541,22 @@ app.post('/bewertung/post', function (req, res) {
         }
     });
 });
+app.get('/bewertung/get', function (req, res) {
+    var cQuery = "SELECT * from buchung";
+    var bewertung = [];
+    database.query(cQuery, function (err, results) {
+        if (err === null) {
+            res.status(200);
+            bewertung = results;
+            res.send(bewertung);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});

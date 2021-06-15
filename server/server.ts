@@ -563,3 +563,21 @@ app.post('/bewertung/post', (req:Request, res:Response)=>{
     });
 });
 
+app.get('/bewertung/get', (req:Request, res:Response)=>{
+    let  cQuery = "SELECT * from buchung";
+    let  bewertung: Bewertung[]=[];
+    database.query(cQuery, (err, results: any) => {
+        if (err === null) {
+            res.status(200);
+            bewertung =results;
+            res.send(bewertung);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
