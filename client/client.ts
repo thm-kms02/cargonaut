@@ -151,7 +151,8 @@ let ladeflaecheF: number;
 let ladehoeheIN: number;
 let ladehoeheF: number;
 let offerslist: Anzeige[];
-let feedbackuserID: number;
+let id_empfaenger: number;
+let idBooking: number;
 
 
 
@@ -212,7 +213,7 @@ $(() => {
     addCarForm =$('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    let fremdnutzerBTN: JQuery = $("#fremdnutzerBTN");
+    let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
 
     getAll();
     logoutbtn.hide();
@@ -235,11 +236,6 @@ $(() => {
         mainarea.show();
         offerArea.hide();
     });
-
-    fremdnutzerBTN.on('click', () => {
-        feedbackuserID = $(event.currentTarget).data("user-id");
-
-    })
 
     trackNumButton.on('click', () => {
         getTrackingRole();
@@ -319,6 +315,10 @@ $(() => {
     });
 });
 
+function testFunction() {
+    id_empfaenger = $(event.currentTarget).data("user-id");
+    console.log(id_empfaenger);
+}
 
 function getDifUser(event){
     event.preventDefault();
@@ -336,6 +336,26 @@ function getDifUser(event){
            alert("err");
         },
     });
+}
+
+function testFunction2() {
+    console.log("Hallo")
+    event.preventDefault();
+    $.ajax({
+        url: '/buchen',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            idBooking
+        }),
+        success: () => {
+            console.log('Gebucht');
+        },
+        error: (response) => {
+            console.log(response);
+        },
+    })
 }
 
 
@@ -1241,28 +1261,26 @@ function postBewertung(){
     let radio3: JQuery = $("#e3:checked");
     let radio4: JQuery = $("#e4:checked");
     let radio5: JQuery = $("#e5:checked");
-    let kommentar: JQuery = $("#feedbackTextarea");
+    let kommentar: string = $("#feedbackTextarea").val().toString();
 
-    if(radio1.val() == 1) {
+    if(radio5.val() == 5) {
         bewertung = 1;
-    } else if(radio2.val() == 2) {
+    } else if(radio4.val() == 4) {
         bewertung = 2;
     } else if(radio3.val() == 3) {
         bewertung = 3;
-    } else if(radio4.val() == 4) {
+    } else if(radio2.val() == 2) {
         bewertung = 4;
-    } else if(radio5.val() == 5) {
+    } else if(radio1.val() == 1) {
         bewertung = 5;
     }
-
-    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            feedbackuserID,
+            id_empfaenger,
             bewertung,
             kommentar
         }),
@@ -1311,6 +1329,7 @@ function registry(){
 function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
+    idBooking = id;
     console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
@@ -1343,7 +1362,7 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
-                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75"
+                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75" onclick="testFunction2()"
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);
@@ -1389,7 +1408,7 @@ function renderOwnBookings() {
                                                       <th scope="row">${dateConvert(offer.datum)}</th>
                                                      
                                                       <td>
-                                                        <button id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
+                                                        <button onclick="testFunction()" id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdnutzerBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
                                                         </td>
                                                     </tr>`);
                 bookingsTable.append(renderOffers)

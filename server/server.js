@@ -488,26 +488,25 @@ app.post('/kasse', function (req, res) {
         }
     });
 });
-/*
-app.post('/buchen', (req: Request, res: Response) => {
-    const buchen: Buchen = new Buchen(req.body.id_kasse);
-    const anzID: number = req.body.anzID;
-    let data = [buchen.id_kasse]
-    let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
-    database.query(cQuery, data, (err, results: any) => {
+app.post('/buchen', function (req, res) {
+    var bookID = req.body.idBooking;
+    var data = [session.user_id, bookID];
+    var cQuery = "INSERT INTO buchungen (id_kaeufer, id_anz) VALUES (?, ?);";
+    database.query(cQuery, data, function (err, results) {
         if (err === null) {
             res.status(201);
             res.send(" Anzeige wurde gebucht");
-        } else if (err.errno === 1062) {
+        }
+        else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
-        } else {
+        }
+        else {
             console.log(err);
             res.sendStatus(500);
         }
     });
 });
-*/
 // routs for get rating and post rating
 app.get('/bewertung/get', function (req, res) {
     var cQuery = "SELECT *,user.name from bewertung";

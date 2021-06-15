@@ -128,7 +128,8 @@ var ladeflaecheF;
 var ladehoeheIN;
 var ladehoeheF;
 var offerslist;
-var feedbackuserID;
+var id_empfaenger;
+var idBooking;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -185,7 +186,7 @@ $(function () {
     addCarForm = $('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    var fremdnutzerBTN = $("#fremdnutzerBTN");
+    var fremdnutzerBTN = $(".fremdnutzerBTN");
     getAll();
     logoutbtn.hide();
     profilbtn.hide();
@@ -202,9 +203,6 @@ $(function () {
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
-    });
-    fremdnutzerBTN.on('click', function () {
-        feedbackuserID = $(event.currentTarget).data("user-id");
     });
     trackNumButton.on('click', function () {
         getTrackingRole();
@@ -278,6 +276,10 @@ $(function () {
         postBewertung();
     });
 });
+function testFunction() {
+    id_empfaenger = $(event.currentTarget).data("user-id");
+    console.log(id_empfaenger);
+}
 function getDifUser(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("user-id");
@@ -291,6 +293,25 @@ function getDifUser(event) {
         },
         error: function (err) {
             alert("err");
+        },
+    });
+}
+function testFunction2() {
+    console.log("Hallo");
+    event.preventDefault();
+    $.ajax({
+        url: '/buchen',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            idBooking: idBooking
+        }),
+        success: function () {
+            console.log('Gebucht');
+        },
+        error: function (response) {
+            console.log(response);
         },
     });
 }
@@ -918,30 +939,29 @@ function postBewertung() {
     var radio3 = $("#e3:checked");
     var radio4 = $("#e4:checked");
     var radio5 = $("#e5:checked");
-    var kommentar = $("#feedbackTextarea");
-    if (radio1.val() == 1) {
+    var kommentar = $("#feedbackTextarea").val().toString();
+    if (radio5.val() == 5) {
         bewertung = 1;
     }
-    else if (radio2.val() == 2) {
+    else if (radio4.val() == 4) {
         bewertung = 2;
     }
     else if (radio3.val() == 3) {
         bewertung = 3;
     }
-    else if (radio4.val() == 4) {
+    else if (radio2.val() == 2) {
         bewertung = 4;
     }
-    else if (radio5.val() == 5) {
+    else if (radio1.val() == 1) {
         bewertung = 5;
     }
-    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            feedbackuserID: feedbackuserID,
+            id_empfaenger: id_empfaenger,
             bewertung: bewertung,
             kommentar: kommentar
         }),
@@ -987,6 +1007,7 @@ function registry() {
 function renderOfferPage(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("offer-id");
+    idBooking = id;
     console.log(id);
     companyName = $("#companyName");
     rating = $("#rating");
@@ -1010,7 +1031,7 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty();
             var pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
-            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
+            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\" onclick=\"testFunction2()\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
             offerPicture.append(pic);
             offerPageButtons.append(buttons);
         },
@@ -1044,7 +1065,7 @@ function renderOwnBookings() {
             console.log(response);
             bookingsTable.empty();
             response.forEach(function (offer) {
-                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.user_id + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                     \n                                                      <td>\n                                                        <button id=\"fremdnutzerBTN\" data-user-id=\"" + offer.user_id + "\" class=\"btn btn-sm fremdBTN\" style=\"background-color: #276678; color: white\" data-bs-dismiss=\"modal\"  data-target=\"#feedback\" data-toggle=\"modal\">Feedback</button>\n                                                        </td>\n                                                    </tr>");
+                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.user_id + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                     \n                                                      <td>\n                                                        <button onclick=\"testFunction()\" id=\"fremdnutzerBTN\" data-user-id=\"" + offer.user_id + "\" class=\"btn btn-sm fremdnutzerBTN\" style=\"background-color: #276678; color: white\" data-bs-dismiss=\"modal\"  data-target=\"#feedback\" data-toggle=\"modal\">Feedback</button>\n                                                        </td>\n                                                    </tr>");
                 bookingsTable.append(renderOffers);
             });
         },
