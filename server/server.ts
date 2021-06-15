@@ -298,7 +298,7 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 
 app.get('/user', (req: Request, res: Response) => {
 
-    const query: string = "SELECT * FROM user WHERE user_id=?";
+    const query: string = "SELECT fahrzeug.name AS name2, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -306,7 +306,7 @@ app.get('/user', (req: Request, res: Response) => {
             });
         } else {
             res.status(200).send({
-                result: rows[0]
+                result: rows
             });
 
         }
