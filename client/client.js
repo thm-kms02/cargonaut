@@ -128,6 +128,7 @@ var ladehoeheIN;
 var ladehoeheF;
 var offerslist;
 var id_empfaenger;
+var idBooking;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -284,6 +285,25 @@ function getDifUser(event) {
         },
         error: function (err) {
             alert("err");
+        },
+    });
+}
+function testFunction2() {
+    console.log("Hallo");
+    event.preventDefault();
+    $.ajax({
+        url: '/buchen',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            idBooking: idBooking
+        }),
+        success: function () {
+            console.log('Gebucht');
+        },
+        error: function (response) {
+            console.log(response);
         },
     });
 }
@@ -978,6 +998,7 @@ function registry() {
 function renderOfferPage(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("offer-id");
+    idBooking = id;
     console.log(id);
     companyName = $("#companyName");
     rating = $("#rating");
@@ -1001,7 +1022,7 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty();
             var pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
-            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
+            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\" onclick=\"testFunction2()\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
             offerPicture.append(pic);
             offerPageButtons.append(buttons);
         },

@@ -151,6 +151,7 @@ let ladehoeheIN: number;
 let ladehoeheF: number;
 let offerslist: Anzeige[];
 let id_empfaenger: number;
+let idBooking: number;
 
 
 
@@ -331,6 +332,26 @@ function getDifUser(event){
            alert("err");
         },
     });
+}
+
+function testFunction2() {
+    console.log("Hallo")
+    event.preventDefault();
+    $.ajax({
+        url: '/buchen',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            idBooking
+        }),
+        success: () => {
+            console.log('Gebucht');
+        },
+        error: (response) => {
+            console.log(response);
+        },
+    })
 }
 
 
@@ -1299,6 +1320,7 @@ function registry(){
 function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
+    idBooking = id;
     console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
@@ -1331,7 +1353,7 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
-                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75"
+                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75" onclick="testFunction2()"
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);

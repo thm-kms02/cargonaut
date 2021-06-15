@@ -502,12 +502,11 @@ app.post('/kasse', (req: Request, res: Response) => {
         }
     });
 });
-/*
+
 app.post('/buchen', (req: Request, res: Response) => {
-    const buchen: Buchen = new Buchen(req.body.id_kasse);
-    const anzID: number = req.body.anzID;
-    let data = [buchen.id_kasse]
-    let cQuery: string = "INSERT INTO buchungen (id_kasse) VALUES (?);";
+    const bookID: number = req.body.idBooking;
+    let data = [session.user_id, bookID]
+    let cQuery: string = "INSERT INTO buchungen (id_kaeufer, id_anz) VALUES (?, ?);";
     database.query(cQuery, data, (err, results: any) => {
         if (err === null) {
             res.status(201);
@@ -521,7 +520,7 @@ app.post('/buchen', (req: Request, res: Response) => {
         }
     });
 });
-*/
+
 // routs for get rating and post rating
 
 app.get('/bewertung/get', (req:Request, res:Response)=>{
