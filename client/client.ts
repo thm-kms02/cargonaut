@@ -150,7 +150,7 @@ let ladeflaecheF: number;
 let ladehoeheIN: number;
 let ladehoeheF: number;
 let offerslist: Anzeige[];
-let feedbackuserID: number;
+let id_empfaenger: number;
 
 
 
@@ -311,8 +311,8 @@ $(() => {
 });
 
 function testFunction() {
-    feedbackuserID = $(event.currentTarget).data("user-id");
-    console.log(feedbackuserID);
+    id_empfaenger = $(event.currentTarget).data("user-id");
+    console.log(id_empfaenger);
 }
 
 function getDifUser(event){
@@ -1231,28 +1231,26 @@ function postBewertung(){
     let radio3: JQuery = $("#e3:checked");
     let radio4: JQuery = $("#e4:checked");
     let radio5: JQuery = $("#e5:checked");
-    let kommentar: JQuery = $("#feedbackTextarea");
+    let kommentar: string = $("#feedbackTextarea").val().toString();
 
-    if(radio1.val() == 1) {
+    if(radio5.val() == 5) {
         bewertung = 1;
-    } else if(radio2.val() == 2) {
+    } else if(radio4.val() == 4) {
         bewertung = 2;
     } else if(radio3.val() == 3) {
         bewertung = 3;
-    } else if(radio4.val() == 4) {
+    } else if(radio2.val() == 2) {
         bewertung = 4;
-    } else if(radio5.val() == 5) {
+    } else if(radio1.val() == 1) {
         bewertung = 5;
     }
-
-    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            feedbackuserID,
+            id_empfaenger,
             bewertung,
             kommentar
         }),

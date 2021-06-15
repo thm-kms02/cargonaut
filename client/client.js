@@ -127,7 +127,7 @@ var ladeflaecheF;
 var ladehoeheIN;
 var ladehoeheF;
 var offerslist;
-var feedbackuserID;
+var id_empfaenger;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -268,8 +268,8 @@ $(function () {
     });
 });
 function testFunction() {
-    feedbackuserID = $(event.currentTarget).data("user-id");
-    console.log(feedbackuserID);
+    id_empfaenger = $(event.currentTarget).data("user-id");
+    console.log(id_empfaenger);
 }
 function getDifUser(event) {
     event.preventDefault();
@@ -910,30 +910,29 @@ function postBewertung() {
     var radio3 = $("#e3:checked");
     var radio4 = $("#e4:checked");
     var radio5 = $("#e5:checked");
-    var kommentar = $("#feedbackTextarea");
-    if (radio1.val() == 1) {
+    var kommentar = $("#feedbackTextarea").val().toString();
+    if (radio5.val() == 5) {
         bewertung = 1;
     }
-    else if (radio2.val() == 2) {
+    else if (radio4.val() == 4) {
         bewertung = 2;
     }
     else if (radio3.val() == 3) {
         bewertung = 3;
     }
-    else if (radio4.val() == 4) {
+    else if (radio2.val() == 2) {
         bewertung = 4;
     }
-    else if (radio5.val() == 5) {
+    else if (radio1.val() == 1) {
         bewertung = 5;
     }
-    console.log("UID: " + feedbackuserID);
     $.ajax({
         url: '/bewertung/post',
         type: 'POST',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            feedbackuserID: feedbackuserID,
+            id_empfaenger: id_empfaenger,
             bewertung: bewertung,
             kommentar: kommentar
         }),
