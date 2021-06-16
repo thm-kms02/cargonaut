@@ -342,12 +342,10 @@ app.get('/user', (req: Request, res: Response) => {
 });
 
 app.put('/update/user', (req: Request, res: Response) => {
-    let email: string = req.body.email;
-    let name: string = req.body.name;
-    let phonenmbr: string = req.body.handyNr;
+let bild: string = req.body.bild2
 
-    let query: string = "UPDATE user SET name=?, handyNr=? WHERE user.email=?";
-    let data = [name, phonenmbr, email];
+    let query: string = "UPDATE user SET bild=? WHERE user.user_id=?";
+    let data = [bild, session.user_id];
     database.query(query, data, (err: MysqlError, results: any) => {
         if (err === null) {
             res.status(200).send({"message": "User updated."});
@@ -553,7 +551,7 @@ app.post('/buchen', (req: Request, res: Response) => {
             database.query(query, data2, (err: MysqlError, results: any) => {
                 if(err == null) {
                     const writer: number = results[0].user_id;
-                    const query1: string= "INSERT INTO tracking (buchung_id, reader, writer) VALUES (?, ?, ?)";
+                    const query1: string= "INSERT INTO tracking (id, reader, writer) VALUES (?, ?, ?)";
                     const data1 = [buchungID, reader, writer];
                     database.query(query1, data1, () => {
                         if (err==null) {
@@ -621,7 +619,7 @@ app.post('/bewertung/post', (req:Request, res:Response)=>{
 });
 
 app.get('/bookings', (req:Request, res:Response)=>{
-    let  cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum from buchungen left JOIN user on buchungen.id_kauefer = user.user_id LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE user.user_id = ? ";
+    let  cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum, buchungen.id AS trackID from buchungen left JOIN user on buchungen.id_kauefer = user.user_id LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE user.user_id = ? ";
     database.query(cQuery,[session.user_id], (err, results: any) => {
         if (err === null) {
             res.status(200);

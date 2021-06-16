@@ -914,21 +914,21 @@ function getmyMessages() {
 }
 
 function updateUser() {
-    let email: string= "test@gmail21.commm";
-    let name: string="testname";
-    let handynmbr: string= "testhandy";
+    let bildIN: JQuery = $('#uploadProfilePicture');
+    let bild: string=bildIN.val().toString();
+  let bild2 = bild.replace("C:\\fakepath\\", "bilder\\");
+    console.log(bild2);
     $.ajax({
         url: '/update/user',
         type: 'PUT',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-           "email": email,
-            "name": name,
-            "handyNr": handynmbr,
+            bild2
         }),
         success: (response) => {
             console.log("sucess");
+            getProfil();
         },
         error: (response) => {
             console.log("error");
@@ -1083,6 +1083,9 @@ let newProfil: JQuery = $(`  <div class="row">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
+                    <div>
+                    <button class="btn niceButton" onclick="updateUser()">Profilbild ändern</button>
+</div>
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
@@ -1464,9 +1467,20 @@ function renderOwnBookings() {
         success: (response) => {
             console.log(response);
             bookingsTable.empty();
+            let header: JQuery = $(`<tr>
+                                                      <th scope="row">Track.Nr.</th>
+                                                      <th scope="row">Start</th>
+                                                      <th scope="row">Ziel</th>
+                                                      <th scope="row">Datum</th>
+                                                     
+                                                      <td>
+                                                       
+                                                    </tr>`);
+            bookingsTable.append(header);
             response.forEach((offer)=> {
+
                 let renderOffers: JQuery = $(`<tr>
-                                                      <th scope="row">${offer.user_id}</th>
+                                                      <th scope="row">${offer.trackID}</th>
                                                       <th scope="row">${offer.start}</th>
                                                       <th scope="row">${offer.ziel}</th>
                                                       <th scope="row">${dateConvert(offer.datum)}</th>
