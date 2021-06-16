@@ -1177,7 +1177,11 @@ let newProfil: JQuery = $(`  <div class="row">
                                                             </div>
                                                             <div class="col-1">
                                                                 <button class="btn btn-outline-dark btn-sm delete-user-button" data-car-id="${car.id}" onclick="deleteCar(${car.id})">
-                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                  <!----  <i class="fa fa-trash" aria-hidden="true"></i>---->
+                                                                   <div class="w1-padding w1-xlarge w3-text-red">           
+                                                                         <i class="material-icons">delete</i>
+                                                                     </div>
+                                                                                  
                                                                 </button>
                                                             </div>
                                                         </div>
