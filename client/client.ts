@@ -1422,3 +1422,19 @@ function renderOwnBookings() {
         }
     })
 }
+
+function deletedata(event) {
+
+    const dataId: number = $(event.currentTarget).data('user_id');
+
+    $.ajax({
+        url: '/delete/' + dataId,
+        type: 'DELETE',
+        dataType: 'json',
+        success: (response) => {
+          //  updateUserList();
+        },
+        error: (jqXHRresponse) => {
+        },
+    }).then(()=>{});
+}
