@@ -1404,11 +1404,11 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty()
             let pic: JQuery;
-            if(response.car.bild_pfad===null) {
+            if(response.car===undefined) {
                 pic= $(` <img id="offerPicture" src="/bilder/profil_default.png" style="margin-top: 5%"
                                  alt="ExamplePicture">`);
             } else {
-                pic= $(` <img id="offerPicture" src=${response.result.bild_pfad} style="margin-top: 5%"
+                pic= $(` <img id="offerPicture" src=${response.result.car.bild_pfad} style="margin-top: 5%"
                                  alt="ExamplePicture">`);
             }
 

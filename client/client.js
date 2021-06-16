@@ -1117,11 +1117,11 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty();
             var pic;
-            if (response.car.bild_pfad === null) {
+            if (response.car === undefined) {
                 pic = $(" <img id=\"offerPicture\" src=\"/bilder/profil_default.png\" style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
             }
             else {
-                pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
+                pic = $(" <img id=\"offerPicture\" src=" + response.result.car.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
             }
             var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" class=\"btn w-75\" onclick=\"testFunction2(" + offerID + ")\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
             offerPicture.append(pic);
