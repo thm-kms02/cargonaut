@@ -1082,10 +1082,9 @@ let newProfil: JQuery = $(`  <div class="row">
                             <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+                        <button class="btn niceButton" onclick="updateUser()">Profilbild ändern</button>
                     </div>
-                    <div>
-                    <button class="btn niceButton" onclick="updateUser()">Profilbild ändern</button>
-</div>
+       
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
