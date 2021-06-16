@@ -379,6 +379,7 @@ function getDifUser(event){
 
         success: (response) => {
         renderProfil(response.user, response.cars, response.bewertung);
+        getBewertung(id);
         },
         error: (err) => {
            alert("err");
@@ -562,6 +563,25 @@ function getGPS(tracknum: number) {
 
         },
     });
+}
+
+function getBewertung(id: number) {
+    $.ajax({
+        url: '/bewertung/get/'+id,
+        type: 'GET',
+        dataType: 'json',
+        success: (response) => {
+            renderBewertungen(response);
+        },
+        error: (response) => {
+        },
+    });
+}
+
+function renderBewertungen(bewertungen) {
+    for(let bewertung of bewertungen) {
+
+    }
 }
 
 function showLocation(lat: number, lng: number) {
