@@ -30,6 +30,8 @@ CREATE DATABASE IF NOT EXISTS `cargo` DEFAULT CHARACTER SET utf8 COLLATE utf8_ge
 USE `cargo`;
 
 
+-- --------------------------------------------------------
+
 --
 -- Tabellenstruktur für Tabelle `anzeige`
 --
@@ -51,11 +53,10 @@ CREATE TABLE `anzeige` (
 --
 
 INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `ziel`, `beschreibung`, `id_fahrzeug`) VALUES
-(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', 1),
+(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', NULL),
 (2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
 (3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
-(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', 2),
-(5, 1, 1, '2021-06-17', 250, 'Aßlar', 'Wetzlar', 'Just do it', NULL);
+(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', NULL);
 
 -- --------------------------------------------------------
 
@@ -76,18 +77,9 @@ CREATE TABLE `bewertung` (
 --
 
 INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `kommentar`) VALUES
-(1, 1, 1, 1, 'Hi'),
-(2, 1, 1, 1, 'Hi'),
-(3, 1, 1, 1, 'Hi'),
-(4, 1, 1, 3, 'HI'),
-(5, 1, 1, 0, 'HI'),
-(6, 1, 2, 0, 'HI'),
-(7, 1, 1, 0, 'hiojöd'),
-(8, 1, 1, 4, 'fas'),
-(9, 1, 1, 2, 'fas'),
-(10, 1, 1, 5, 'gsa'),
-(11, 1, 1, 4, 'gsa'),
-(12, 1, 1, 3, 'gsa');
+(17, 2, 1, 4, 'Top gefahren'),
+(18, 3, 1, 3, 'Zu schnell gefahren'),
+(19, 2, 1, 1, 'ZU langsam !!!');
 
 -- --------------------------------------------------------
 
@@ -101,14 +93,6 @@ CREATE TABLE `buchungen` (
   `id_anz` int(11) NOT NULL,
   `datum` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `buchungen`
---
-
-INSERT INTO `buchungen` (`id`, `id_kauefer`, `id_anz`, `datum`) VALUES
-(2, 1, 1, '2021-06-15 13:23:37'),
-(3, 1, 2, '2021-06-14 13:27:41');
 
 -- --------------------------------------------------------
 
@@ -131,10 +115,9 @@ CREATE TABLE `fahrzeug` (
 --
 
 INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `bild_pfad`) VALUES
-(1, 1, 'VW Arteon', 2018, 300, 2000, 'bilder/img.png'),
-(2, 1, 'VW Sharan', 2012, 500, 2300, 'bilder/img.png'),
 (3, 2, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
-(4, 6, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
+(6, 1, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
+(7, 1, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
 
 -- --------------------------------------------------------
 
@@ -188,8 +171,7 @@ CREATE TABLE `personenbefoerderung` (
 INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
 (1, 4),
 (2, 2),
-(3, 1),
-(5, 10);
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -226,13 +208,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `passwort`, `geburtsdatum`, `bild`) VALUES
-(1, 'root@gmail.com', 'Test User', 'root', '1994-12-05', 'bilder/profil_default.png'),
+(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder/profil_default.png'),
 (2, 'fast-Driver@gmail.com', 'Thomas Müller', 'Blanco99', '1990-06-01', 'bilder/profil_default.png'),
-(3, 'Bandigo@gmail.com', 'Bernd Wender', 'B239djak3?!', '1990-09-09', 'bilder/profil_default.png'),
-(4, 'hyper@gmail.com', 'Lukas Hohl', 'jd3nd93kqn', '1994-12-19', 'bilder/profil_default.png'),
-(5, 'onur@gmail.com', 'Onur Dede', 'ksnai3dnaj3n3', '1994-10-19', 'bilder/profil_default.png'),
-(6, 'travel-alg@gmail.com', 'Trevor Denkins', 'nofiann3f932nds93', '1994-10-10', 'bilder/profil_default.png'),
-(7, 'test@gmail.com', 'Testo Tester', 'test1234', '1994-10-19', 'bilder/profil_default.png');
+(3, 'Bandigo@gmail.com', 'Bernd Wender', 'bernd', '1990-09-09', 'bilder/profil_default.png'),
+(4, 'hyper@gmail.com', 'Lukas Hohl', 'lukas', '1994-12-19', 'bilder/profil_default.png'),
+(5, 'onur@gmail.com', 'Onur Dede', 'onur', '1994-10-19', 'bilder/profil_default.png'),
+(8, 'colin.kristen@mni.thm.de', 'Colin Kristen', 'colin', '1999-05-26', 'bilder/profil_default.png');
 
 --
 -- Indizes der exportierten Tabellen
@@ -312,25 +293,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `anzeige`
 --
 ALTER TABLE `anzeige`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT für Tabelle `nachricht`
@@ -348,7 +329,7 @@ ALTER TABLE `tracking`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints der exportierten Tabellen
@@ -359,7 +340,7 @@ ALTER TABLE `user`
 --
 ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints der Tabelle `bewertung`
