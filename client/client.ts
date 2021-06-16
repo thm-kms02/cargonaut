@@ -402,7 +402,7 @@ function testFunction2(id: string) {
 
 
 function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
-    let durchschnitt: string = bewertung.toString();
+    let durchschnitt: string = String(bewertung);
     profileArea.empty()
     let newProfil: JQuery = $(`   
         <div class="row">
@@ -544,7 +544,11 @@ function getGPS(tracknum: number) {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-            showLocation(response.lat, response.lng);
+            if(response.lat=== null || response.lng==null) {
+                alert("Noch keine GPS-Daten vorhanden!");
+            } else {
+                showLocation(response.lat, response.lng);
+            }
         },
         error: (response) => {
 
@@ -561,7 +565,7 @@ function showLocation(lat: number, lng: number) {
     const center: google.maps.LatLngLiteral = {lat: lat, lng: lng};
     map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
         center,
-        zoom: 8
+        zoom: 11
     });
 
 }
@@ -963,7 +967,7 @@ function renderAnzeige(anz: AnzeigeRender) {
     }else {
         fahrzeugName = anz.name;
     }
-    if (anz.bild_pfad === null){
+    if (anz.bild_pfad === null||anz.bild_pfad===undefined){
         img = "assets/Examplepictures/Pic-1.png";
     }else {
         img = anz.bild_pfad;
@@ -1057,7 +1061,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 function openOwnProfile(user:User, cars: Fahrzeug[], bewertung: number) {
 profileArea.empty();
-let durchschnitt: string = bewertung.toString();
+let durchschnitt: string = String(bewertung);
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
             <div class="col-8" style="background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%">
@@ -1399,10 +1403,16 @@ function renderOfferPage(event) {
 
             offerPicture.empty();
             offerPageButtons.empty()
-
-
-            let pic: JQuery = $(` <img id="offerPicture" src=${response.result.bild_pfad} style="margin-top: 5%"
+            let pic: JQuery;
+            if(response.result.bild_pfad===null) {
+                pic= $(` <img id="offerPicture" src="/bilder/profil_default.png" style="margin-top: 5%"
                                  alt="ExamplePicture">`);
+            } else {
+                pic= $(` <img id="offerPicture" src=${response.result.bild_pfad} style="margin-top: 5%"
+                                 alt="ExamplePicture">`);
+            }
+
+
             let buttons: JQuery = $(`<button data-user-id="${response.result.user_id}" class="btn w-75 userProfil"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>

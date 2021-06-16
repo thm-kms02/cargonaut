@@ -214,6 +214,7 @@ app.get('/difUser/:id', (req: Request, res: Response) => {
                 message: 'Database request failed: ' + err
             });
         } else {
+            const durchschnitt: number = rows[0].avg;
             user = new User(rows[0].email, rows[0].name, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
             const query1: string = "SELECT * FROM fahrzeug WHERE fahrzeug.user_id=?";
             const data1 = [req.params.id];
@@ -225,7 +226,7 @@ app.get('/difUser/:id', (req: Request, res: Response) => {
                         let car: Fahrzeug = new Fahrzeug(row.name, row.jahr, row.volumen, row.gewicht, row.bild_pfad, row.id)
                         carsList.push(car);
                     });
-                    res.status(200).send({"user":user, "cars":carsList});
+                    res.status(200).send({"user":user, "cars":carsList, "bewertung":durchschnitt});
                 }
             });
         }
@@ -299,7 +300,7 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 
 app.get('/user', (req: Request, res: Response) => {
 
-    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.user_id  WHERE user.user_id=?";
+    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.id_empfaenger WHERE user.user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -400,7 +401,6 @@ app.delete('/car/:carId', (req: Request, res: Response) => {
 // routs for tracking
 
 app.get('/trackingrole/:trackID', (req: Request, res: Response) => {
-    session.user_id=2;
     const query: string = 'SELECT * FROM tracking WHERE tracking.id =?';
     const data = [req.params.trackID];
 

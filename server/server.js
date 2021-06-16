@@ -202,6 +202,7 @@ app.get('/difUser/:id', function (req, res) {
             });
         }
         else {
+            var durchschnitt_1 = rows[0].avg;
             user = new user_1.User(rows[0].email, rows[0].name, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
             var query1 = "SELECT * FROM fahrzeug WHERE fahrzeug.user_id=?";
             var data1 = [req.params.id];
@@ -214,7 +215,7 @@ app.get('/difUser/:id', function (req, res) {
                         var car = new fahrzeug_1.Fahrzeug(row.name, row.jahr, row.volumen, row.gewicht, row.bild_pfad, row.id);
                         carsList.push(car);
                     });
-                    res.status(200).send({ "user": user, "cars": carsList });
+                    res.status(200).send({ "user": user, "cars": carsList, "bewertung": durchschnitt_1 });
                 }
             });
         }
@@ -285,7 +286,7 @@ app.post('/anzeige/filter', function (req, res) {
 });
 // routs for get user and update user
 app.get('/user', function (req, res) {
-    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.user_id  WHERE user.user_id=?";
+    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.id_empfaenger WHERE user.user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -379,7 +380,6 @@ app.delete('/car/:carId', function (req, res) {
 });
 // routs for tracking
 app.get('/trackingrole/:trackID', function (req, res) {
-    session.user_id = 2;
     var query = 'SELECT * FROM tracking WHERE tracking.id =?';
     var data = [req.params.trackID];
     database.query(query, data, function (err, results) {
