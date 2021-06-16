@@ -207,7 +207,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
 app.get('/difUser/:id', (req: Request, res: Response) => {
     let user : User;
     let carsList: Fahrzeug[] = [];
-    const query: string = "SELECT * FROM user WHERE user_id=?";
+    const query: string = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,AVG(bewertung.bewertung) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
     database.query(query, [req.params.id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -299,7 +299,7 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 
 app.get('/user', (req: Request, res: Response) => {
 
-    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
+    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.user_id  WHERE user.user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -314,7 +314,8 @@ app.get('/user', (req: Request, res: Response) => {
             });
             res.status(200).send({
                 "user":user,
-                "cars":cars
+                "cars":cars,
+                "bewertung":rows[0].avg
             });
 
         }
