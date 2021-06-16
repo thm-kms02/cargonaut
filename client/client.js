@@ -553,12 +553,13 @@ function showMap() {
 }
 function deleteCar(id) {
     $.ajax({
-        url: '/fahrzeug/' + id,
+        url: '/car/' + id,
         type: 'DELETE',
         contentType: 'application/json',
         dataType: 'json',
         success: function (response) {
             console.log("sucess");
+            getProfil();
         },
         error: function (response) {
             console.log("error");
@@ -911,7 +912,7 @@ function openOwnProfile(user, cars, bewertung) {
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     cars.forEach(function (car) {
-        var renderCar = $("<tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                  \n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\"><span>Modell: </span>" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\"><span>Baujahr: </span>" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\"><span>Ladefl\u00E4che/ Sitzpl\u00E4tze: </span>" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\"><span>Gewicht: </span>" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
+        var renderCar = $("<tr>\n                                            <td>\n                                                <div class=\"card\">\n                                                    <div class=\"card-body\">\n                                                        <div class=\"row\">\n                                                          \n                                                            <div class=\"col-5\" style=\"text-align: center\">\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeModel\"><span>Modell: </span>" + car.name + "</span>\n                                                                </div>\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeYear\"><span>Baujahr: </span>" + car.jahr + "</span>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-6\" style=\"text-align: center\">\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeCargoArea\"><span>Ladefl\u00E4che/ Sitzpl\u00E4tze: </span>" + car.volumen + "</span>\n                                                                </div>\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeWeight\"><span>Gewicht: </span>" + car.gewicht + "</span>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-1\">\n                                                                <button class=\"btn btn-outline-dark btn-sm delete-user-button\" data-car-id=\"" + car.id + "\" onclick=\"deleteCar(" + car.id + ")\">\n                                                                    <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                                                                </button>\n                                                            </div>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </td>\n                                        </tr>");
         carsTableBody.append(renderCar);
         profileArea.show();
     });
@@ -1177,17 +1178,4 @@ function renderOwnBookings() {
             console.log(response);
         }
     });
-}
-function deletedata(event) {
-    var dataId = $(event.currentTarget).data('user_id');
-    $.ajax({
-        url: '/delete/' + dataId,
-        type: 'DELETE',
-        dataType: 'json',
-        success: function (response) {
-            //  updateUserList();
-        },
-        error: function (jqXHRresponse) {
-        },
-    }).then(function () { });
 }

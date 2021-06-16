@@ -385,7 +385,8 @@ app.get('/fahrzeug', function (req, res) {
     });
 });
 app.delete('/car/:carId', function (req, res) {
-    var id = Number(req.params.userMail);
+    var id = Number(req.params.carId);
+    console.log("CarID: " + id);
     var query = 'DELETE FROM fahrzeug WHERE fahrzeug.id=?';
     database.query(query, [id], function (err) {
         if (err) {

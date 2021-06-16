@@ -643,12 +643,13 @@ function showMap() {
 
 function deleteCar(id: number) {
     $.ajax({
-        url: '/fahrzeug/' + id,
+        url: '/car/' + id,
         type: 'DELETE',
         contentType: 'application/json',
         dataType: 'json',
         success: (response) => {
             console.log("sucess");
+            getProfil();
         },
         error: (response) => {
             console.log("error");
@@ -1145,40 +1146,45 @@ let newProfil: JQuery = $(`  <div class="row">
             </div>
         </div>`);
 
-profileArea.append(newProfil);
-let carsTableBody: JQuery = $('#carsTableBody');
+        profileArea.append(newProfil);
+        let carsTableBody: JQuery = $('#carsTableBody');
 
-cars.forEach((car) => {
-    let renderCar: JQuery = $(`<tr>
-                                    <td>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                  
-                                                    <div class="col-6" style="text-align: center">
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeModel"><span>Modell: </span>${car.name}</span>
-                                                        </div>
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeYear"><span>Baujahr: </span>${car.jahr}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6" style="text-align: center">
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeCargoArea"><span>Ladefläche/ Sitzplätze: </span>${car.volumen}</span>
-                                                        </div>
-                                                        <div class="carAttribute">
-                                                            <span class="carAttributeWeight"><span>Gewicht: </span>${car.gewicht}</span>
+        cars.forEach((car) => {
+            let renderCar: JQuery = $(`<tr>
+                                            <td>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                          
+                                                            <div class="col-5" style="text-align: center">
+                                                                <div class="carAttribute">
+                                                                    <span class="carAttributeModel"><span>Modell: </span>${car.name}</span>
+                                                                </div>
+                                                                <div class="carAttribute">
+                                                                    <span class="carAttributeYear"><span>Baujahr: </span>${car.jahr}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6" style="text-align: center">
+                                                                <div class="carAttribute">
+                                                                    <span class="carAttributeCargoArea"><span>Ladefläche/ Sitzplätze: </span>${car.volumen}</span>
+                                                                </div>
+                                                                <div class="carAttribute">
+                                                                    <span class="carAttributeWeight"><span>Gewicht: </span>${car.gewicht}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <button class="btn btn-outline-dark btn-sm delete-user-button" data-car-id="${car.id}" onclick="deleteCar(${car.id})">
+                                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>`);
-    carsTableBody.append(renderCar);
-    profileArea.show();
-});
+                                            </td>
+                                        </tr>`);
+            carsTableBody.append(renderCar);
+            profileArea.show();
+        });
 }
 
 function getFahrzeugDropTaxi() {
@@ -1484,18 +1490,3 @@ function renderOwnBookings() {
     })
 }
 
-function deletedata(event) {
-
-    const dataId: number = $(event.currentTarget).data('user_id');
-
-    $.ajax({
-        url: '/delete/' + dataId,
-        type: 'DELETE',
-        dataType: 'json',
-        success: (response) => {
-          //  updateUserList();
-        },
-        error: (jqXHRresponse) => {
-        },
-    }).then(()=>{});
-}

@@ -401,7 +401,8 @@ app.get('/fahrzeug', (req: Request, res: Response) => {
 });
 
 app.delete('/car/:carId', (req: Request, res: Response) => {
-    let id: number = Number(req.params.userMail);
+    let id: number = Number(req.params.carId);
+    console.log("CarID: " + id);
     let query: string = 'DELETE FROM fahrzeug WHERE fahrzeug.id=?';
     database.query(query, [id], (err: MysqlError) => {
         if (err) {
