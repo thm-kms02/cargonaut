@@ -446,9 +446,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-4">
-                                                        <img class="card-img" src=${car.bild_pfad} alt="Card image cap">
-                                                    </div>
+                                         
                                                     <div class="col-4" style="text-align: center">
                                                         <div class="carAttribute">
                                                             <span class="carAttributeModel">${car.name}</span>
@@ -1144,9 +1142,7 @@ cars.forEach((car) => {
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-4">
-                                                        <img class="card-img" src=${car.bild_pfad} alt="Card image cap">
-                                                    </div>
+                                                  
                                                     <div class="col-4" style="text-align: center">
                                                         <div class="carAttribute">
                                                             <span class="carAttributeModel">${car.name}</span>
