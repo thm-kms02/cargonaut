@@ -580,8 +580,8 @@ function getBewertung(id: number) {
 }
 
 function renderBewertungen(bewertungen) {
+    console.log(bewertungen)
     for(let bewertung of bewertungen) {
-
     }
 }
 
@@ -1106,6 +1106,7 @@ let newProfil: JQuery = $(`  <div class="row">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                         <button class="btn niceButton" onclick="updateUser()">Profilbild ändern</button>
+                        <table class="table table-borderless" id="kommentare"></table>
                     </div>
        
                     <div class="col-9">
