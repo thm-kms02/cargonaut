@@ -48,7 +48,6 @@ INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `z
 (2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
 (3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
 (4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', NULL);
-(5, 3, 1, '2021-06-2', 500, 'langöns', 'berlin', 'Spass bei der Fahrt ist meine Priorität', NULL);
 (6, 4, 0, '2021-07-1', 400, 'Marburg', 'Fulda', 'willst du spass beim fahren haben , dann bist du hier richtig', NULL);
 
 -- --------------------------------------------------------
