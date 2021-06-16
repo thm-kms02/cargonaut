@@ -703,8 +703,8 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
     let filteredAnzeigen:AnzeigeRender[]=[];
     let j: number = 0;
     for (let i=0;i<anzeigen.length;i++){
-                if (anzeigen[i].preis == minPreis || minPreis === 0 ) {
-                    if (anzeigen[i].preis == maxPreis || maxPreis === 0 ) {
+                if (anzeigen[i].preis >= minPreis || minPreis === 0 ) {
+                    if (anzeigen[i].preis <= maxPreis || maxPreis === 0 ) {
                         if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
                             if (anzeigen[i].start == von || von === "" || von === undefined) {
                                 if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {

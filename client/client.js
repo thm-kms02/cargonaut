@@ -570,8 +570,8 @@ function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum) {
     var filteredAnzeigen = [];
     var j = 0;
     for (var i = 0; i < anzeigen.length; i++) {
-        if (anzeigen[i].preis == minPreis || minPreis === 0) {
-            if (anzeigen[i].preis == maxPreis || maxPreis === 0) {
+        if (anzeigen[i].preis >= minPreis || minPreis === 0) {
+            if (anzeigen[i].preis <= maxPreis || maxPreis === 0) {
                 if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
                     if (anzeigen[i].start == von || von === "" || von === undefined) {
                         if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
