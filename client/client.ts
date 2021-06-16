@@ -412,6 +412,7 @@ function testFunction2(id: string) {
         },
         error: (response) => {
             console.log('Gebucht');
+            alert("Anzeige wurde gebucht");
             mainarea.show()
             offerArea.hide();
             getAll();
@@ -672,6 +673,7 @@ function createCar() {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            alert("Fahrzeug wurde hinzugefügt")
         },
         error: (response) => {
             console.log("error");
@@ -699,6 +701,7 @@ function deleteCar(id: number) {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            alert(" Fahrzeug wurde entfernt")
         },
         error: (response) => {
             console.log("error");
@@ -752,6 +755,7 @@ function saveValuesLieferungFilter() {
     modalBackdrop.hide();
     modal.modal("hide");
 }
+
 function getFilter() {
     let radOffer : JQuery = $('#filterForOfferRadio:checked');
     let radSearch: JQuery = $('#filterForSerachRadio:checked');

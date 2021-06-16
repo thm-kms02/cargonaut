@@ -403,6 +403,7 @@ function testFunction2(id) {
         },
         error: function (response) {
             console.log('Gebucht');
+            alert("Anzeige wurde gebucht");
             mainarea.show();
             offerArea.hide();
             getAll();
@@ -566,6 +567,7 @@ function createCar() {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            alert("Fahrzeug wurde hinzugefügt");
         },
         error: function (response) {
             console.log("error");
@@ -590,6 +592,7 @@ function deleteCar(id) {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            alert(" Fahrzeug wurde entfernt");
         },
         error: function (response) {
             console.log("error");
