@@ -330,7 +330,7 @@ function getDifUser(event){
         dataType: 'json',
 
         success: (response) => {
-        renderProfil(response.user, response.cars);
+        renderProfil(response.user, response.cars, response.bewertung);
         },
         error: (err) => {
            alert("err");
@@ -359,7 +359,8 @@ function testFunction2(id: string) {
 }
 
 
-function renderProfil(user: User,cars: Fahrzeug[]) {
+function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
+    let durchschnitt: string = bewertung.toString();
     profileArea.empty()
     let newProfil: JQuery = $(`   
         <div class="row">
@@ -376,7 +377,7 @@ function renderProfil(user: User,cars: Fahrzeug[]) {
                    
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
-                        <span id="profileRating"></span><span>/5 Sterne</span>
+                        <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
@@ -1012,8 +1013,9 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 }
 
-function openOwnProfile(user:User, cars: Fahrzeug[]) {
+function openOwnProfile(user:User, cars: Fahrzeug[], bewertung: number) {
 profileArea.empty();
+let durchschnitt: string = bewertung.toString();
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
             <div class="col-8" style="background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%">
@@ -1027,7 +1029,7 @@ let newProfil: JQuery = $(`  <div class="row">
                     </div>
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
-                        <span id="profileRating"></span><span>/5 Sterne</span>
+                        <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
                         <button onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
                         </button>
@@ -1381,7 +1383,7 @@ function getProfil(){
         type: 'GET',
         contentType: 'application/json',
         success: (response) => {
-            openOwnProfile(response.user, response.cars);
+            openOwnProfile(response.user, response.cars, response.bewertung);
         },
         error: (response) => {
             console.log(response);
