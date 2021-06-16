@@ -95,7 +95,7 @@ app.get('/anzeige', function (req, res) {
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -129,12 +129,12 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild_pfad, offer.id));
+                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild, offer.id));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild_pfad, offer.id));
+                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild, offer.id));
                         }
                     }
                 }
@@ -645,27 +645,30 @@ app.delete('/delete/:dataId', function (req, res) {
         }
     });
 });
-app.get('/average', function (req, res) {
-    var query = 'SELECT AVG(bewertung) FROM cargo WHERE bewertung is not null;';
-    database.query(query, function (err, result) {
-        if (err) {
-            // Database operation has failed
-            res.status(500).send({
-                message: 'Database request failed: ' + err
-            });
-        }
-        else {
-            // Check if database response contains at least one entry
-            if (result.affectedRows === 1) {
-                res.status(200).send({
-                    message: "Successfully deleted user ",
-                });
-            }
-            else {
-                res.status(400).send({
-                    message: 'The user to be deleted could not be found',
-                });
-            }
-        }
-    });
+/*
+app.get('/average',(req:Request,res:Response)=>{
+
+    let query= 'SELECT AVG(bewertung) FROM cargo WHERE bewertung is not null;'
+
+   database.query(query,(err: MysqlError, result: any)=>{
+       if (err) {
+           // Database operation has failed
+           res.status(500).send({
+               message: 'Database request failed: ' + err
+           });
+       } else {
+           // Check if database response contains at least one entry
+           if (result.affectedRows === 1) {
+               res.status(200).send({
+                   message: `Successfully deleted user `,
+               });
+           } else {
+               res.status(400).send({
+                   message: 'The user to be deleted could not be found',
+               });
+           }
+       }
+
+   });
 });
+*/ 

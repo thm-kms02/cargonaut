@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnzeigeRender = void 0;
 var AnzeigeRender = /** @class */ (function () {
-    function AnzeigeRender(user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug, personen, ladeflaeche, ladungsgewicht, ladehoehe, name, bild_pfad, id) {
+    function AnzeigeRender(user_id, ang_ges, datum, preis, start, ziel, beschreibung, id_fahrzeug, personen, ladeflaeche, ladungsgewicht, ladehoehe, name, bild, id) {
         this.user_id = user_id;
         this.ang_ges = ang_ges;
         this.beschreibung = beschreibung;
@@ -17,7 +17,7 @@ var AnzeigeRender = /** @class */ (function () {
         this.datum = datum;
         this.id_fahrzeug = id_fahrzeug;
         this.name = name;
-        this.bild_pfad = bild_pfad;
+        this.bild = bild;
     }
     return AnzeigeRender;
 }());
