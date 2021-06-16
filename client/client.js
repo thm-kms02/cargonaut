@@ -234,6 +234,10 @@ $(function () {
     offerArea.hide();
     logoutbtn.hide();
     registryBTN.show();
+    trackbutton.hide();
+    buchungbtn.hide();
+    trackbutton.hide();
+    profilbtn.hide();
     offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
     addCarForm.on('click', '.addCar', createCar);
@@ -388,10 +392,13 @@ function testFunction2(id) {
             idBooking: idBooking
         }),
         success: function () {
-            console.log('Gebucht');
+            console.log("Error");
         },
         error: function (response) {
-            console.log(response);
+            console.log('Gebucht');
+            mainarea.show();
+            offerArea.hide();
+            getAll();
         },
     });
 }
@@ -403,7 +410,7 @@ function renderProfil(user, cars, bewertung) {
     var carsTableBody = $('#carsTableBody');
     for (var _i = 0, cars_1 = cars; _i < cars_1.length; _i++) {
         var car = cars_1[_i];
-        var elem = $(" <tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                         \n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\">" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\">" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\">" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\">" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
+        var elem = $(" <tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                         \n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\"><span>Modell: </span>" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\"><span>Baujahr: </span>" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\"><span>Ladefl\u00E4che/ Sitzpl\u00E4tze: </span>" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\"><span>Gewicht: </span>" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
         carsTableBody.append(elem);
     }
     addOfferArea.hide();
@@ -904,7 +911,7 @@ function openOwnProfile(user, cars, bewertung) {
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     cars.forEach(function (car) {
-        var renderCar = $("<tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                  \n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\">" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\">" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\">" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\">" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
+        var renderCar = $("<tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                  \n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\"><span>Modell: </span>" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\"><span>Baujahr: </span>" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-6\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\"><span>Ladefl\u00E4che/ Sitzpl\u00E4tze: </span>" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\"><span>Gewicht: </span>" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
         carsTableBody.append(renderCar);
         profileArea.show();
     });
@@ -985,6 +992,7 @@ function login() {
             trackbutton.show();
             logoutbtn.show();
             profilbtn.show();
+            buchungbtn.show();
         },
         error: function (response) {
             alert(response.responseJSON.message);
@@ -1001,6 +1009,8 @@ function logout() {
         },
         error: function (err) {
             loginArea.show();
+            trackbutton.hide();
+            profilbtn.hide();
             location.reload();
         },
     });

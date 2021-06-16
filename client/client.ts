@@ -226,6 +226,10 @@ $(() => {
     offerArea.hide();
     logoutbtn.hide();
     registryBTN.show();
+    trackbutton.hide();
+    buchungbtn.hide();
+    trackbutton.hide();
+    profilbtn.hide();
 
     offerControlForm.on('click', '.userProfil', getDifUser);
 
@@ -394,10 +398,14 @@ function testFunction2(id: string) {
             idBooking
         }),
         success: () => {
-            console.log('Gebucht');
+            console.log("Error");
+
         },
         error: (response) => {
-            console.log(response);
+            console.log('Gebucht');
+            mainarea.show()
+            offerArea.hide();
+            getAll();
         },
     })
 }
@@ -449,20 +457,20 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                                             <div class="card-body">
                                                 <div class="row">
                                          
-                                                    <div class="col-4" style="text-align: center">
+                                                    <div class="col-6" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeModel">${car.name}</span>
+                                                            <span class="carAttributeModel"><span>Modell: </span>${car.name}</span>
                                                         </div>
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeYear">${car.jahr}</span>
+                                                            <span class="carAttributeYear"><span>Baujahr: </span>${car.jahr}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-4" style="text-align: center">
+                                                    <div class="col-6" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeCargoArea">${car.volumen}</span>
+                                                            <span class="carAttributeCargoArea"><span>Ladefläche/ Sitzplätze: </span>${car.volumen}</span>
                                                         </div>
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeWeight">${car.gewicht}</span>
+                                                            <span class="carAttributeWeight"><span>Gewicht: </span>${car.gewicht}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1139,6 +1147,7 @@ let newProfil: JQuery = $(`  <div class="row">
 
 profileArea.append(newProfil);
 let carsTableBody: JQuery = $('#carsTableBody');
+
 cars.forEach((car) => {
     let renderCar: JQuery = $(`<tr>
                                     <td>
@@ -1146,20 +1155,20 @@ cars.forEach((car) => {
                                             <div class="card-body">
                                                 <div class="row">
                                                   
-                                                    <div class="col-4" style="text-align: center">
+                                                    <div class="col-6" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeModel">${car.name}</span>
+                                                            <span class="carAttributeModel"><span>Modell: </span>${car.name}</span>
                                                         </div>
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeYear">${car.jahr}</span>
+                                                            <span class="carAttributeYear"><span>Baujahr: </span>${car.jahr}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-4" style="text-align: center">
+                                                    <div class="col-6" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeCargoArea">${car.volumen}</span>
+                                                            <span class="carAttributeCargoArea"><span>Ladefläche/ Sitzplätze: </span>${car.volumen}</span>
                                                         </div>
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeWeight">${car.gewicht}</span>
+                                                            <span class="carAttributeWeight"><span>Gewicht: </span>${car.gewicht}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1187,8 +1196,6 @@ function getFahrzeugDropTaxi() {
             },
 
         });
-
-
 }
 
 function getFahrzeugDropLieferung() {
@@ -1262,6 +1269,7 @@ function login(){
             trackbutton.show();
             logoutbtn.show();
             profilbtn.show();
+            buchungbtn.show();
         },
         error: (response) => {
            alert(response.responseJSON.message)
@@ -1280,6 +1288,8 @@ function logout() {
         },
         error: (err) => {
             loginArea.show();
+            trackbutton.hide();
+            profilbtn.hide();
             location.reload();
         },
     });
