@@ -108,7 +108,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
     let offers: any[];
     let taxi: any[];
     let cargo: any[];
-    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id';
+    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({

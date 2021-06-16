@@ -95,7 +95,7 @@ app.get('/anzeige', function (req, res) {
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
