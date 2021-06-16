@@ -596,8 +596,8 @@ function getAll() {
     });
 }
 
-function createCar(event) {
-    event.preventDefault();
+function createCar() {
+
     let namein: JQuery = $('#addCarAttributeModel');
     let yearin: JQuery = $('#addCarAttributeYear');
     let volin: JQuery = $('#addCarAttributeCargoArea');
@@ -624,9 +624,11 @@ function createCar(event) {
         }),
         success: (response) => {
             console.log("sucess");
+            getProfil();
         },
         error: (response) => {
             console.log("error");
+            getProfil();
         },
     });
 }
@@ -1094,7 +1096,7 @@ let newProfil: JQuery = $(`  <div class="row">
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
-                              <form id="addCarForm">
+                              
                                 <thead>
                                 <tr>
                                     <th>
@@ -1103,7 +1105,7 @@ let newProfil: JQuery = $(`  <div class="row">
                                                 <div class="row">
                                                     <div class="col-4">
                                                         <div class="btn" id="addCarBTN" >
-                                                            <button form="addCarForm" class="addCar">
+                                                            <button form="addCarForm" class="addCar" onclick="createCar()">
                                                             <img src="assets/AddCarBTN.png" height="80" width="80"
                                                                  alt="Add Car"/>
                                                                  </button>
@@ -1139,7 +1141,7 @@ let newProfil: JQuery = $(`  <div class="row">
                                 <!--Hier wird die Liste reingerendert-->
                                
                                 </tbody>
-                                </form>
+                              
                             </table>
                         </div>
 
