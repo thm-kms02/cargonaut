@@ -13,6 +13,7 @@ let trackbutton: JQuery;
 let signupBtn:JQuery;
 let logoutbtn:JQuery;
 let profilbtn:JQuery;
+let buchungbtn:JQuery;
 
 //Login-Page html-Elements:
 let loginArea: JQuery;
@@ -210,6 +211,7 @@ $(() => {
     inputPrize = $("#inputPrice");
     signupBtn=$("#SignupBtn");
     logoutbtn=$("#LogoutBtn");
+    buchungbtn=$("#buchung");
     profilbtn=$("#profil");
     addCarForm =$('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
@@ -1061,6 +1063,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 function openOwnProfile(user:User, cars: Fahrzeug[], bewertung: number) {
 profileArea.empty();
+
 let durchschnitt: string = String(bewertung);
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
@@ -1076,9 +1079,9 @@ let newProfil: JQuery = $(`  <div class="row">
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
-                        <button onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
+                       <!-------------------- <button  onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
-                        </button>
+                        </button>-------------->
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
