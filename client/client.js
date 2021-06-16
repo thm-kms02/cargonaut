@@ -657,16 +657,24 @@ function getFilter() {
     var ladeflaeche = ladeflaecheF;
     var ladehoehe = ladehoeheF;
     var ladungsgewicht = gesamtgewichtF;
-    if (radOffer.val() == "option1") {
+    if (radOffer.val() == "option1" && radSearch.val() == "option2") {
+        ang_ges = undefined;
+    }
+    else if (radOffer.val() == "option1" && radSearch.val() != "option2") {
         ang_ges = 0;
     }
-    else if (radSearch.val() == "option2") {
+    else if (radSearch.val() == "option2" && radOffer.val() != "option1") {
         ang_ges = 1;
     }
-    if (radCargo.val() == "option1") {
-        kategorie = 1;
+    if (radCargo.val() == "option1" && radTaxi.val() == "option2") {
+        kategorie = 0;
+        console.log("kategorie 0");
     }
-    else if (radTaxi.val() == "option2") {
+    else if (radCargo.val() == "option1" && radTaxi.val() != "option2") {
+        kategorie = 1;
+        console.log("kategorie 1");
+    }
+    else if (radTaxi.val() == "option2" && radCargo.val() != "option1") {
         kategorie = 2;
     }
     if (kategorie == 1) {
@@ -694,7 +702,7 @@ function getFilter() {
             var serverAnzeigen;
             serverAnzeigen = response;
             anzeigenRender = filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
-            if (kategorie == undefined) {
+            if (kategorie == 0) {
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 1) {
