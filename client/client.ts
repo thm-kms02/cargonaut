@@ -976,10 +976,10 @@ function renderAnzeige(anz: AnzeigeRender) {
     }else {
         fahrzeugName = anz.name;
     }
-    if (anz.bild_pfad === null||anz.bild_pfad===undefined){
+    if (anz.bild === null||anz.bild===undefined){
         img = "assets/Examplepictures/Pic-1.png";
     }else {
-        img = anz.bild_pfad;
+        img = anz.bild;
     }
 
     offersListBody.append( card(ueberschrift,anz,datumEuropaFormat,menge,fahrzeugName,img));
