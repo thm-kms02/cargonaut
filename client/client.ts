@@ -122,6 +122,7 @@ let addCarAttributeWeight: JQuery;
 let addCarForm: JQuery;
 let ownBookingsBTN: JQuery;
 let buttonFeedback: JQuery;
+let renderComments: JQuery;
 
 ///OfferDetailPage
 let offerPageButtons: JQuery;
@@ -426,8 +427,12 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                             <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+                        <table class="table table-borderless" id="kommentare">
+                            <tbody id="renderComments">
+                                <!--Hier werden die kommentare des eigenen Profils angezeigt-->
+                            </tbody>
+                        </table>
                     </div>
-                   
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
@@ -580,9 +585,23 @@ function getBewertung(id: number) {
 }
 
 function renderBewertungen(bewertungen) {
-    console.log(bewertungen)
-    for(let bewertung of bewertungen) {
-    }
+    renderComments = $("#renderComments");
+    console.log(bewertungen);
+    bewertungen.forEach((comment) => {
+        let comments: JQuery = $(`<tr>    
+                                            <td>
+                                                <div style="border-style: solid; border-radius: 3px; border-width: 1px; background-color: white; border-color: lightgrey">
+                                                    <div style="margin-left: 7%">
+                                                        <span>${comment.bewertung}<span>/5</span></span><br>
+                                                        <span>${comment.kommentar}</span>
+                                                    </div>
+                                                   
+                                                </div>  
+                                            </td>
+                                        </tr>`);
+        renderComments.append(comments);
+        profileArea.show();
+    });
 }
 
 function showLocation(lat: number, lng: number) {
@@ -1106,7 +1125,12 @@ let newProfil: JQuery = $(`  <div class="row">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                         <button class="btn niceButton" onclick="updateUser()">Profilbild ändern</button>
-                        <table class="table table-borderless" id="kommentare"></table>
+                        <table class="table table-borderless" id="kommentare">
+                            <tbody id="renderComments">
+                                <!--Hier werden die kommentare des eigenen Profils angezeigt-->
+                            </tbody>
+                        
+                        </table>
                     </div>
        
                     <div class="col-9">
