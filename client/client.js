@@ -225,12 +225,26 @@ $(function () {
     buttonFeedback = $("#Buttonfeedback");
     var fremdnutzerBTN = $(".fremdnutzerBTN");
     getAll();
-    renderAreas();
+    mainarea.hide();
+    loginArea.show();
+    addOfferArea.hide();
+    profileArea.hide();
+    offerArea.hide();
+    logoutbtn.hide();
+    registryBTN.show();
     offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
     addCarForm.on('click', '.addCar', createCar);
     homeButton.on('click', function () {
-        renderAreas();
+        logoutbtn.show();
+        profilbtn.show();
+        trackbutton.show();
+        addOfferArea.hide();
+        profileArea.hide();
+        mainarea.show();
+        offerArea.hide();
+        loginArea.hide();
+        registryBTN.hide();
     });
     trackNumButton.on('click', function () {
         getTrackingRole();
