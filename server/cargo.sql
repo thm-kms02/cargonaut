@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 09. Jun 2021 um 21:33
--- Server-Version: 10.4.19-MariaDB
--- PHP-Version: 7.3.28
+-- Erstellungszeit: 16. Jun 2021 um 12:19
+-- Server-Version: 10.4.18-MariaDB
+-- PHP-Version: 7.3.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -21,6 +21,7 @@ SET time_zone = "+00:00";
 -- Datenbank: `cargo`
 --
 
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `anzeige`
@@ -57,29 +58,12 @@ INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `z
 
 CREATE TABLE `bewertung` (
   `id` int(11) NOT NULL,
+  `id_buchen` int(11) NOT NULL,
   `id_verfasser` int(11) NOT NULL,
   `id_empfaenger` int(11) NOT NULL,
   `bewertung` int(1) NOT NULL,
-  `kommentar` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+  `kommentar` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Daten für Tabelle `bewertung`
---
-
-INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `kommentar`) VALUES
-(1, 1, 1, 1, 'Hi'),
-(2, 1, 1, 1, 'Hi'),
-(3, 1, 1, 1, 'Hi'),
-(4, 1, 1, 3, 'HI'),
-(5, 1, 1, 0, 'HI'),
-(6, 1, 2, 0, 'HI'),
-(7, 1, 1, 0, 'hiojöd'),
-(8, 1, 1, 4, 'fas'),
-(9, 1, 1, 2, 'fas'),
-(10, 1, 1, 5, 'gsa'),
-(11, 1, 1, 4, 'gsa'),
-(12, 1, 1, 3, 'gsa');
 
 -- --------------------------------------------------------
 
@@ -99,8 +83,10 @@ CREATE TABLE `buchungen` (
 --
 
 INSERT INTO `buchungen` (`id`, `id_kauefer`, `id_anz`, `datum`) VALUES
-(2, 1, 1, '2021-06-15 13:23:37'),
-(3, 1, 2, '2021-06-14 13:27:41');
+(2, 1, 3, '2021-06-15 14:54:57'),
+(3, 1, 1, '2021-06-16 11:11:02'),
+(4, 1, 1, '2021-06-16 12:01:31'),
+(5, 1, 2, '2021-06-16 12:02:05');
 
 -- --------------------------------------------------------
 
@@ -191,12 +177,21 @@ INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
 
 CREATE TABLE `tracking` (
   `id` int(11) NOT NULL,
-  `lat` int(11) NOT NULL,
-  `lng` int(11) NOT NULL,
+  `buchung_id` int(11) NOT NULL,
+  `lat` int(11) DEFAULT NULL,
+  `lng` int(11) DEFAULT NULL,
   `reader` int(11) NOT NULL,
   `writer` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `tracking`
+--
+
+INSERT INTO `tracking` (`id`, `buchung_id`, `lat`, `lng`, `reader`, `writer`, `date`) VALUES
+(1, 4, NULL, NULL, 1, 1, '2021-06-16 10:01:31'),
+(2, 5, 51, 9, 1, 2, '2021-06-16 10:17:51');
 
 -- --------------------------------------------------------
 
@@ -243,6 +238,7 @@ ALTER TABLE `anzeige`
 --
 ALTER TABLE `bewertung`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `id_buchen` (`id_buchen`),
   ADD KEY `id_verfasser` (`id_verfasser`),
   ADD KEY `id_empfaenger` (`id_empfaenger`);
 
@@ -287,7 +283,8 @@ ALTER TABLE `personenbefoerderung`
 ALTER TABLE `tracking`
   ADD PRIMARY KEY (`id`),
   ADD KEY `reader` (`reader`,`writer`),
-  ADD KEY `writer` (`writer`);
+  ADD KEY `writer` (`writer`),
+  ADD KEY `buchung_id` (`buchung_id`);
 
 --
 -- Indizes für die Tabelle `user`
@@ -310,13 +307,13 @@ ALTER TABLE `anzeige`
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
@@ -334,7 +331,7 @@ ALTER TABLE `nachricht`
 -- AUTO_INCREMENT für Tabelle `tracking`
 --
 ALTER TABLE `tracking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
@@ -357,6 +354,7 @@ ALTER TABLE `anzeige`
 -- Constraints der Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
+  ADD CONSTRAINT `bewertung_ibfk_1` FOREIGN KEY (`id_buchen`) REFERENCES `buchungen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `bewertung_ibfk_2` FOREIGN KEY (`id_verfasser`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `bewertung_ibfk_3` FOREIGN KEY (`id_empfaenger`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -390,7 +388,8 @@ ALTER TABLE `personenbefoerderung`
 --
 ALTER TABLE `tracking`
   ADD CONSTRAINT `tracking_ibfk_1` FOREIGN KEY (`reader`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tracking_ibfk_2` FOREIGN KEY (`writer`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tracking_ibfk_2` FOREIGN KEY (`writer`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tracking_ibfk_3` FOREIGN KEY (`buchung_id`) REFERENCES `buchungen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

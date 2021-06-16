@@ -58,8 +58,9 @@ app.post('/create/account', function (req, res) {
 app.post('/login', function (req, res) {
     var email = req.body.email;
     var passwort = req.body.passwort;
-    var query = 'SELECT user_id, passwort from user where email = email';
-    database.query(query, function (err, rows) {
+    var query = 'SELECT user_id, passwort FROM user WHERE user.email = ?';
+    var data = [email];
+    database.query(query, data, function (err, rows) {
         if (err) {
             res.status(500).send({
                 message: 'Diese Emailadresse ist nicht registriert',
@@ -94,7 +95,7 @@ app.get('/anzeige', function (req, res) {
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, name, bild_pfad FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -284,7 +285,7 @@ app.post('/anzeige/filter', function (req, res) {
 });
 // routs for get user and update user
 app.get('/user', function (req, res) {
-    var query = "SELECT fahrzeug.name AS name2, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
+    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -292,8 +293,15 @@ app.get('/user', function (req, res) {
             });
         }
         else {
+            var user = new user_1.User(rows[0].email, rows[0].name3, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            var cars_1 = [];
+            rows.forEach(function (car) {
+                var newcar = new fahrzeug_1.Fahrzeug(car.name2, car.jahr, car.volumen, car.gewicht, car.bild_pfad);
+                cars_1.push(newcar);
+            });
             res.status(200).send({
-                result: rows
+                "user": user,
+                "cars": cars_1
             });
         }
     });
@@ -484,11 +492,34 @@ app.post('/kasse', function (req, res) {
 app.post('/buchen', function (req, res) {
     var bookID = req.body.idBooking;
     var data = [session.user_id, bookID];
-    var cQuery = "INSERT INTO buchungen (id_kaeufer, id_anz) VALUES (?, ?);";
+    var cQuery = "INSERT INTO buchungen (id_kauefer, id_anz) VALUES (?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
-            res.status(201);
-            res.send(" Anzeige wurde gebucht");
+            var buchungID_1 = results.insertId;
+            var reader_1 = session.user_id;
+            var query_1 = "SELECT * FROM anzeige WHERE anzeige.id=?";
+            var data2 = [bookID];
+            database.query(query_1, data2, function (err, results) {
+                if (err == null) {
+                    var writer = results[0].user_id;
+                    var query1 = "INSERT INTO tracking (buchung_id, reader, writer) VALUES (?, ?, ?)";
+                    var data1 = [buchungID_1, reader_1, writer];
+                    database.query(query1, data1, function () {
+                        if (err == null) {
+                            res.status(201);
+                            res.send(" Anzeige wurde gebucht");
+                        }
+                        else {
+                            res.status(500);
+                            res.send("Fehler");
+                        }
+                    });
+                }
+                else {
+                    res.status(500);
+                    res.send("Fehler");
+                }
+            });
         }
         else if (err.errno === 1062) {
             res.status(500);

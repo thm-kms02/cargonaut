@@ -98,6 +98,7 @@ var addCarAttributeModel;
 var addCarAttributeYear;
 var addCarAttributeCargoArea;
 var addCarAttributeWeight;
+var addCarForm;
 var ownBookingsBTN;
 var buttonFeedback;
 ///OfferDetailPage
@@ -182,6 +183,7 @@ $(function () {
     signupBtn = $("#SignupBtn");
     logoutbtn = $("#LogoutBtn");
     profilbtn = $("#profil");
+    addCarForm = $('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
     var fremdnutzerBTN = $(".fremdnutzerBTN");
@@ -195,6 +197,7 @@ $(function () {
     offerArea.hide();
     offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
+    addCarForm.on('click', '.addCar', createCar);
     homeButton.on('click', function () {
         addOfferArea.hide();
         profileArea.hide();
@@ -257,10 +260,11 @@ $(function () {
     saveBTN2F.on('click', function () {
         saveValuesLieferungFilter();
     });
-    addCarBTN.on('click', function () {
-        console.log("Add Car");
-        createCar();
-    });
+    /*
+        addCarBTN.on('click', () => {
+            console.log("Add Car");
+            createCar;
+        });*/
     ownBookingsBTN.on('click', function () {
         renderOwnBookings();
     });
@@ -288,9 +292,9 @@ function getDifUser(event) {
         },
     });
 }
-function testFunction2() {
-    console.log("Hallo");
+function testFunction2(id) {
     event.preventDefault();
+    var idBooking = Number(id);
     $.ajax({
         url: '/buchen',
         type: 'POST',
@@ -412,7 +416,8 @@ function getAll() {
         },
     });
 }
-function createCar() {
+function createCar(event) {
+    event.preventDefault();
     var namein = $('#addCarAttributeModel');
     var yearin = $('#addCarAttributeYear');
     var volin = $('#addCarAttributeCargoArea');
@@ -565,8 +570,8 @@ function filternStandard(anzeigen, minPreis, maxPreis, von, nach, datum) {
     var filteredAnzeigen = [];
     var j = 0;
     for (var i = 0; i < anzeigen.length; i++) {
-        if (anzeigen[i].preis == minPreis || minPreis === 0) {
-            if (anzeigen[i].preis == maxPreis || maxPreis === 0) {
+        if (anzeigen[i].preis >= minPreis || minPreis === 0) {
+            if (anzeigen[i].preis <= maxPreis || maxPreis === 0) {
                 if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
                     if (anzeigen[i].start == von || von === "" || von === undefined) {
                         if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
@@ -802,13 +807,13 @@ function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
         return card;
     }
 }
-function openOwnProfile(result) {
+function openOwnProfile(user, cars) {
     profileArea.empty();
-    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + result.bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + result.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <button onclick=\"renderOwnBookings()\" type=\"button\" class=\"btn niceButton\" data-toggle=\"modal\" data-target=\"#ownBookings\">\n                            Meine Buchungen\n                        </button>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
+    var newProfil = $("  <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                        <input class=\"form-control\" type=\"file\" aria-label=\"\" id=\"uploadProfilePicture\">\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\"></span><span>/5 Sterne</span>\n                        <button onclick=\"renderOwnBookings()\" type=\"button\" class=\"btn niceButton\" data-toggle=\"modal\" data-target=\"#ownBookings\">\n                            Meine Buchungen\n                        </button>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                              <form id=\"addCarForm\">\n                                <thead>\n                                <tr>\n                                    <th>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <div class=\"btn\" id=\"addCarBTN\" >\n                                                            <button form=\"addCarForm\" class=\"addCar\">\n                                                            <img src=\"assets/AddCarBTN.png\" height=\"80\" width=\"80\"\n                                                                 alt=\"Add Car\"/>\n                                                                 </button>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" id=\"addCarAttributeModel\"\n                                                                   type=\"text\" form=\"addCarForm\" placeholder=\"Marke/Modell\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeYear\" type=\"text\"\n                                                                   placeholder=\"Baujahr\"/>\n                                                        </label>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeCargoArea\"\n                                                                   type=\"text\" placeholder=\"Stauraum\"/>\n                                                        </label>\n                                                        <label>\n                                                            <input class=\"form-control\" form=\"addCarForm\" id=\"addCarAttributeWeight\"\n                                                                   type=\"text\" placeholder=\"Gewicht\"/>\n                                                        </label>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </th>\n                                </tr>\n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                               \n                                </tbody>\n                                </form>\n                            </table>\n                        </div>\n\n                    </div>\n                </div>\n            </div>\n        </div>");
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
-    result.forEach(function (car) {
-        var renderCar = $("<tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <img class=\"card-img\" src=" + car.bild_pfad + " alt=\"Card image cap\">\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\">" + car.name2 + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\">" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\">" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\">" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
+    cars.forEach(function (car) {
+        var renderCar = $("<tr>\n                                    <td>\n                                        <div class=\"card\">\n                                            <div class=\"card-body\">\n                                                <div class=\"row\">\n                                                    <div class=\"col-4\">\n                                                        <img class=\"card-img\" src=" + car.bild_pfad + " alt=\"Card image cap\">\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeModel\">" + car.name + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeYear\">" + car.jahr + "</span>\n                                                        </div>\n                                                    </div>\n                                                    <div class=\"col-4\" style=\"text-align: center\">\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeCargoArea\">" + car.volumen + "</span>\n                                                        </div>\n                                                        <div class=\"carAttribute\">\n                                                            <span class=\"carAttributeWeight\">" + car.gewicht + "</span>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </td>\n                                </tr>");
         carsTableBody.append(renderCar);
         profileArea.show();
     });
@@ -998,6 +1003,7 @@ function registry() {
 function renderOfferPage(event) {
     event.preventDefault();
     var id = $(event.currentTarget).data("offer-id");
+    var offerID = id.toString();
     idBooking = id;
     console.log(id);
     companyName = $("#companyName");
@@ -1022,7 +1028,7 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty();
             var pic = $(" <img id=\"offerPicture\" src=" + response.result.bild_pfad + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
-            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" data-offer-id:" + id + " class=\"btn w-75\" onclick=\"testFunction2()\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
+            var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" class=\"btn w-75\" onclick=\"testFunction2(" + offerID + ")\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
             offerPicture.append(pic);
             offerPageButtons.append(buttons);
         },
@@ -1037,7 +1043,7 @@ function getProfil() {
         type: 'GET',
         contentType: 'application/json',
         success: function (response) {
-            openOwnProfile(response.result);
+            openOwnProfile(response.user, response.cars);
         },
         error: function (response) {
             console.log(response);

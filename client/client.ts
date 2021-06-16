@@ -118,6 +118,7 @@ let addCarAttributeModel: JQuery;
 let addCarAttributeYear: JQuery;
 let addCarAttributeCargoArea: JQuery;
 let addCarAttributeWeight: JQuery;
+let addCarForm: JQuery;
 let ownBookingsBTN: JQuery;
 let buttonFeedback: JQuery;
 
@@ -209,6 +210,7 @@ $(() => {
     signupBtn=$("#SignupBtn");
     logoutbtn=$("#LogoutBtn");
     profilbtn=$("#profil");
+    addCarForm =$('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
     let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
@@ -222,16 +224,18 @@ $(() => {
     mainarea.hide();
     offerArea.hide();
 
-    offerControlForm.on('click', '.userProfil', getDifUser)
+    offerControlForm.on('click', '.userProfil', getDifUser);
 
-    offerTableForm.on('click','.testBTN', renderOfferPage)
+    offerTableForm.on('click','.testBTN', renderOfferPage);
+
+    addCarForm.on('click', '.addCar', createCar);
 
     homeButton.on('click', () => {
         addOfferArea.hide();
         profileArea.hide();
         mainarea.show();
         offerArea.hide();
-    })
+    });
 
     trackNumButton.on('click', () => {
         getTrackingRole();
@@ -296,11 +300,11 @@ $(() => {
     saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
     });
-
+/*
     addCarBTN.on('click', () => {
         console.log("Add Car");
-        createCar();
-    });
+        createCar;
+    });*/
 
     ownBookingsBTN.on('click', ()=> {
         renderOwnBookings();
@@ -334,9 +338,9 @@ function getDifUser(event){
     });
 }
 
-function testFunction2() {
-    console.log("Hallo")
+function testFunction2(id: string) {
     event.preventDefault();
+    let idBooking: number= Number(id);
     $.ajax({
         url: '/buchen',
         type: 'POST',
@@ -537,7 +541,8 @@ function getAll() {
     });
 }
 
-function createCar() {
+function createCar(event) {
+    event.preventDefault();
     let namein: JQuery = $('#addCarAttributeModel');
     let yearin: JQuery = $('#addCarAttributeYear');
     let volin: JQuery = $('#addCarAttributeCargoArea');
@@ -698,8 +703,8 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
     let filteredAnzeigen:AnzeigeRender[]=[];
     let j: number = 0;
     for (let i=0;i<anzeigen.length;i++){
-                if (anzeigen[i].preis == minPreis || minPreis === 0 ) {
-                    if (anzeigen[i].preis == maxPreis || maxPreis === 0 ) {
+                if (anzeigen[i].preis >= minPreis || minPreis === 0 ) {
+                    if (anzeigen[i].preis <= maxPreis || maxPreis === 0 ) {
                         if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
                             if (anzeigen[i].start == von || von === "" || von === undefined) {
                                 if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
@@ -1007,7 +1012,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 }
 
-function openOwnProfile(result: any) {
+function openOwnProfile(user:User, cars: Fahrzeug[]) {
 profileArea.empty();
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
@@ -1016,12 +1021,12 @@ let newProfil: JQuery = $(`  <div class="row">
                     <div class="col-3">
                         <!--Profilbildbereich-->
                         <div>
-                            <img id="profilePicture" src=${result.bild} alt="ProfilePicture">
+                            <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
                     <div class="col-9">
-                        <h1 id="profileName">${result.name}</h1>
+                        <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
                         <button onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
@@ -1029,6 +1034,7 @@ let newProfil: JQuery = $(`  <div class="row">
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
+                              <form id="addCarForm">
                                 <thead>
                                 <tr>
                                     <th>
@@ -1036,28 +1042,30 @@ let newProfil: JQuery = $(`  <div class="row">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <div class="btn" id="addCarBTN">
+                                                        <div class="btn" id="addCarBTN" >
+                                                            <button form="addCarForm" class="addCar">
                                                             <img src="assets/AddCarBTN.png" height="80" width="80"
                                                                  alt="Add Car"/>
+                                                                 </button>
                                                         </div>
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <label>
                                                             <input class="form-control" id="addCarAttributeModel"
-                                                                   type="text" placeholder="Marke/Modell"/>
+                                                                   type="text" form="addCarForm" placeholder="Marke/Modell"/>
                                                         </label>
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeYear" type="text"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeYear" type="text"
                                                                    placeholder="Baujahr"/>
                                                         </label>
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeCargoArea"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeCargoArea"
                                                                    type="text" placeholder="Stauraum"/>
                                                         </label>
                                                         <label>
-                                                            <input class="form-control" id="addCarAttributeWeight"
+                                                            <input class="form-control" form="addCarForm" id="addCarAttributeWeight"
                                                                    type="text" placeholder="Gewicht"/>
                                                         </label>
                                                     </div>
@@ -1071,6 +1079,7 @@ let newProfil: JQuery = $(`  <div class="row">
                                 <!--Hier wird die Liste reingerendert-->
                                
                                 </tbody>
+                                </form>
                             </table>
                         </div>
 
@@ -1081,7 +1090,7 @@ let newProfil: JQuery = $(`  <div class="row">
 
 profileArea.append(newProfil);
 let carsTableBody: JQuery = $('#carsTableBody');
-result.forEach((car) => {
+cars.forEach((car) => {
     let renderCar: JQuery = $(`<tr>
                                     <td>
                                         <div class="card">
@@ -1092,7 +1101,7 @@ result.forEach((car) => {
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeModel">${car.name2}</span>
+                                                            <span class="carAttributeModel">${car.name}</span>
                                                         </div>
                                                         <div class="carAttribute">
                                                             <span class="carAttributeYear">${car.jahr}</span>
@@ -1320,6 +1329,7 @@ function registry(){
 function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
+    const offerID: string = id.toString();
     idBooking = id;
     console.log(id);
     companyName = $("#companyName");
@@ -1353,7 +1363,7 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
-                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75" onclick="testFunction2()"
+                            <button id="bookBTN" class="btn w-75" onclick="testFunction2(${offerID})"
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);
@@ -1371,7 +1381,7 @@ function getProfil(){
         type: 'GET',
         contentType: 'application/json',
         success: (response) => {
-            openOwnProfile(response.result);
+            openOwnProfile(response.user, response.cars);
         },
         error: (response) => {
             console.log(response);
