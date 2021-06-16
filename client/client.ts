@@ -153,6 +153,7 @@ let ladehoeheF: number;
 let offerslist: Anzeige[];
 let id_empfaenger: number;
 let idBooking: number;
+let isLoggedIn2: boolean = false;
 
 
 
@@ -216,13 +217,7 @@ $(() => {
     let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
 
     getAll();
-    logoutbtn.hide();
-    profilbtn.hide();
-    trackbutton.hide();
-    addOfferArea.hide();
-    profileArea.hide();
-    mainarea.hide();
-    offerArea.hide();
+    renderAreas();
 
     offerControlForm.on('click', '.userProfil', getDifUser);
 
@@ -231,10 +226,7 @@ $(() => {
     addCarForm.on('click', '.addCar', createCar);
 
     homeButton.on('click', () => {
-        addOfferArea.hide();
-        profileArea.hide();
-        mainarea.show();
-        offerArea.hide();
+        renderAreas();
     });
 
     trackNumButton.on('click', () => {
@@ -314,6 +306,42 @@ $(() => {
         postBewertung();
     });
 });
+
+function renderAreas() {
+    console.log("Nutzer angemeldet: " + isLoggedIn2);
+    if(isLoggedIn2 == true) {
+        logoutbtn.show();
+        profilbtn.show();
+        trackbutton.show();
+        addOfferArea.hide();
+        profileArea.hide();
+        mainarea.show();
+        offerArea.hide();
+        loginArea.hide();
+        registryBTN.hide();
+    } else{
+        mainarea.hide();
+        loginArea.show();
+        addOfferArea.hide();
+        profileArea.hide();
+        offerArea.hide();
+        logoutbtn.hide();
+        registryBTN.show();
+    }
+}
+
+async function isLoggedIn() {
+    $.ajax({
+        url: '/isLoggedIn',
+        type: 'GET',
+        success: (response) => {
+            isLoggedIn2 = true;
+        },
+        error: jqXHR => {
+            isLoggedIn2 =  false;
+        }
+    });
+}
 
 function testFunction() {
     id_empfaenger = $(event.currentTarget).data("user-id");

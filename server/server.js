@@ -489,6 +489,15 @@ app.post('/kasse', function (req, res) {
         }
     });
 });
+app.get('/isLoggedIn', function (req, res) {
+    console.log(session.user_id);
+    if (session.user_id == null) {
+        res.sendStatus(500);
+    }
+    else {
+        res.sendStatus(200);
+    }
+});
 app.post('/buchen', function (req, res) {
     var bookID = req.body.idBooking;
     var data = [session.user_id, bookID];

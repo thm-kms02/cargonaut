@@ -511,6 +511,15 @@ app.post('/kasse', (req: Request, res: Response) => {
     });
 });
 
+app.get('/isLoggedIn', (req: Request, res: Response) => {
+    console.log(session.user_id);
+    if(session.user_id == null) {
+        res.sendStatus(500);
+    } else {
+        res.sendStatus(200);
+    }
+})
+
 app.post('/buchen', (req: Request, res: Response) => {
     const bookID: number = req.body.idBooking;
     const data = [session.user_id, bookID]
