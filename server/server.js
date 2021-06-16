@@ -194,7 +194,7 @@ app.get('/read/offer/:id', function (req, res) {
 app.get('/difUser/:id', function (req, res) {
     var user;
     var carsList = [];
-    var query = "SELECT * FROM user WHERE user_id=?";
+    var query = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,AVG(bewertung.bewertung) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
     database.query(query, [req.params.id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -285,7 +285,7 @@ app.post('/anzeige/filter', function (req, res) {
 });
 // routs for get user and update user
 app.get('/user', function (req, res) {
-    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.* FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id WHERE user.user_id=?";
+    var query = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.user_id  WHERE user.user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -301,7 +301,8 @@ app.get('/user', function (req, res) {
             });
             res.status(200).send({
                 "user": user,
-                "cars": cars_1
+                "cars": cars_1,
+                "bewertung": rows[0].avg
             });
         }
     });
@@ -488,6 +489,15 @@ app.post('/kasse', function (req, res) {
             res.sendStatus(500);
         }
     });
+});
+app.get('/isLoggedIn', function (req, res) {
+    console.log(session.user_id);
+    if (session.user_id == null) {
+        res.sendStatus(500);
+    }
+    else {
+        res.sendStatus(200);
+    }
 });
 app.post('/buchen', function (req, res) {
     var bookID = req.body.idBooking;
