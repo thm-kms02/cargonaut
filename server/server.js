@@ -180,14 +180,29 @@ app.post('/create/anzeige', function (req, res) {
     });
 });
 app.get('/read/offer/:id', function (req, res) {
-    var query = 'SELECT * FROM anzeige, user, fahrzeug WHERE anzeige.id = ? AND anzeige.user_id = user.user_id AND anzeige.id_fahrzeug = fahrzeug.id';
+    var query = 'SELECT * FROM anzeige, user WHERE anzeige.id = ? AND anzeige.user_id = user.user_id';
     var data = [req.params.id];
     database.query(query, data, function (err, results) {
         if (err) {
             res.status(500).send({ err: err });
         }
         else {
-            res.status(200).send({ "result": results[0] });
+            if (results[0].id_fahrzeug === null || results[0].id_fahrzeug === undefined) {
+                res.status(200).send({ "result": results[0] });
+            }
+            else {
+                var res1_1 = results[0];
+                var query1 = 'SELECT * FROM fahrzeug WHERE fahrzeug.id=?';
+                var data1 = [results[0].id_fahrzeug];
+                database.query(query1, data1, function (err, results) {
+                    if (err) {
+                        res.status(500).send({ err: err });
+                    }
+                    else {
+                        res.status(200).send({ "result": res1_1, "car": results[0] });
+                    }
+                });
+            }
         }
     });
 });

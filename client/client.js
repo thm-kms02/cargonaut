@@ -1117,7 +1117,7 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty();
             var pic;
-            if (response.result.bild_pfad === null) {
+            if (response.car.bild_pfad === null) {
                 pic = $(" <img id=\"offerPicture\" src=\"/bilder/profil_default.png\" style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
             }
             else {

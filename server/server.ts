@@ -193,13 +193,27 @@ app.post('/create/anzeige', (req: Request, res: Response) => {
 });
 
 app.get('/read/offer/:id', (req: Request, res: Response) => {
-    const query = 'SELECT * FROM anzeige, user, fahrzeug WHERE anzeige.id = ? AND anzeige.user_id = user.user_id AND anzeige.id_fahrzeug = fahrzeug.id';
+    const query = 'SELECT * FROM anzeige, user WHERE anzeige.id = ? AND anzeige.user_id = user.user_id';
     const data = [req.params.id];
     database.query(query, data, (err: MysqlError, results: any) => {
         if(err) {
             res.status(500).send({err});
         } else {
-            res.status(200).send({"result":results[0]});
+            if(results[0].id_fahrzeug===null||results[0].id_fahrzeug===undefined){
+                res.status(200).send({"result":results[0]});
+            } else {
+                const res1 = results[0];
+                const query1: string ='SELECT * FROM fahrzeug WHERE fahrzeug.id=?';
+                const data1 = [results[0].id_fahrzeug];
+                database.query(query1, data1, (err: MysqlError, results:any) => {
+                    if(err) {
+                        res.status(500).send({err});
+                    } else {
+                    res.status(200).send({"result": res1, "car":results[0]});
+                    }
+                });
+            }
+
         }
     });
 });
