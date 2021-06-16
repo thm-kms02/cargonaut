@@ -1093,7 +1093,7 @@ let newProfil: JQuery = $(`  <div class="row">
                        <!-------------------- <button  onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
                         </button>-------------->
-                        <div style="margin-top: 10%; margin-left: 30%">
+                        <div style="margin-top: 2%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
                               
@@ -1104,11 +1104,8 @@ let newProfil: JQuery = $(`  <div class="row">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-4">
-                                                        <div class="btn" id="addCarBTN" >
-                                                            <button form="addCarForm" class="addCar" onclick="createCar()">
-                                                            <img src="assets/AddCarBTN.png" height="80" width="80"
-                                                                 alt="Add Car"/>
-                                                                 </button>
+                                                        <div class="btn" id="addCarBTN" >                                                  
+                                                            <a class="btn btn-light action-button"  role="button" form="addCarForm" onclick="createCar()" style="margin-top:20% ;margin-left: 15% ; background-color: #276678; color: white">Anlegen</a>
                                                         </div>
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
@@ -1178,11 +1175,11 @@ let newProfil: JQuery = $(`  <div class="row">
                                                             </div>
                                                             <div class="col-1">
                                                                 <button class="btn btn-outline-dark btn-sm delete-user-button" data-car-id="${car.id}" onclick="deleteCar(${car.id})">
-                                                                  <!----  <i class="fa fa-trash" aria-hidden="true"></i>---->
-                                                                   <div class="w1-padding w1-xlarge w3-text-red">           
+                                                                  <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                 <!--  <div class="w1-padding w1-xlarge w3-text-red">           
                                                                          <i class="material-icons">delete</i>
                                                                      </div>
-                                                                                  
+                                                                              -->    
                                                                 </button>
                                                             </div>
                                                         </div>
