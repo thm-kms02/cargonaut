@@ -571,6 +571,7 @@ function getBewertung(id: number) {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
+            console.log(response)
             renderBewertungen(response);
         },
         error: (response) => {
@@ -1473,6 +1474,7 @@ function getProfil(){
         contentType: 'application/json',
         success: (response) => {
             openOwnProfile(response.user, response.cars, response.bewertung);
+            getBewertung(-1);
         },
         error: (response) => {
             console.log(response);

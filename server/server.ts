@@ -580,9 +580,14 @@ app.post('/buchen', (req: Request, res: Response) => {
 // routs for get rating and post rating
 
 app.get('/bewertung/get/:id', (req:Request, res:Response)=>{
+    let id: number = Number(req.params.id);
+    if(id<0) {
+        id = session.user_id;
+    }
+
     let  cQuery = "SELECT * from bewertung where id_empfaenger =  ?";
 
-    database.query(cQuery,[req.params.id], (err, results: any) => {
+    database.query(cQuery,[id], (err, results: any) => {
         if (err === null) {
             res.status(200);
             res.send(results);

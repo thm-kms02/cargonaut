@@ -564,8 +564,12 @@ app.post('/buchen', function (req, res) {
 });
 // routs for get rating and post rating
 app.get('/bewertung/get/:id', function (req, res) {
+    var id = Number(req.params.id);
+    if (id < 0) {
+        id = session.user_id;
+    }
     var cQuery = "SELECT * from bewertung where id_empfaenger =  ?";
-    database.query(cQuery, [req.params.id], function (err, results) {
+    database.query(cQuery, [id], function (err, results) {
         if (err === null) {
             res.status(200);
             res.send(results);
