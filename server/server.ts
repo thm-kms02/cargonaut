@@ -68,8 +68,9 @@ app.post('/login', (req: express.Request, res: express.Response) => {
     let email: string = req.body.email;
     let passwort: string = req.body.passwort;
 
-    const query: string = 'SELECT user_id, passwort from user where email = email'
-    database.query(query, (err: MysqlError, rows: any) => {
+    const query: string = 'SELECT user_id, passwort FROM user WHERE user.email = ?'
+    const data = [email];
+    database.query(query, data, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Diese Emailadresse ist nicht registriert',
@@ -512,12 +513,33 @@ app.post('/kasse', (req: Request, res: Response) => {
 
 app.post('/buchen', (req: Request, res: Response) => {
     const bookID: number = req.body.idBooking;
-    let data = [session.user_id, bookID]
-    let cQuery: string = "INSERT INTO buchungen (id_kaeufer, id_anz) VALUES (?, ?);";
+    const data = [session.user_id, bookID]
+    const cQuery: string = "INSERT INTO buchungen (id_kauefer, id_anz) VALUES (?, ?);";
     database.query(cQuery, data, (err, results: any) => {
         if (err === null) {
-            res.status(201);
-            res.send(" Anzeige wurde gebucht");
+            const buchungID: number = results.insertId;
+            const reader: number = session.user_id;
+            const query: string="SELECT * FROM anzeige WHERE anzeige.id=?";
+            const data2 = [bookID];
+            database.query(query, data2, (err: MysqlError, results: any) => {
+                if(err == null) {
+                    const writer: number = results[0].user_id;
+                    const query1: string= "INSERT INTO tracking (buchung_id, reader, writer) VALUES (?, ?, ?)";
+                    const data1 = [buchungID, reader, writer];
+                    database.query(query1, data1, () => {
+                        if (err==null) {
+                            res.status(201);
+                            res.send(" Anzeige wurde gebucht");
+                        } else {
+                            res.status(500);
+                            res.send("Fehler");
+                        }
+                    });
+                } else {
+                    res.status(500);
+                    res.send("Fehler");
+                }
+            });
         } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");

@@ -58,8 +58,9 @@ app.post('/create/account', function (req, res) {
 app.post('/login', function (req, res) {
     var email = req.body.email;
     var passwort = req.body.passwort;
-    var query = 'SELECT user_id, passwort from user where email = email';
-    database.query(query, function (err, rows) {
+    var query = 'SELECT user_id, passwort FROM user WHERE user.email = ?';
+    var data = [email];
+    database.query(query, data, function (err, rows) {
         if (err) {
             res.status(500).send({
                 message: 'Diese Emailadresse ist nicht registriert',
@@ -491,11 +492,34 @@ app.post('/kasse', function (req, res) {
 app.post('/buchen', function (req, res) {
     var bookID = req.body.idBooking;
     var data = [session.user_id, bookID];
-    var cQuery = "INSERT INTO buchungen (id_kaeufer, id_anz) VALUES (?, ?);";
+    var cQuery = "INSERT INTO buchungen (id_kauefer, id_anz) VALUES (?, ?);";
     database.query(cQuery, data, function (err, results) {
         if (err === null) {
-            res.status(201);
-            res.send(" Anzeige wurde gebucht");
+            var buchungID_1 = results.insertId;
+            var reader_1 = session.user_id;
+            var query_1 = "SELECT * FROM anzeige WHERE anzeige.id=?";
+            var data2 = [bookID];
+            database.query(query_1, data2, function (err, results) {
+                if (err == null) {
+                    var writer = results[0].user_id;
+                    var query1 = "INSERT INTO tracking (buchung_id, reader, writer) VALUES (?, ?, ?)";
+                    var data1 = [buchungID_1, reader_1, writer];
+                    database.query(query1, data1, function () {
+                        if (err == null) {
+                            res.status(201);
+                            res.send(" Anzeige wurde gebucht");
+                        }
+                        else {
+                            res.status(500);
+                            res.send("Fehler");
+                        }
+                    });
+                }
+                else {
+                    res.status(500);
+                    res.send("Fehler");
+                }
+            });
         }
         else if (err.errno === 1062) {
             res.status(500);

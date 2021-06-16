@@ -338,9 +338,9 @@ function getDifUser(event){
     });
 }
 
-function testFunction2() {
-    console.log("Hallo")
+function testFunction2(id: string) {
     event.preventDefault();
+    let idBooking: number= Number(id);
     $.ajax({
         url: '/buchen',
         type: 'POST',
@@ -1012,7 +1012,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 }
 
-function openOwnProfile(result: any[]) {
+function openOwnProfile(user:User, cars: Fahrzeug[]) {
 profileArea.empty();
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
@@ -1021,12 +1021,12 @@ let newProfil: JQuery = $(`  <div class="row">
                     <div class="col-3">
                         <!--Profilbildbereich-->
                         <div>
-                            <img id="profilePicture" src=${result[0].bild} alt="ProfilePicture">
+                            <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
                         <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
                     </div>
                     <div class="col-9">
-                        <h1 id="profileName">${result[0].name3}</h1>
+                        <h1 id="profileName">${user.name}</h1>
                         <span id="profileRating"></span><span>/5 Sterne</span>
                         <button onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
@@ -1090,7 +1090,7 @@ let newProfil: JQuery = $(`  <div class="row">
 
 profileArea.append(newProfil);
 let carsTableBody: JQuery = $('#carsTableBody');
-result.forEach((car) => {
+cars.forEach((car) => {
     let renderCar: JQuery = $(`<tr>
                                     <td>
                                         <div class="card">
@@ -1101,7 +1101,7 @@ result.forEach((car) => {
                                                     </div>
                                                     <div class="col-4" style="text-align: center">
                                                         <div class="carAttribute">
-                                                            <span class="carAttributeModel">${car.name2}</span>
+                                                            <span class="carAttributeModel">${car.name}</span>
                                                         </div>
                                                         <div class="carAttribute">
                                                             <span class="carAttributeYear">${car.jahr}</span>
@@ -1329,6 +1329,7 @@ function registry(){
 function renderOfferPage(event) {
     event.preventDefault();
     const id: number = $(event.currentTarget).data("offer-id");
+    const offerID: string = id.toString();
     idBooking = id;
     console.log(id);
     companyName = $("#companyName");
@@ -1362,7 +1363,7 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
                             <br>
-                            <button id="bookBTN" data-offer-id:`+id+` class="btn w-75" onclick="testFunction2()"
+                            <button id="bookBTN" class="btn w-75" onclick="testFunction2(${offerID})"
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);
@@ -1380,7 +1381,7 @@ function getProfil(){
         type: 'GET',
         contentType: 'application/json',
         success: (response) => {
-            renderProfil(response.user, response.cars);
+            openOwnProfile(response.user, response.cars);
         },
         error: (response) => {
             console.log(response);
