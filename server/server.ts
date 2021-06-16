@@ -579,14 +579,13 @@ app.post('/buchen', (req: Request, res: Response) => {
 
 // routs for get rating and post rating
 
-app.get('/bewertung/get', (req:Request, res:Response)=>{
-    let  cQuery = "SELECT *,user.name from bewertung";
-    let  bewertung: Bewertung[]=[];
-    database.query(cQuery, (err, results: any) => {
+app.get('/bewertung/get/:id', (req:Request, res:Response)=>{
+    let  cQuery = "SELECT * from bewertung where id_empfaenger =  ?";
+
+    database.query(cQuery,[req.params.id], (err, results: any) => {
         if (err === null) {
             res.status(200);
-            bewertung =results;
-            res.send(bewertung);
+            res.send(results);
         }
         else if (err.errno === 1062) {
             res.status(500);
