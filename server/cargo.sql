@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Jun 2021 um 14:22
+-- Erstellungszeit: 16. Jun 2021 um 16:36
 -- Server-Version: 10.4.14-MariaDB
 -- PHP-Version: 7.4.9
 
@@ -44,10 +44,10 @@ CREATE TABLE `anzeige` (
 --
 
 INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `ziel`, `beschreibung`, `id_fahrzeug`) VALUES
-(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', 1),
+(1, 1, 0, '2021-06-23', 300, 'Gießen', 'Frankfurt', 'Ich befördere Menschen seit 10 Jahren und habe nie einen Unfall gemacht.', NULL),
 (2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
 (3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
-(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', 2);
+(4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', NULL);
 
 -- --------------------------------------------------------
 
@@ -68,9 +68,9 @@ CREATE TABLE `bewertung` (
 --
 
 INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `kommentar`) VALUES
-(13, 2, 1, 4, 'Die Fahrt war super :D'),
-(14, 3, 1, 3, 'Tolle Fahrt :)'),
-(15, 1, 4, 5, 'Großartiger Service');
+(17, 2, 1, 4, 'Top gefahren'),
+(18, 3, 1, 3, 'Zu schnell gefahren'),
+(19, 2, 1, 1, 'ZU langsam !!!');
 
 -- --------------------------------------------------------
 
@@ -106,8 +106,6 @@ CREATE TABLE `fahrzeug` (
 --
 
 INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `bild_pfad`) VALUES
-(1, 1, 'VW Arteon', 2018, 300, 2000, 'bilder/img.png'),
-(2, 1, 'VW Sharan', 2012, 500, 2300, 'bilder/img.png'),
 (3, 2, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
 (6, 1, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
 (7, 1, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
@@ -201,12 +199,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `passwort`, `geburtsdatum`, `bild`) VALUES
-(1, 'root@gmail.com', 'Test User', 'root', '1994-12-05', 'bilder/profil_default.png'),
+(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder/profil_default.png'),
 (2, 'fast-Driver@gmail.com', 'Thomas Müller', 'Blanco99', '1990-06-01', 'bilder/profil_default.png'),
 (3, 'Bandigo@gmail.com', 'Bernd Wender', 'bernd', '1990-09-09', 'bilder/profil_default.png'),
 (4, 'hyper@gmail.com', 'Lukas Hohl', 'lukas', '1994-12-19', 'bilder/profil_default.png'),
 (5, 'onur@gmail.com', 'Onur Dede', 'onur', '1994-10-19', 'bilder/profil_default.png'),
-(8, 'colin.kristen@mni.thm.de', 'Colin Kristen', 'colin', '1999-05-26', NULL);
+(8, 'colin.kristen@mni.thm.de', 'Colin Kristen', 'colin', '1999-05-26', 'bilder/profil_default.png');
 
 --
 -- Indizes der exportierten Tabellen
@@ -292,13 +290,13 @@ ALTER TABLE `anzeige`
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
@@ -333,7 +331,7 @@ ALTER TABLE `user`
 --
 ALTER TABLE `anzeige`
   ADD CONSTRAINT `anzeige_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `anzeige_ibfk_2` FOREIGN KEY (`id_fahrzeug`) REFERENCES `fahrzeug` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 --
 -- Constraints der Tabelle `bewertung`

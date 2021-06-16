@@ -1040,7 +1040,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
                         <h5 class="card-title">${ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
-                                <img src=${anz.bild_pfad} style="width: 200px; height: auto" alt="Examplepicture">
+                                <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
                             </div>
                             <div class="col-5">
                                 <p class="textListComponent"><span>Von: ${anz.start}</span></p>
@@ -1419,14 +1419,8 @@ function renderOfferPage(event) {
             offerPicture.empty();
             offerPageButtons.empty()
             let pic: JQuery;
-            if(response.car===undefined) {
-                pic= $(` <img id="offerPicture" src="/bilder/profil_default.png" style="margin-top: 5%"
+            pic= $(` <img id="offerPicture" src=${response.result.bild} style="margin-top: 5%"
                                  alt="ExamplePicture">`);
-            } else {
-                pic= $(` <img id="offerPicture" src=${response.car.bild_pfad} style="margin-top: 5%"
-                                 alt="ExamplePicture">`);
-            }
-
 
             let buttons: JQuery = $(`<button data-user-id="${response.result.user_id}" class="btn w-75 userProfil"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
