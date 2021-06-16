@@ -128,6 +128,9 @@ let renderComments: JQuery;
 let offerPageButtons: JQuery;
 let offerControlForm: JQuery;
 
+//Modals
+let modalPersonenbefoerderung: JQuery
+
 
 //Global Variables:
 let person: number;
@@ -275,6 +278,7 @@ $(() => {
         getAll();
     });
     saveBTN.on('click', () => {
+
         saveValuesTaxi();
     });
     saveBTN2.on('click', () => {
@@ -366,7 +370,10 @@ async function isLoggedIn() {
 
 function testFunction() {
     id_empfaenger = $(event.currentTarget).data("user-id");
-    console.log(id_empfaenger);
+    let modal = $("#ownBookings");
+    let modalBackdrop: JQuery = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.hide();
 }
 
 function getDifUser(event){
@@ -705,12 +712,20 @@ function saveValuesTaxi() {
     nach = String(inputNach.val()).trim();
     fahrzeugID = Number($('.custom-select').val());
     setDate = String(inputDate.val()).trim();
+    modalPersonenbefoerderung = $("#personenbefoerderungModal");
+    let modalBackdrop: JQuery = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modalPersonenbefoerderung.modal("hide");
 }
 function saveValuesTaxiFilter() {
     personF = Number(inputPersonenzahlF.val());
     vonF = String(inputVonF.val()).trim();
     nachF = String(inputNachF.val()).trim();
     setDateF = String(inputDateF.val()).trim();
+    let modal = $("#personenbefoerderungModalF");
+    let modalBackdrop: JQuery = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function saveValuesLieferung() {
     gesamtgewichtIN = Number(inputGesamtgewicht.val());
@@ -720,6 +735,10 @@ function saveValuesLieferung() {
     ladeflaecheIN = Number(inputLadeflaeche.val());
     ladehoeheIN = Number(inputLadehoehe.val());
     fahrzeugID2 = Number($('.custom-select2').val());
+    let modal = $("#transportModal");
+    let modalBackdrop: JQuery = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function saveValuesLieferungFilter() {
     gesamtgewichtF = Number(inputGesamtgewichtF.val())
@@ -728,6 +747,10 @@ function saveValuesLieferungFilter() {
     nach2F = String(inputNach2F.val()).trim();
     ladeflaecheF = Number(inputLadeflaecheF.val());
     ladehoeheF = Number(inputLadehoeheF.val());
+    let modal = $("#transportModalF");
+    let modalBackdrop: JQuery = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function getFilter() {
     let radOffer : JQuery = $('#filterForOfferRadio:checked');
@@ -1399,10 +1422,14 @@ function postBewertung(){
             kommentar
         }),
         success: (response) => {
-            console.log("Bewertet")
+            console.log("Bewertet");
+
         },
         error: (response) => {
-            alert(response.responseJSON.message)
+            let modal = $("#feedback");
+            let modalBackdrop: JQuery = $(".modal-backdrop");
+            modalBackdrop.hide();
+            modal.hide();
         },
     });
 }

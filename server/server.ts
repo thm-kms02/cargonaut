@@ -315,7 +315,7 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 app.get('/user', (req: Request, res: Response) => {
     let user : User;
     let carsList: Fahrzeug[] = [];
-    const query: string = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,AVG(bewertung.bewertung) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
+    const query: string = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,ROUND(AVG(bewertung.bewertung), 1) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({

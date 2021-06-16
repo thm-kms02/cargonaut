@@ -142,6 +142,8 @@ var renderComments;
 ///OfferDetailPage
 var offerPageButtons;
 var offerControlForm;
+//Modals
+var modalPersonenbefoerderung;
 //Global Variables:
 var person;
 var personF;
@@ -363,7 +365,10 @@ function isLoggedIn() {
 }
 function testFunction() {
     id_empfaenger = $(event.currentTarget).data("user-id");
-    console.log(id_empfaenger);
+    var modal = $("#ownBookings");
+    var modalBackdrop = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.hide();
 }
 function getDifUser(event) {
     event.preventDefault();
@@ -597,12 +602,20 @@ function saveValuesTaxi() {
     nach = String(inputNach.val()).trim();
     fahrzeugID = Number($('.custom-select').val());
     setDate = String(inputDate.val()).trim();
+    modalPersonenbefoerderung = $("#personenbefoerderungModal");
+    var modalBackdrop = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modalPersonenbefoerderung.modal("hide");
 }
 function saveValuesTaxiFilter() {
     personF = Number(inputPersonenzahlF.val());
     vonF = String(inputVonF.val()).trim();
     nachF = String(inputNachF.val()).trim();
     setDateF = String(inputDateF.val()).trim();
+    var modal = $("#personenbefoerderungModalF");
+    var modalBackdrop = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function saveValuesLieferung() {
     gesamtgewichtIN = Number(inputGesamtgewicht.val());
@@ -612,6 +625,10 @@ function saveValuesLieferung() {
     ladeflaecheIN = Number(inputLadeflaeche.val());
     ladehoeheIN = Number(inputLadehoehe.val());
     fahrzeugID2 = Number($('.custom-select2').val());
+    var modal = $("#transportModal");
+    var modalBackdrop = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function saveValuesLieferungFilter() {
     gesamtgewichtF = Number(inputGesamtgewichtF.val());
@@ -620,6 +637,10 @@ function saveValuesLieferungFilter() {
     nach2F = String(inputNach2F.val()).trim();
     ladeflaecheF = Number(inputLadeflaecheF.val());
     ladehoeheF = Number(inputLadehoeheF.val());
+    var modal = $("#transportModalF");
+    var modalBackdrop = $(".modal-backdrop");
+    modalBackdrop.hide();
+    modal.modal("hide");
 }
 function getFilter() {
     var radOffer = $('#filterForOfferRadio:checked');
@@ -1092,7 +1113,10 @@ function postBewertung() {
             console.log("Bewertet");
         },
         error: function (response) {
-            alert(response.responseJSON.message);
+            var modal = $("#feedback");
+            var modalBackdrop = $(".modal-backdrop");
+            modalBackdrop.hide();
+            modal.hide();
         },
     });
 }

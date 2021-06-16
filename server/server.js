@@ -303,7 +303,7 @@ app.post('/anzeige/filter', function (req, res) {
 app.get('/user', function (req, res) {
     var user;
     var carsList = [];
-    var query = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,AVG(bewertung.bewertung) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
+    var query = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,ROUND(AVG(bewertung.bewertung), 1) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
     database.query(query, [session.user_id], function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -672,4 +672,4 @@ app.get('/average',(req:Request,res:Response)=>{
 
    });
 });
-*/ 
+*/
