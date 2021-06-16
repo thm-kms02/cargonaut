@@ -414,7 +414,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                         <div>
                             <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
-                        <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+           
                     </div>
                    
                     <div class="col-9">
