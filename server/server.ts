@@ -313,26 +313,30 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
 // routs for get user and update user
 
 app.get('/user', (req: Request, res: Response) => {
-
-    const query: string = "SELECT fahrzeug.name AS name2, user.name AS name3, user.*, fahrzeug.*, AVG(bewertung.bewertung) as avg FROM user LEFT JOIN fahrzeug ON user.user_id=fahrzeug.user_id left join bewertung on  user.user_id =bewertung.id_empfaenger WHERE user.user_id=?";
+    let user : User;
+    let carsList: Fahrzeug[] = [];
+    const query: string = "SELECT user.user_id,user.email,user.name,user.passwort,user.geburtsdatum,user.bild,AVG(bewertung.bewertung) as avg FROM user left join bewertung ON user.user_id = bewertung.id_empfaenger WHERE user_id=?";
     database.query(query, [session.user_id], (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
             });
         } else {
-            let user: User = new User(rows[0].email, rows[0].name3, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
-            let cars: Fahrzeug[] =[];
-            rows.forEach((car) => {
-                let newcar: Fahrzeug = new Fahrzeug(car.name2, car.jahr, car.volumen, car.gewicht, car.bild_pfad);
-                cars.push(newcar);
+            const durchschnitt: number = rows[0].avg;
+            user = new User(rows[0].email, rows[0].name, rows[0].passwort, rows[0].geburtsdatum, rows[0].bild);
+            const query1: string = "SELECT * FROM fahrzeug WHERE fahrzeug.user_id=?";
+            const data1 = [session.user_id];
+            database.query(query1, data1,(err: MysqlError, rows:any) => {
+                if(err) {
+                    res.status(500).send({err});
+                } else {
+                    rows.forEach((row) => {
+                        let car: Fahrzeug = new Fahrzeug(row.name, row.jahr, row.volumen, row.gewicht, row.bild_pfad, row.id)
+                        carsList.push(car);
+                    });
+                    res.status(200).send({"user":user, "cars":carsList, "bewertung":durchschnitt});
+                }
             });
-            res.status(200).send({
-                "user":user,
-                "cars":cars,
-                "bewertung":rows[0].avg
-            });
-
         }
     });
 });
