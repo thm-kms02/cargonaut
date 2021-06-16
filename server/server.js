@@ -556,3 +556,53 @@ app.get('/bookings', function (req, res) {
         }
     });
 });
+app.delete('/delete/:dataId', function (req, res) {
+    // Read data from request
+    var dataId = Number(req.params.user_id);
+    var query = 'DELETE FROM cargo WHERE id = ?;';
+    database.query(query, dataId, function (err, result) {
+        if (err) {
+            // Database operation has failed
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            // Check if database response contains at least one entry
+            if (result.affectedRows === 1) {
+                res.status(200).send({
+                    message: "Successfully deleted user ",
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: 'The user to be deleted could not be found',
+                });
+            }
+        }
+    });
+});
+app.get('/average', function (req, res) {
+    var query = 'SELECT AVG(bewertung) FROM cargo WHERE bewertung is not null;';
+    database.query(query, function (err, result) {
+        if (err) {
+            // Database operation has failed
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        }
+        else {
+            // Check if database response contains at least one entry
+            if (result.affectedRows === 1) {
+                res.status(200).send({
+                    message: "Successfully deleted user ",
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: 'The user to be deleted could not be found',
+                });
+            }
+        }
+    });
+});

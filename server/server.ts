@@ -579,3 +579,57 @@ app.get('/bookings', (req:Request, res:Response)=>{
     });
 });
 
+
+
+app.delete('/delete/:dataId', (req: Request, res: Response) => {
+    // Read data from request
+    const dataId: number = Number(req.params.user_id);
+    const query = 'DELETE FROM cargo WHERE id = ?;';
+
+    database.query(query, dataId, (err: MysqlError, result: any) => {
+        if (err) {
+            // Database operation has failed
+            res.status(500).send({
+                message: 'Database request failed: ' + err
+            });
+        } else {
+            // Check if database response contains at least one entry
+            if (result.affectedRows === 1) {
+                res.status(200).send({
+                    message: `Successfully deleted user `,
+                });
+            } else {
+                res.status(400).send({
+                    message: 'The user to be deleted could not be found',
+                });
+            }
+        }
+    });
+});
+
+
+app.get('/average',(req:Request,res:Response)=>{
+
+    let query= 'SELECT AVG(bewertung) FROM cargo WHERE bewertung is not null;'
+
+   database.query(query,(err: MysqlError, result: any)=>{
+       if (err) {
+           // Database operation has failed
+           res.status(500).send({
+               message: 'Database request failed: ' + err
+           });
+       } else {
+           // Check if database response contains at least one entry
+           if (result.affectedRows === 1) {
+               res.status(200).send({
+                   message: `Successfully deleted user `,
+               });
+           } else {
+               res.status(400).send({
+                   message: 'The user to be deleted could not be found',
+               });
+           }
+       }
+
+   });
+});
