@@ -948,7 +948,7 @@ function addAnzeige() {
 
         }),
         success: (response) => {
-            console.log("sucess");
+            alert("Ihre Anzeige wurde erstellt!");
         },
         error: (err) => {
             console.log(err);

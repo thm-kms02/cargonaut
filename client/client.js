@@ -833,7 +833,7 @@ function addAnzeige() {
             "ladehoehe": ladehoehe
         }),
         success: function (response) {
-            console.log("sucess");
+            alert("Ihre Anzeige wurde erstellt!");
         },
         error: function (err) {
             console.log(err);
