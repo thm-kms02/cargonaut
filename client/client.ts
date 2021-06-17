@@ -1294,8 +1294,9 @@ let newProfil: JQuery = $(`  <div class="row">
                                             </td>
                                         </tr>`);
             carsTableBody.append(renderCar);
-            profileArea.show();
+
         });
+    profileArea.show();
 }
 
 function getFahrzeugDropTaxi() {
@@ -1391,7 +1392,7 @@ function login(){
             btn.show();
         },
         error: (response) => {
-           alert(response.responseJSON.message)
+           alert("Account wurde erstellt");
         },
     });
 
