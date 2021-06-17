@@ -623,6 +623,23 @@ app.get('/bookings', function (req, res) {
         }
     });
 });
+app.get('/difBookings', function (req, res) {
+    var cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum, buchungen.id AS trackID from buchungen  LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE anzeige.user_id = ? ";
+    database.query(cQuery, [session.user_id], function (err, results) {
+        if (err === null) {
+            res.status(200);
+            res.send(results);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        }
+        else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
 app.delete('/delete/:dataId', function (req, res) {
     // Read data from request
     var dataId = Number(req.params.user_id);
