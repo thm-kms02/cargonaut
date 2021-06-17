@@ -171,6 +171,7 @@ var offerslist;
 var id_empfaenger;
 var idBooking;
 var isLoggedIn2 = false;
+var btn;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -229,6 +230,7 @@ $(function () {
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
     var fremdnutzerBTN = $(".fremdnutzerBTN");
+    btn = $('#difbuchung');
     getAll();
     mainarea.hide();
     loginArea.show();
@@ -241,6 +243,7 @@ $(function () {
     buchungbtn.hide();
     trackbutton.hide();
     profilbtn.hide();
+    btn.hide();
     offerControlForm.on('click', '.userProfil', getDifUser);
     offerTableForm.on('click', '.testBTN', renderOfferPage);
     addCarForm.on('click', '.addCar', createCar);
@@ -1060,6 +1063,7 @@ function login() {
     event.preventDefault();
     var email = String($('#inputLoginEmail').val()).trim().toLowerCase();
     var passwort = String($('#inputLoginPassword').val()).trim();
+    var btn = $('#difbuchung');
     $.ajax({
         url: '/login',
         type: 'POST',
@@ -1077,6 +1081,7 @@ function login() {
             logoutbtn.show();
             profilbtn.show();
             buchungbtn.show();
+            btn.show();
         },
         error: function (response) {
             alert(response.responseJSON.message);
@@ -1095,6 +1100,10 @@ function logout() {
             loginArea.show();
             trackbutton.hide();
             profilbtn.hide();
+            btn.hide();
+            mainarea.hide();
+            profileArea.hide();
+            addOfferArea.hide();
             location.reload();
         },
     });
