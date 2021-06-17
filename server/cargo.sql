@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Jun 2021 um 16:36
--- Server-Version: 10.4.14-MariaDB
--- PHP-Version: 7.4.9
+-- Erstellungszeit: 17. Jun 2021 um 10:58
+-- Server-Version: 10.4.19-MariaDB
+-- PHP-Version: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -48,7 +48,6 @@ INSERT INTO `anzeige` (`id`, `user_id`, `ang_ges`, `datum`, `preis`, `start`, `z
 (2, 2, 0, '2021-06-16', 100, 'Hamburg', 'Berlin', 'Es wird eine angenehme Fahrt', 3),
 (3, 5, 1, '2021-06-24', 150, 'Aßlar', 'Frankfurt', 'Die Fahrt wird mit mir nicht Langweilig! ', NULL),
 (4, 1, 0, '2021-06-30', 120, 'Lenste', 'Wetzlar', 'Mit mir kommt die Lieferung sicher an', NULL);
-(6, 4, 0, '2021-07-1', 400, 'Marburg', 'Fulda', 'willst du spass beim fahren haben , dann bist du hier richtig', NULL);
 
 -- --------------------------------------------------------
 
@@ -71,10 +70,8 @@ CREATE TABLE `bewertung` (
 INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `kommentar`) VALUES
 (17, 2, 1, 4, 'Top gefahren'),
 (18, 3, 1, 3, 'Zu schnell gefahren'),
-(19, 2, 1, 1, 'ZU langsam !!!');
-(20, 3, 2, 5, 'Die Fahrt war wirklich angenehm !!!');
-(21, 2, 3, 5, 'super fahrt!!!');
-(1, 4, 2, 2, 'Rauchen und telefonieren während der Fahrt!!!');
+(19, 2, 1, 1, 'ZU langsam !!!'),
+(20, 3, 5, 5, 'gut');
 
 -- --------------------------------------------------------
 
@@ -88,6 +85,14 @@ CREATE TABLE `buchungen` (
   `id_anz` int(11) NOT NULL,
   `datum` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `buchungen`
+--
+
+INSERT INTO `buchungen` (`id`, `id_kauefer`, `id_anz`, `datum`) VALUES
+(29, 1, 2, '2021-06-17 01:00:23'),
+(30, 2, 1, '2021-06-17 08:47:00');
 
 -- --------------------------------------------------------
 
@@ -113,10 +118,6 @@ INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `
 (3, 2, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
 (6, 1, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
 (7, 1, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
-(8, 3, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png');
-(9, 4, 'opel corsa', 2009, 200, 230, 'bilder/img.png');
-(10, 5, 'WV-GOLF', 2019, 202, 3000, 'bilder/img.png');
-(1, 6, 'Tesla', 2021, 230, 2020, 'bilder/img.png');
 
 -- --------------------------------------------------------
 
@@ -137,10 +138,6 @@ CREATE TABLE `lieferung` (
 
 INSERT INTO `lieferung` (`anz_ID`, `ladeflaeche`, `ladungsgewicht`, `ladehoehe`) VALUES
 (4, 3, 30, 120);
-(3, 6, 70, 160);
-(5, 8, 29, 110);
-(6, 10, 90, 190);
-(7, 11, 50, 200);
 
 -- --------------------------------------------------------
 
@@ -175,9 +172,6 @@ INSERT INTO `personenbefoerderung` (`anz_ID`, `personen`) VALUES
 (1, 4),
 (2, 2),
 (3, 1);
-(4, 5);
-(5, 7);
-(6, 8);
 
 -- --------------------------------------------------------
 
@@ -193,6 +187,13 @@ CREATE TABLE `tracking` (
   `writer` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `tracking`
+--
+
+INSERT INTO `tracking` (`id`, `lat`, `lng`, `reader`, `writer`, `date`) VALUES
+(29, 0, 0, 1, 2, '2021-06-16 23:00:23');
 
 -- --------------------------------------------------------
 
@@ -214,16 +215,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `passwort`, `geburtsdatum`, `bild`) VALUES
-(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder/profil_default.png'),
+(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder\\nappy.png'),
 (2, 'fast-Driver@gmail.com', 'Thomas Müller', 'Blanco99', '1990-06-01', 'bilder/profil_default.png'),
 (3, 'Bandigo@gmail.com', 'Bernd Wender', 'bernd', '1990-09-09', 'bilder/profil_default.png'),
 (4, 'hyper@gmail.com', 'Lukas Hohl', 'lukas', '1994-12-19', 'bilder/profil_default.png'),
 (5, 'onur@gmail.com', 'Onur Dede', 'onur', '1994-10-19', 'bilder/profil_default.png'),
-(6, 'lauriane@gmail.com', 'lauriane', 'lauriane', '1994-10-18', 'bilder/profil_default.png'),
-(7, 'lois@gmail.com', 'lois', 'lois', '1994-9-12', 'bilder/profil_default.png'),
 (8, 'colin.kristen@mni.thm.de', 'Colin Kristen', 'colin', '1999-05-26', 'bilder/profil_default.png');
-(9, 'ivan@gmail.com', 'ivan', 'ivan', '1996-07-27', 'bilder/profil_default.png');
-(10, 'toto@yahoo.fr', 'toto', 'toto', '1997-06-25', 'bilder/profil_default.png');
 
 --
 -- Indizes der exportierten Tabellen
@@ -309,13 +306,13 @@ ALTER TABLE `anzeige`
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
 --
 ALTER TABLE `buchungen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
@@ -333,7 +330,7 @@ ALTER TABLE `nachricht`
 -- AUTO_INCREMENT für Tabelle `tracking`
 --
 ALTER TABLE `tracking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT für Tabelle `user`
