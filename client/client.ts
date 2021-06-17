@@ -1227,11 +1227,11 @@ let newProfil: JQuery = $(`  <div class="row">
                                                     <div class="col-4" style="text-align: center">
                                                         <label>
                                                             <input class="form-control" form="addCarForm" id="addCarAttributeCargoArea"
-                                                                   type="text" placeholder="Stauraum"/>
+                                                                   type="text" placeholder="Stauraum (Liter)"/>
                                                         </label>
                                                         <label>
                                                             <input class="form-control" form="addCarForm" id="addCarAttributeWeight"
-                                                                   type="text" placeholder="Gewicht"/>
+                                                                   type="text" placeholder="Zuladung (kg)"/>
                                                         </label>
                                                     </div>
                                                 </div>
