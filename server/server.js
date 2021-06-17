@@ -188,7 +188,7 @@ app.get('/read/offer/:id', function (req, res) {
         }
         else {
             if (results[0].id_fahrzeug === null || results[0].id_fahrzeug === undefined) {
-                res.status(200).send({ "result": results[0] });
+                res.status(200).send({ "result": results[0], "mail": session.email });
             }
             else {
                 var res1_1 = results[0];
@@ -199,7 +199,7 @@ app.get('/read/offer/:id', function (req, res) {
                         res.status(500).send({ err: err });
                     }
                     else {
-                        res.status(200).send({ "result": res1_1, "car": results[0] });
+                        res.status(200).send({ "result": res1_1, "car": results[0], "mail": session.email });
                     }
                 });
             }

@@ -546,6 +546,7 @@ function sendLocation(tracknum: number) {
 
                     }),
                     success: () => {
+                        console.log("Hallo!");
                         showLocation(position.coords.latitude, position.coords.longitude, "");
                     },
                     error: (response) => {
@@ -1082,13 +1083,20 @@ function renderOffersList(offerList: AnzeigeRender[]) {
 
 function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
     let card: JQuery;
+    let str: string="";
+    if(anz.ang_ges==false) {
+        str= "Biete: ";
+    } else if(anz.ang_ges==true) {
+        str= "Suche: ";
+    }
+
     if (ueberschrift === "Personenbeförderung") {
          card = $(`
         <tr>
             <td>
                 <div class="card" style="background-color: #f5f6f6">
                     <div class="card-body">
-                        <h5 class="card-title">${ueberschrift}</h5>
+                        <h5 class="card-title">${str+ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
                                 <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
@@ -1119,7 +1127,7 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
             <td>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">${ueberschrift}</h5>
+                        <h5 class="card-title">${str+ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
                                 <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
@@ -1517,6 +1525,7 @@ function renderOfferPage(event) {
             pic= $(` <img id="offerPicture" src=${response.result.bild} style="margin-top: 5%"
                                  alt="ExamplePicture">`);
 
+
             let buttons: JQuery = $(`<button data-user-id="${response.result.user_id}" class="btn w-75 userProfil"
                                     style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
                             </button>
@@ -1525,7 +1534,10 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);
-            offerPageButtons.append(buttons);
+            if(response.result.email!=response.mail) {
+                offerPageButtons.append(buttons);
+            }
+
 
         },
         error: (response) => {
@@ -1620,10 +1632,7 @@ function renderDifBookings() {
                                                       <th scope="row">${offer.start}</th>
                                                       <th scope="row">${offer.ziel}</th>
                                                       <th scope="row">${dateConvert(offer.datum)}</th>
-                                                     
-                                                      <td>
-                                                        <button onclick="testFunction()" id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdnutzerBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
-                                                        </td>
+                                                    
                                                     </tr>`);
                 bookingsTable.append(renderOffers)
             })

@@ -200,7 +200,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
             res.status(500).send({err});
         } else {
             if(results[0].id_fahrzeug===null||results[0].id_fahrzeug===undefined){
-                res.status(200).send({"result":results[0]});
+                res.status(200).send({"result":results[0], "mail":session.email});
             } else {
                 const res1 = results[0];
                 const query1: string ='SELECT * FROM fahrzeug WHERE fahrzeug.id=?';
@@ -209,7 +209,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
                     if(err) {
                         res.status(500).send({err});
                     } else {
-                    res.status(200).send({"result": res1, "car":results[0]});
+                    res.status(200).send({"result": res1, "car":results[0], "mail":session.email});
                     }
                 });
             }
