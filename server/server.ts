@@ -644,6 +644,23 @@ app.get('/bookings', (req:Request, res:Response)=>{
 });
 
 
+app.get('/difBookings',(req:Request,res:Response)=>{
+    let  cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum, buchungen.id AS trackID from buchungen  LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE anzeige.user_id = ? ";
+    database.query(cQuery,[session.user_id], (err, results: any) => {
+        if (err === null) {
+            res.status(200);
+            res.send(results);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
+
 app.delete('/delete/:dataId', (req: Request, res: Response) => {
     // Read data from request
     const dataId: number = Number(req.params.user_id);
