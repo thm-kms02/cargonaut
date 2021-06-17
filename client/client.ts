@@ -159,6 +159,7 @@ let offerslist: Anzeige[];
 let id_empfaenger: number;
 let idBooking: number;
 let isLoggedIn2: boolean = false;
+let btn: JQuery;
 
 
 
@@ -221,7 +222,7 @@ $(() => {
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
     let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
-
+    btn = $('#difbuchung');
     getAll();
     mainarea.hide();
     loginArea.show();
@@ -234,6 +235,7 @@ $(() => {
     buchungbtn.hide();
     trackbutton.hide();
     profilbtn.hide();
+    btn.hide();
 
     offerControlForm.on('click', '.userProfil', getDifUser);
 
@@ -422,7 +424,12 @@ function testFunction2(id: string) {
 
 
 function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
-    let durchschnitt: string = String(bewertung);
+    let durchschnitt: string="";
+    if(bewertung<0) {
+        durchschnitt = String(bewertung)+"/5 Sternen";
+    } else {
+       durchschnitt = "Noch keine Bewertungen vorhanden"
+    }
     profileArea.empty()
     let newProfil: JQuery = $(`   
         <div class="row">
@@ -434,7 +441,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                         <div>
                             <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
-                        <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+                    
                         <table class="table table-borderless" id="kommentare">
                             <tbody id="renderComments">
                                 <!--Hier werden die kommentare des eigenen Profils angezeigt-->
@@ -443,7 +450,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                     </div>
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
-                        <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
+                        <span id="profileRating">${durchschnitt}</span>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
@@ -1161,8 +1168,12 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
 
 function openOwnProfile(user:User, cars: Fahrzeug[], bewertung: number) {
 profileArea.empty();
-
-let durchschnitt: string = String(bewertung);
+    let durchschnitt: string="";
+    if(bewertung<0) {
+        durchschnitt = String(bewertung)+"/5 Sternen";
+    } else {
+        durchschnitt = "Noch keine Bewertungen vorhanden"
+    }
 let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
             <div class="col-8" style="background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%">
@@ -1184,7 +1195,7 @@ let newProfil: JQuery = $(`  <div class="row">
        
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
-                        <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
+                        <span id="profileRating">${durchschnitt}</span>
                        <!-------------------- <button  onclick="renderOwnBookings()" type="button" class="btn niceButton" data-toggle="modal" data-target="#ownBookings">
                             Meine Buchungen
                         </button>-------------->
@@ -1358,7 +1369,8 @@ function inputFahrzeugDropLieferung(fahrzeugListe: Fahrzeug[]) {
 function login(){
     event.preventDefault();
     let email = String($('#inputLoginEmail').val()).trim().toLowerCase();
-    let passwort = String($('#inputLoginPassword').val()).trim()
+    let passwort = String($('#inputLoginPassword').val()).trim();
+    let btn: JQuery = $('#difbuchung');
     $.ajax({
         url: '/login',
         type: 'POST',
@@ -1376,6 +1388,7 @@ function login(){
             logoutbtn.show();
             profilbtn.show();
             buchungbtn.show();
+            btn.show();
         },
         error: (response) => {
            alert(response.responseJSON.message)
@@ -1396,6 +1409,10 @@ function logout() {
             loginArea.show();
             trackbutton.hide();
             profilbtn.hide();
+            btn.hide();
+            mainarea.hide()
+            profileArea.hide();
+            addOfferArea.hide();
             location.reload();
         },
     });
