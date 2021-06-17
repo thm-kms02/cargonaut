@@ -546,10 +546,10 @@ function sendLocation(tracknum: number) {
 
                     }),
                     success: () => {
-                        showLocation(position.coords.latitude, position.coords.longitude);
+                        showLocation(position.coords.latitude, position.coords.longitude, "");
                     },
                     error: (response) => {
-                        showLocation(lat, lng);
+                        showLocation(lat, lng, "");
                         alert("error");
                     },
                 });
@@ -569,7 +569,7 @@ function getGPS(tracknum: number) {
             if(response.lat=== null || response.lng==null) {
                 alert("Noch keine GPS-Daten vorhanden!");
             } else {
-                showLocation(response.lat, response.lng);
+                showLocation(response.lat, response.lng, response.date);
             }
         },
         error: (response) => {
@@ -612,7 +612,7 @@ function renderBewertungen(bewertungen) {
     });
 }
 
-function showLocation(lat: number, lng: number) {
+function showLocation(lat: number, lng: number, date: string) {
     let mapArea: JQuery = $('#mapArea');
     mapArea.empty();
     let trackmodal: JQuery = $('#trackModal');
@@ -622,6 +622,11 @@ function showLocation(lat: number, lng: number) {
     map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
         center,
         zoom: 11
+    });
+    new google.maps.Marker({
+        position: center,
+        map,
+        title: date,
     });
 
 }
@@ -1585,4 +1590,48 @@ function renderOwnBookings() {
         }
     })
 }
+
+function renderDifBookings() {
+    event.preventDefault();
+    let bookingsTable: JQuery = $("#difbookingsTabelBody");
+    console.log("Hallo");
+
+    $.ajax({
+        url: '/difBookings',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (response) => {
+            console.log(response);
+            bookingsTable.empty();
+            let header: JQuery = $(`<tr>
+                                                      <th scope="row">Track.Nr.</th>
+                                                      <th scope="row">Start</th>
+                                                      <th scope="row">Ziel</th>
+                                                      <th scope="row">Datum</th>
+                                                     
+                                                      <td>
+                                                       
+                                                    </tr>`);
+            bookingsTable.append(header);
+            response.forEach((offer)=> {
+
+                let renderOffers: JQuery = $(`<tr>
+                                                      <th scope="row">${offer.trackID}</th>
+                                                      <th scope="row">${offer.start}</th>
+                                                      <th scope="row">${offer.ziel}</th>
+                                                      <th scope="row">${dateConvert(offer.datum)}</th>
+                                                     
+                                                      <td>
+                                                        <button onclick="testFunction()" id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdnutzerBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
+                                                        </td>
+                                                    </tr>`);
+                bookingsTable.append(renderOffers)
+            })
+        },
+        error: (response) => {
+            console.log(response);
+        }
+    })
+}
+
 

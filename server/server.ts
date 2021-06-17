@@ -450,7 +450,7 @@ app.get('/getGPS/:trackID', (req: Request, res: Response) => {
             res.status(500).send();
         } else {
             if (results[0].reader==session.user_id) {
-                res.status(200).send({"lat":results[0].lat, "lng": results[0].lng});
+                res.status(200).send({"lat":results[0].lat, "lng": results[0].lng, "date": results[0].date});
             } else {
                 res.status(200).send({"message":"You are not authorized!"});
             }
@@ -642,7 +642,6 @@ app.get('/bookings', (req:Request, res:Response)=>{
         }
     });
 });
-
 
 
 app.delete('/delete/:dataId', (req: Request, res: Response) => {

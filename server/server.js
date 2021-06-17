@@ -432,7 +432,7 @@ app.get('/getGPS/:trackID', function (req, res) {
         }
         else {
             if (results[0].reader == session.user_id) {
-                res.status(200).send({ "lat": results[0].lat, "lng": results[0].lng });
+                res.status(200).send({ "lat": results[0].lat, "lng": results[0].lng, "date": results[0].date });
             }
             else {
                 res.status(200).send({ "message": "You are not authorized!" });

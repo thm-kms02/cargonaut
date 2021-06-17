@@ -83,6 +83,7 @@
                     <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
                             class="navbar-toggler-icon"></span></button>
                 </div>
+                <a onclick="renderDifBookings()" data-target="#difBookings" data-toggle="modal" class="btn btn-light action-button" role="button" id="difbuchung" style="margin-right: 1%">Meine Fahrten</a>
                 <a onclick="renderOwnBookings()" data-target="#ownBookings" data-toggle="modal" class="btn btn-light action-button" role="button" id="buchung" style="margin-right: 1%">Meine Buchungen</a>
                 <a class="btn btn-light action-button" role="button" data-toggle="modal" data-target="#exampleModal" id="SignupBtn" style="margin-right: 1%">Sign Up</a>
                 <a class="btn btn-light action-button" role="button" id="trackingButton" style="margin-right: 1%" data-bs-toggle="modal" data-bs-target="#trackModal"
@@ -730,6 +731,32 @@
             <div class="modal-body">
                 <table class="table table-borderless">
                     <tbody id="bookingsTabelBody">
+                    <!--Hier wird die Liste reingerendert-->
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal my booked offers -->
+<div class="modal fade" id="difBookings" tabindex="-1" role="dialog" aria-labelledby="difBookings" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Meine Fahrten</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless">
+                    <tbody id="difbookingsTabelBody">
                     <!--Hier wird die Liste reingerendert-->
 
                     </tbody>
