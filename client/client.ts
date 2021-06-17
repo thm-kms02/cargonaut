@@ -1012,6 +1012,7 @@ function updateUser() {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            getAll();
         },
         error: (response) => {
             console.log("error");

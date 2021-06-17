@@ -893,6 +893,7 @@ function updateUser() {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            getAll();
         },
         error: function (response) {
             console.log("error");
