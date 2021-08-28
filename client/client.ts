@@ -422,7 +422,12 @@ function testFunction2(id: string) {
 
 
 function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
-    let durchschnitt: string = String(bewertung);
+    let durchschnitt: string="";
+    if(bewertung<0) {
+        durchschnitt = String(bewertung)+"/5 Sternen";
+    } else {
+        durchschnitt = "Noch keine Bewertungen vorhanden"
+    }
     profileArea.empty()
     let newProfil: JQuery = $(`   
         <div class="row">
@@ -434,7 +439,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                         <div>
                             <img id="profilePicture" src=${user.profil_bild} alt="ProfilePicture">
                         </div>
-                        <input class="form-control" type="file" aria-label="" id="uploadProfilePicture">
+                    
                         <table class="table table-borderless" id="kommentare">
                             <tbody id="renderComments">
                                 <!--Hier werden die kommentare des eigenen Profils angezeigt-->
@@ -443,7 +448,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                     </div>
                     <div class="col-9">
                         <h1 id="profileName">${user.name}</h1>
-                        <span id="profileRating">${durchschnitt}</span><span>/5 Sterne</span>
+                        <span id="profileRating">${durchschnitt}</span>
                         <div style="margin-top: 10%; margin-left: 30%">
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
@@ -456,7 +461,6 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -1071,7 +1075,7 @@ function renderAnzeige(anz: AnzeigeRender) {
 
 function renderOffersList(offerList: AnzeigeRender[]) {
     const offersListBody: JQuery = $("#offersTableBody");
-    if (offerList.length ==0 || offerList === undefined ){
+    if (offerList.length == 0 ){
         alert("Die Suche liefert keine Ergebnisse");
     }
     offersListBody.empty();
@@ -1516,7 +1520,7 @@ function renderOfferPage(event) {
             console.log(response.result);
             companyName.text(response.result.email);
             offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
-                dateConvert(response.result.datum) + "\n \n" + "Beschreibung: " + response.result.beschreibung);
+                dateConvert(response.result.datum)+ "\n" +"Fahrzeug: "+ response.car.name + "\n \n" + "Beschreibung: " + response.result.beschreibung);
 
             offerPicture.empty();
             offerPageButtons.empty()
@@ -1592,6 +1596,45 @@ function renderOwnBookings() {
                                                       <td>
                                                         <button onclick="testFunction()" id="fremdnutzerBTN" data-user-id="${offer.user_id}" class="btn btn-sm fremdnutzerBTN" style="background-color: #276678; color: white" data-bs-dismiss="modal"  data-target="#feedback" data-toggle="modal">Feedback</button>
                                                         </td>
+                                                    </tr>`);
+                bookingsTable.append(renderOffers)
+            })
+        },
+        error: (response) => {
+            console.log(response);
+        }
+    })
+}
+function renderDifBookings() {
+    event.preventDefault();
+    let bookingsTable: JQuery = $("#difbookingsTabelBody");
+    console.log("Hallo");
+
+    $.ajax({
+        url: '/difBookings',
+        type: 'GET',
+        contentType: 'application/json',
+        success: (response) => {
+            console.log(response);
+            bookingsTable.empty();
+            let header: JQuery = $(`<tr>
+                                                      <th scope="row">Track.Nr.</th>
+                                                      <th scope="row">Start</th>
+                                                      <th scope="row">Ziel</th>
+                                                      <th scope="row">Datum</th>
+                                                     
+                                                      <td>
+                                                       
+                                                    </tr>`);
+            bookingsTable.append(header);
+            response.forEach((offer)=> {
+
+                let renderOffers: JQuery = $(`<tr>
+                                                      <th scope="row">${offer.trackID}</th>
+                                                      <th scope="row">${offer.start}</th>
+                                                      <th scope="row">${offer.ziel}</th>
+                                                      <th scope="row">${dateConvert(offer.datum)}</th>
+                                                    
                                                     </tr>`);
                 bookingsTable.append(renderOffers)
             })

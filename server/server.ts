@@ -108,7 +108,7 @@ app.get('/anzeige', (req: Request, res: Response) => {
     let offers: any[];
     let taxi: any[];
     let cargo: any[];
-    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
+    const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name AS fzgname, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
@@ -138,13 +138,14 @@ app.get('/anzeige', (req: Request, res: Response) => {
                 for (let offer of offers) {
                     let store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild,offer.id));
+                        offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.fzgname, offer.bild,offer.id));
                     } else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild,offer.id));
+                            offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.fzgname, offer.bild,offer.id));
                         }
                     }
+                    console.log(offer);
                 }
                 res.status(200).send({
 
@@ -302,7 +303,30 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
                     results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild, results[i].id));
             }
             console.log(anzeigen.length)
-            res.send(anzeigen);
+            let query: string ="SELECT * from buchungen";
+            database.query(query, (err, rows: any) => {
+                if(err==null) {
+                    let filteredOffers: AnzeigeRender[] = [];
+                    for(let anz of anzeigen) {
+                        let flag: boolean=true;
+                        for (let row of rows) {
+                            if(anz.id==row.id_anz) {
+                                flag = false;
+                            }
+                        }
+                        if(flag) {
+                            filteredOffers.push(anz);
+                        }
+                    }
+                    res.send(filteredOffers);
+                } else {
+                    console.log(err);
+                    res.sendStatus(500);
+                }
+
+            })
+
+
         }
 
         else if (err.errno === 1062) {
