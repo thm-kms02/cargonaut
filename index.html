@@ -83,6 +83,7 @@
                     <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
                             class="navbar-toggler-icon"></span></button>
                 </div>
+                <a onclick="renderDifBookings()" data-target="#difBookings" data-toggle="modal" class="btn btn-light action-button" role="button" id="difbuchung" style="margin-right: 1%">Meine Fahrten</a>
                 <a onclick="renderOwnBookings()" data-target="#ownBookings" data-toggle="modal" class="btn btn-light action-button" role="button" id="buchung" style="margin-right: 1%">Meine Buchungen</a>
                 <a class="btn btn-light action-button" role="button" data-toggle="modal" data-target="#exampleModal" id="SignupBtn" style="margin-right: 1%">Sign Up</a>
                 <a class="btn btn-light action-button" role="button" id="trackingButton" style="margin-right: 1%" data-bs-toggle="modal" data-bs-target="#trackModal"
@@ -363,49 +364,49 @@
                             <h3>Fahrzeuge</h3>
                             <table class="table table-borderless">
                                 <form id="addCarForm">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-4">
-                                                        <div class="btn" id="addCarBTN" type="submit">
-                                                            <img src="assets/AddCarBTN.png" height="80" width="80"
-                                                                 alt="Add Car"/>
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <div class="btn" id="addCarBTN" type="submit">
+                                                                <img src="assets/AddCarBTN.png" height="80" width="80"
+                                                                     alt="Add Car"/>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-4" style="text-align: center">
-                                                        <label>
-                                                            <input class="form-control" id="addCarAttributeModel"
-                                                                   type="text" placeholder="Marke/Modell"/>
-                                                        </label>
-                                                        <label>
-                                                            <input class="form-control" id="addCarAttributeYear" type="text"
-                                                                   placeholder="Baujahr"/>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-4" style="text-align: center">
-                                                        <label>
-                                                            <input class="form-control" id="addCarAttributeCargoArea"
-                                                                   type="text" placeholder="Stauraum"/>
-                                                        </label>
-                                                        <label>
-                                                            <input class="form-control" id="addCarAttributeWeight"
-                                                                   type="text" placeholder="Gewicht"/>
-                                                        </label>
+                                                        <div class="col-4" style="text-align: center">
+                                                            <label>
+                                                                <input class="form-control" id="addCarAttributeModel"
+                                                                       type="text" placeholder="Marke/Modell"/>
+                                                            </label>
+                                                            <label>
+                                                                <input class="form-control" id="addCarAttributeYear" type="text"
+                                                                       placeholder="Baujahr"/>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-4" style="text-align: center">
+                                                            <label>
+                                                                <input class="form-control" id="addCarAttributeCargoArea"
+                                                                       type="text" placeholder="Stauraum"/>
+                                                            </label>
+                                                            <label>
+                                                                <input class="form-control" id="addCarAttributeWeight"
+                                                                       type="text" placeholder="Gewicht"/>
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody id="carsTableBody">
-                                <!--Hier wird die Liste reingerendert-->
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="carsTableBody">
+                                    <!--Hier wird die Liste reingerendert-->
 
-                                </tbody>
-                            </form>
+                                    </tbody>
+                                </form>
                             </table>
                         </div>
 
@@ -423,38 +424,38 @@
                 <div class="col-8" style="background-color: #f6f5f5">
                     <div class="row">
                         <div class="col-6">
-                         <div>
-                            <span id="companyName"></span>
-                            <span id="rating"></span>
-                            <span id="countRating"></span>
-                        </div>
-                        <div id="offerPic">
-                            <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%"
-                                 alt="ExamplePicture">
-                        </div>
-                        </div>
-                    <div class="col-1">
-
-                    </div>
-                    <div class="col-5">
-
-                        <div id="offerPageButton">
                             <div>
-                            <button id="profileBTN" class="btn w-75"
-                                    style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
-                            </button>
-                            <br>
-                                <button id="bookBTN" class="btn w-75" onclick="testFunction2"
-                                        style="background-color: #276678; color: white; margin-top: 5%">Buchen
-                                </button>
+                                <span id="companyName"></span>
+                                <span id="rating"></span>
+                                <span id="countRating"></span>
+                            </div>
+                            <div id="offerPic">
+                                <img id="offerPicture" src="assets/Examplepictures/Pic-1-lg.png" style="margin-top: 5%"
+                                     alt="ExamplePicture">
                             </div>
                         </div>
-                    </div>
-                <textarea style="height: 200px; margin-top: 20px" id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
-                    </div>
-            <div class="col-2"></div>
+                        <div class="col-1">
 
-         </div>
+                        </div>
+                        <div class="col-5">
+
+                            <div id="offerPageButton">
+                                <div>
+                                    <button id="profileBTN" class="btn w-75"
+                                            style="background-color: #276678; color: white; margin-top: 5%">Zum Profil
+                                    </button>
+                                    <br>
+                                    <button id="bookBTN" class="btn w-75" onclick="testFunction2"
+                                            style="background-color: #276678; color: white; margin-top: 5%">Buchen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea style="height: 200px; margin-top: 20px" id="offerDescription" class="form-control" aria-label="With textarea"></textarea>
+                    </div>
+                    <div class="col-2"></div>
+
+                </div>
             </div>
         </form>
     </div>
@@ -525,7 +526,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div>
-                            <label for="inputGesamtgewicht" class="form-label">Gesamtgewicht*</label>
+                            <label for="inputGesamtgewicht" class="form-label">Gesamtgewicht (kg)*</label>
                             <input type="number" class="form-control" id="inputGesamtgewicht">
                         </div>
                         <div>
@@ -533,8 +534,8 @@
                             <input type="text" class="form-control" id="inputVon2">
                         </div>
                         <div>
-                            <label for="inputLadeflaeche" class="form-label">Ladefläche*</label>
-                            <input type="text" class="form-control" id="inputLadeflaeche">
+                            <label for="inputLadeflaeche" class="form-label">Ladefläche (m²)*</label>
+                            <input type="number" class="form-control" id="inputLadeflaeche">
                         </div>
                     </div>
                     <div class="col-6">
@@ -547,8 +548,8 @@
                             <input type="text" class="form-control" id="inputNach2">
                         </div>
                         <div>
-                            <label for="inputLadehoehe" class="form-label">Ladehoehe*</label>
-                            <input type="text" class="form-control" id="inputLadehoehe">
+                            <label for="inputLadehoehe" class="form-label">Ladehoehe (cm)*</label>
+                            <input type="number" class="form-control" id="inputLadehoehe">
                         </div>
                     </div>
                     <div class="input-group mb-3" style="margin-top: 5%">
@@ -583,7 +584,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div>
-                            <label for="inputGesamtgewichtF" class="form-label">Gesamtgewicht*</label>
+                            <label for="inputGesamtgewichtF" class="form-label">Gesamtgewicht (kg)*</label>
                             <input type="number" class="form-control" id="inputGesamtgewichtF">
                         </div>
                         <div>
@@ -591,8 +592,8 @@
                             <input type="text" class="form-control" id="inputVon2F">
                         </div>
                         <div>
-                            <label for="inputLadeflaecheF" class="form-label">Ladefläche*</label>
-                            <input type="text" class="form-control" id="inputLadeflaecheF">
+                            <label for="inputLadeflaecheF" class="form-label">Ladefläche (m²)*</label>
+                            <input type="number" class="form-control" id="inputLadeflaecheF">
                         </div>
                     </div>
                     <div class="col-6">
@@ -605,8 +606,8 @@
                             <input type="text" class="form-control" id="inputNach2F">
                         </div>
                         <div>
-                            <label for="inputLadehoeheF" class="form-label">Ladehoehe*</label>
-                            <input type="text" class="form-control" id="inputLadehoeheF">
+                            <label for="inputLadehoeheF" class="form-label">Ladehoehe (cm)*</label>
+                            <input type="number" class="form-control" id="inputLadehoeheF">
                         </div>
                     </div>
                 </div>
@@ -712,7 +713,7 @@
                     <button type="submit" id="Buttonfeedback" data-bs-dismiss="modal" class="btn btn-dark ">Abschicken</button>
                 </div>
             </div>
-    </div>
+        </div>
 
     </div>
 </div>
@@ -730,6 +731,32 @@
             <div class="modal-body">
                 <table class="table table-borderless">
                     <tbody id="bookingsTabelBody">
+                    <!--Hier wird die Liste reingerendert-->
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal my booked offers -->
+<div class="modal fade" id="difBookings" tabindex="-1" role="dialog" aria-labelledby="difBookings" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Meine Fahrten</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless">
+                    <tbody id="difbookingsTabelBody">
                     <!--Hier wird die Liste reingerendert-->
 
                     </tbody>

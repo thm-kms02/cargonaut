@@ -258,7 +258,7 @@ $(() => {
     });
 
     trackbutton.on('click', () => {
-       showMap();
+        showMap();
     });
 
     createOfferBTN.on('click', () => {
@@ -317,11 +317,11 @@ $(() => {
     saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
     });
-/*
-    addCarBTN.on('click', () => {
-        console.log("Add Car");
-        createCar;
-    });*/
+    /*
+        addCarBTN.on('click', () => {
+            console.log("Add Car");
+            createCar;
+        });*/
 
     ownBookingsBTN.on('click', ()=> {
         renderOwnBookings();
@@ -386,11 +386,11 @@ function getDifUser(event){
         dataType: 'json',
 
         success: (response) => {
-        renderProfil(response.user, response.cars, response.bewertung);
-        getBewertung(id);
+            renderProfil(response.user, response.cars, response.bewertung);
+            getBewertung(id);
         },
         error: (err) => {
-           alert("err");
+            alert("err");
         },
     });
 }
@@ -412,6 +412,7 @@ function testFunction2(id: string) {
         },
         error: (response) => {
             console.log('Gebucht');
+            alert("Anzeige wurde gebucht");
             mainarea.show()
             offerArea.hide();
             getAll();
@@ -521,7 +522,7 @@ function getTrackingRole() {
 function goTrack(role: number, tracknum: number) {
     /// 0 = not authorized, 1= viewer, 2= locationprovider
     if(role==1) {
-      getGPS(tracknum);
+        getGPS(tracknum);
     } else if(role==2) {
         sendLocation(tracknum);
     }
@@ -531,7 +532,7 @@ function sendLocation(tracknum: number) {
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
-               let lat: number =  position.coords.latitude;
+                let lat: number =  position.coords.latitude;
                 let lng : number = position.coords.longitude;
                 $.ajax({
                     url: '/create/location',
@@ -540,15 +541,15 @@ function sendLocation(tracknum: number) {
                     dataType: 'json',
                     data: JSON.stringify({
                         tracknum,
-                       lat,
+                        lat,
                         lng
 
                     }),
                     success: () => {
-                        showLocation(position.coords.latitude, position.coords.longitude);
+                        showLocation(position.coords.latitude, position.coords.longitude, "");
                     },
                     error: (response) => {
-                        showLocation(lat, lng);
+                        showLocation(lat, lng, "");
                         alert("error");
                     },
                 });
@@ -568,7 +569,7 @@ function getGPS(tracknum: number) {
             if(response.lat=== null || response.lng==null) {
                 alert("Noch keine GPS-Daten vorhanden!");
             } else {
-                showLocation(response.lat, response.lng);
+                showLocation(response.lat, response.lng, response.date);
             }
         },
         error: (response) => {
@@ -611,7 +612,7 @@ function renderBewertungen(bewertungen) {
     });
 }
 
-function showLocation(lat: number, lng: number) {
+function showLocation(lat: number, lng: number, date: string) {
     let mapArea: JQuery = $('#mapArea');
     mapArea.empty();
     let trackmodal: JQuery = $('#trackModal');
@@ -621,6 +622,11 @@ function showLocation(lat: number, lng: number) {
     map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
         center,
         zoom: 11
+    });
+    new google.maps.Marker({
+        position: center,
+        map,
+        title: date,
     });
 
 }
@@ -672,6 +678,7 @@ function createCar() {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            alert("Fahrzeug wurde hinzugefügt")
         },
         error: (response) => {
             console.log("error");
@@ -683,10 +690,10 @@ function createCar() {
 function showMap() {
     let map: google.maps.Map;
     const center: google.maps.LatLngLiteral = {lat: 30, lng: -110};
-        map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
-            center,
-            zoom: 8
-        });
+    map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
+        center,
+        zoom: 8
+    });
 
 }
 
@@ -699,6 +706,7 @@ function deleteCar(id: number) {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            alert(" Fahrzeug wurde entfernt")
         },
         error: (response) => {
             console.log("error");
@@ -752,6 +760,7 @@ function saveValuesLieferungFilter() {
     modalBackdrop.hide();
     modal.modal("hide");
 }
+
 function getFilter() {
     let radOffer : JQuery = $('#filterForOfferRadio:checked');
     let radSearch: JQuery = $('#filterForSerachRadio:checked');
@@ -767,14 +776,22 @@ function getFilter() {
     let ladeflaeche:number = ladeflaecheF;
     let ladehoehe:number = ladehoeheF;
     let ladungsgewicht:number = gesamtgewichtF;
-    if (radOffer.val() == "option1" ){
+    if (radOffer.val()=="option1"&& radSearch.val() == "option2"){
+        ang_ges = undefined;
+    }
+    else if (radOffer.val() == "option1" && radSearch.val() != "option2"){
         ang_ges = 0;
-    }else if (radSearch.val() == "option2"){
+    }else if (radSearch.val() == "option2" && radOffer.val() != "option1"){
         ang_ges = 1;
     }
-    if(radCargo.val() == "option1"){
+    if(radCargo.val() == "option1" && radTaxi.val() == "option2"){
+        kategorie = 0
+        console.log("kategorie 0")
+    }
+    else if(radCargo.val() == "option1" && radTaxi.val() != "option2"){
         kategorie = 1;
-    }else if (radTaxi.val() == "option2"){
+        console.log("kategorie 1")
+    }else if (radTaxi.val() == "option2" && radCargo.val() != "option1"){
         kategorie = 2;
     }
 
@@ -804,7 +821,7 @@ function getFilter() {
             let serverAnzeigen:AnzeigeRender[];
             serverAnzeigen =response;
             anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
-            if(kategorie == undefined){
+            if(kategorie == 0){
                 renderOffersList(anzeigenRender);
             }if (kategorie ==1){
                 anzeigenRender = filternCargo(anzeigenRender,ladeflaeche,ladehoehe,ladungsgewicht);
@@ -824,33 +841,33 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
     let filteredAnzeigen:AnzeigeRender[]=[];
     let j: number = 0;
     for (let i=0;i<anzeigen.length;i++){
-                if (anzeigen[i].preis >= minPreis || minPreis === 0 ) {
-                    if (anzeigen[i].preis <= maxPreis || maxPreis === 0 ) {
-                        if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
-                            if (anzeigen[i].start == von || von === "" || von === undefined) {
-                                if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
-                                    filteredAnzeigen[j] = anzeigen[i];
-                                    j++;
-                                }
-                            }
+        if (anzeigen[i].preis >= minPreis || minPreis === 0 ) {
+            if (anzeigen[i].preis <= maxPreis || maxPreis === 0 ) {
+                if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
+                    if (anzeigen[i].start == von || von === "" || von === undefined) {
+                        if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
+                            filteredAnzeigen[j] = anzeigen[i];
+                            j++;
                         }
                     }
                 }
+            }
+        }
     }
-return filteredAnzeigen;
+    return filteredAnzeigen;
 }
 
 function filternTaxi(anzeigen:AnzeigeRender[],personen):AnzeigeRender[]{
     let filteredTaxi:AnzeigeRender[]=[];
     let j:number = 0;
     for (let i=0; i<anzeigen.length;i++){
-            if (anzeigen[i].personen == personen || personen == 0 || personen === undefined) {
-                filteredTaxi[j] = anzeigen[i];
-                j++;
-            }
+        if (anzeigen[i].personen == personen || personen == 0 || personen === undefined) {
+            filteredTaxi[j] = anzeigen[i];
+            j++;
+        }
 
     }
-return filteredTaxi;
+    return filteredTaxi;
 }
 
 function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewicht):AnzeigeRender[]{
@@ -858,16 +875,16 @@ function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewi
     let j:number =0 ;
     for (let i=0;i< anzeigen.length;i++){
 
-            if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche==0 ||ladeflaeche === undefined) {
-                if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe==0 || ladehoehe === undefined) {
-                    if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht==0 || ladungsgewicht === undefined) {
-                        filteredCargo[j] = anzeigen[i];
-                        j++;
-                    }
+        if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche==0 ||ladeflaeche === undefined) {
+            if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe==0 || ladehoehe === undefined) {
+                if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht==0 || ladungsgewicht === undefined) {
+                    filteredCargo[j] = anzeigen[i];
+                    j++;
                 }
             }
+        }
     }
-return filteredCargo;
+    return filteredCargo;
 }
 
 function addAnzeige() {
@@ -930,7 +947,7 @@ function addAnzeige() {
 
         }),
         success: (response) => {
-            console.log("sucess");
+            alert("Ihre Anzeige wurde erstellt!");
         },
         error: (err) => {
             console.log(err);
@@ -981,7 +998,7 @@ function getmyMessages() {
 function updateUser() {
     let bildIN: JQuery = $('#uploadProfilePicture');
     let bild: string=bildIN.val().toString();
-  let bild2 = bild.replace("C:\\fakepath\\", "bilder\\");
+    let bild2 = bild.replace("C:\\fakepath\\", "bilder\\");
     console.log(bild2);
     $.ajax({
         url: '/update/user',
@@ -994,6 +1011,7 @@ function updateUser() {
         success: (response) => {
             console.log("sucess");
             getProfil();
+            getAll();
         },
         error: (response) => {
             console.log("error");
@@ -1037,7 +1055,7 @@ function renderAnzeige(anz: AnzeigeRender) {
         menge = String(anz.personen);
     }
     if (anz.name === null){
-         fahrzeugName = "Beliebig"
+        fahrzeugName = "Beliebig"
     }else {
         fahrzeugName = anz.name;
     }
@@ -1062,16 +1080,22 @@ function renderOffersList(offerList: AnzeigeRender[]) {
 
     }
 }
-
 function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) :JQuery{
     let card: JQuery;
+    let str: string="";
+    if(anz.ang_ges==false) {
+        str= "Biete: ";
+    } else if(anz.ang_ges==true) {
+        str= "Suche: ";
+    }
+
     if (ueberschrift === "Personenbeförderung") {
-         card = $(`
+        card = $(`
         <tr>
             <td>
                 <div class="card" style="background-color: #f5f6f6">
                     <div class="card-body">
-                        <h5 class="card-title">${ueberschrift}</h5>
+                        <h5 class="card-title">${str+ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
                                 <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
@@ -1095,14 +1119,14 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
             </td>
         </tr>
     `);
-         return card;
+        return card;
     } else {
         card = $(`
         <tr>
             <td>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">${ueberschrift}</h5>
+                        <h5 class="card-title">${str+ueberschrift}</h5>
                         <div class="row">
                             <div class="col-5">
                                 <img src=${img} style="width: 200px; height: auto" alt="Examplepicture">
@@ -1128,16 +1152,16 @@ function card(ueberschrift:string,anz,datumEuropaFormat,menge,fahrzeugName,img) 
             </td>
         </tr>
     `);
- return card;
+        return card;
     }
 
 }
 
 function openOwnProfile(user:User, cars: Fahrzeug[], bewertung: number) {
-profileArea.empty();
+    profileArea.empty();
 
-let durchschnitt: string = String(bewertung);
-let newProfil: JQuery = $(`  <div class="row">
+    let durchschnitt: string = String(bewertung);
+    let newProfil: JQuery = $(`  <div class="row">
             <div class="col-2"></div>
             <div class="col-8" style="background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%">
                 <div class="row">
@@ -1216,11 +1240,11 @@ let newProfil: JQuery = $(`  <div class="row">
             </div>
         </div>`);
 
-        profileArea.append(newProfil);
-        let carsTableBody: JQuery = $('#carsTableBody');
+    profileArea.append(newProfil);
+    let carsTableBody: JQuery = $('#carsTableBody');
 
-        cars.forEach((car) => {
-            let renderCar: JQuery = $(`<tr>
+    cars.forEach((car) => {
+        let renderCar: JQuery = $(`<tr>
                                             <td>
                                                 <div class="card">
                                                     <div class="card-body">
@@ -1256,9 +1280,9 @@ let newProfil: JQuery = $(`  <div class="row">
                                                 </div>
                                             </td>
                                         </tr>`);
-            carsTableBody.append(renderCar);
-            profileArea.show();
-        });
+        carsTableBody.append(renderCar);
+    });
+    profileArea.show();
 }
 
 function getFahrzeugDropTaxi() {
@@ -1352,7 +1376,7 @@ function login(){
             buchungbtn.show();
         },
         error: (response) => {
-           alert(response.responseJSON.message)
+            alert(response.responseJSON.message)
         },
     });
 
@@ -1440,7 +1464,7 @@ function registry(){
     let password :string = String($('#registryPassword').val()).trim();
     let birthday:string = String($('#registryBirthday').val());
     if(email!=""&&name!=""&&password!=""&&birthday!="") {
-    let img:string = "bilder/profil_default.png";
+        let img:string = "bilder/profil_default.png";
 
         $.ajax({
             url: '/create/account',
@@ -1448,8 +1472,8 @@ function registry(){
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify({
-            email,
-               name,
+                email,
+                name,
                 password,
                 birthday,
                 img
@@ -1508,7 +1532,11 @@ function renderOfferPage(event) {
                                     style="background-color: #276678; color: white; margin-top: 5%">Buchen
                             </button>`)
             offerPicture.append(pic);
-            offerPageButtons.append(buttons);
+            if(response.result.email!=response.mail) {
+                offerPageButtons.append(buttons);
+            }
+
+
 
         },
         error: (response) => {

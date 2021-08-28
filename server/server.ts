@@ -97,8 +97,8 @@ app.post('/login', (req: express.Request, res: express.Response) => {
 
 app.delete('/logout',(req:Request,res:Response)=>{
     session.destroy;
-        res.clearCookie('connect.sid', { path: '/' });
-        res.send("Sie wurden abgemeldet");
+    res.clearCookie('connect.sid', { path: '/' });
+    res.send("Sie wurden abgemeldet");
 });
 
 // routs for get all Offers, create Offers, read a offer, filter offers
@@ -200,7 +200,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
             res.status(500).send({err});
         } else {
             if(results[0].id_fahrzeug===null||results[0].id_fahrzeug===undefined){
-                res.status(200).send({"result":results[0]});
+                res.status(200).send({"result":results[0], "mail":session.email});
             } else {
                 const res1 = results[0];
                 const query1: string ='SELECT * FROM fahrzeug WHERE fahrzeug.id=?';
@@ -209,7 +209,8 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
                     if(err) {
                         res.status(500).send({err});
                     } else {
-                    res.status(200).send({"result": res1, "car":results[0]});
+                        res.status(200).send({"result": res1, "car":results[0], "mail":session.email});
+
                     }
                 });
             }
@@ -261,30 +262,34 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
     let ang_ges: number=req.body.ang_ges;
     let kategorie: number = req.body.kategorie; //1 = ladungsbeförderung, 2 = personenbeförderung
     let cQuery: string;
-    if (kategorie == undefined){
+    if (kategorie == 0){
         if (ang_ges == undefined) {
-            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID"
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID left join user on user.user_id = anzeige.user_id"
         }if (ang_ges == 0){
-            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID where ang_ges = 0"
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID left join user on user.user_id = anzeige.user_id where ang_ges = 0"
         }
         if (ang_ges == 1){
-            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID where ang_ges = 1"
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige left join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left JOIN lieferung ON anzeige.id = lieferung.anz_ID left join user on user.user_id = anzeige.user_id where ang_ges = 1"
         }
     }
     if (kategorie == 2) {
-        console.log(" bin 2")
-        if (ang_ges == 1) {
-            console.log(" bin 2,1")
-            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 1";
+        if (ang_ges == undefined){
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,user.bild from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id ";
+        }
+        else if (ang_ges == 1) {
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,user.bild from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where ang_ges = 1";
         } else {
-            console.log(" bin 2,2")
-            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 0";
+            cQuery = "SELECT anzeige.*,personenbefoerderung.personen,fahrzeug.name,user.bild from anzeige right join personenbefoerderung on anzeige.id = personenbefoerderung.anz_ID   left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where ang_ges = 0";
         }
     } if (kategorie == 1) {
-        if (ang_ges == 1) {
-            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 1";
+        if (ang_ges == undefined){
+            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id";
+
+        }
+        else if (ang_ges == 1) {
+            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where ang_ges = 1";
         } else {
-            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,fahrzeug.bild_pfad from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id where ang_ges = 0";
+            cQuery = "SELECT anzeige.*,lieferung.ladeflaeche,lieferung.ladungsgewicht,lieferung.ladehoehe,fahrzeug.name,user.bild from anzeige right join lieferung on anzeige.id = lieferung.anz_ID left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where ang_ges = 0";
         }
     }
     database.query(cQuery, (err, results: any) => {
@@ -294,7 +299,7 @@ app.post('/anzeige/filter', (req: Request, res: Response) => {
             for(let i=0;i<results.length;i++){
                 anzeigen.push(new AnzeigeRender(results[i].user_id, results[i].ang_ges, results[i].datum, results[i].preis, results[i].start,
                     results[i].ziel, results[i].beschreibung, results[i].id_fahrzeug, results[i].personen, results[i].ladeflaeche,
-                    results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild_pfad, results[i].id));
+                    results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild, results[i].id));
             }
             console.log(anzeigen.length)
             res.send(anzeigen);
@@ -342,7 +347,7 @@ app.get('/user', (req: Request, res: Response) => {
 });
 
 app.put('/update/user', (req: Request, res: Response) => {
-let bild: string = req.body.bild2
+    let bild: string = req.body.bild2
 
     let query: string = "UPDATE user SET bild=? WHERE user.user_id=?";
     let data = [bild, session.user_id];
@@ -446,7 +451,7 @@ app.get('/getGPS/:trackID', (req: Request, res: Response) => {
             res.status(500).send();
         } else {
             if (results[0].reader==session.user_id) {
-                res.status(200).send({"lat":results[0].lat, "lng": results[0].lng});
+                res.status(200).send({"lat":results[0].lat, "lng": results[0].lng, "date": results[0].date});
             } else {
                 res.status(200).send({"message":"You are not authorized!"});
             }
@@ -639,7 +644,22 @@ app.get('/bookings', (req:Request, res:Response)=>{
     });
 });
 
-
+app.get('/difBookings',(req:Request,res:Response)=>{
+    let  cQuery = "SELECT anzeige.user_id, start, ziel, anzeige.datum, buchungen.id AS trackID from buchungen  LEFT JOIN anzeige ON buchungen.id_anz = anzeige.id WHERE anzeige.user_id = ? ";
+    database.query(cQuery,[session.user_id], (err, results: any) => {
+        if (err === null) {
+            res.status(200);
+            res.send(results);
+        }
+        else if (err.errno === 1062) {
+            res.status(500);
+            res.send("Fehler");
+        } else {
+            console.log(err);
+            res.sendStatus(500);
+        }
+    });
+});
 
 app.delete('/delete/:dataId', (req: Request, res: Response) => {
     // Read data from request

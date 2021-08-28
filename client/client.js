@@ -403,6 +403,7 @@ function testFunction2(id) {
         },
         error: function (response) {
             console.log('Gebucht');
+            alert("Anzeige wurde gebucht");
             mainarea.show();
             offerArea.hide();
             getAll();
@@ -465,10 +466,10 @@ function sendLocation(tracknum) {
                     lng: lng
                 }),
                 success: function () {
-                    showLocation(position.coords.latitude, position.coords.longitude);
+                    showLocation(position.coords.latitude, position.coords.longitude, "");
                 },
                 error: function (response) {
-                    showLocation(lat, lng);
+                    showLocation(lat, lng, "");
                     alert("error");
                 },
             });
@@ -488,7 +489,7 @@ function getGPS(tracknum) {
                 alert("Noch keine GPS-Daten vorhanden!");
             }
             else {
-                showLocation(response.lat, response.lng);
+                showLocation(response.lat, response.lng, response.date);
             }
         },
         error: function (response) {
@@ -517,7 +518,7 @@ function renderBewertungen(bewertungen) {
         profileArea.show();
     });
 }
-function showLocation(lat, lng) {
+function showLocation(lat, lng, date) {
     var mapArea = $('#mapArea');
     mapArea.empty();
     var trackmodal = $('#trackModal');
@@ -527,6 +528,11 @@ function showLocation(lat, lng) {
     map = new google.maps.Map(document.getElementById("mapArea"), {
         center: center,
         zoom: 11
+    });
+    new google.maps.Marker({
+        position: center,
+        map: map,
+        title: date,
     });
 }
 function getAll() {
@@ -566,6 +572,7 @@ function createCar() {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            alert("Fahrzeug wurde hinzugefügt");
         },
         error: function (response) {
             console.log("error");
@@ -590,6 +597,7 @@ function deleteCar(id) {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            alert(" Fahrzeug wurde entfernt");
         },
         error: function (response) {
             console.log("error");
@@ -657,16 +665,24 @@ function getFilter() {
     var ladeflaeche = ladeflaecheF;
     var ladehoehe = ladehoeheF;
     var ladungsgewicht = gesamtgewichtF;
-    if (radOffer.val() == "option1") {
+    if (radOffer.val() == "option1" && radSearch.val() == "option2") {
+        ang_ges = undefined;
+    }
+    else if (radOffer.val() == "option1" && radSearch.val() != "option2") {
         ang_ges = 0;
     }
-    else if (radSearch.val() == "option2") {
+    else if (radSearch.val() == "option2" && radOffer.val() != "option1") {
         ang_ges = 1;
     }
-    if (radCargo.val() == "option1") {
-        kategorie = 1;
+    if (radCargo.val() == "option1" && radTaxi.val() == "option2") {
+        kategorie = 0;
+        console.log("kategorie 0");
     }
-    else if (radTaxi.val() == "option2") {
+    else if (radCargo.val() == "option1" && radTaxi.val() != "option2") {
+        kategorie = 1;
+        console.log("kategorie 1");
+    }
+    else if (radTaxi.val() == "option2" && radCargo.val() != "option1") {
         kategorie = 2;
     }
     if (kategorie == 1) {
@@ -694,7 +710,7 @@ function getFilter() {
             var serverAnzeigen;
             serverAnzeigen = response;
             anzeigenRender = filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
-            if (kategorie == undefined) {
+            if (kategorie == 0) {
                 renderOffersList(anzeigenRender);
             }
             if (kategorie == 1) {
@@ -816,7 +832,7 @@ function addAnzeige() {
             "ladehoehe": ladehoehe
         }),
         success: function (response) {
-            console.log("sucess");
+            alert("Ihre Anzeige wurde erstellt!");
         },
         error: function (err) {
             console.log(err);
@@ -876,6 +892,7 @@ function updateUser() {
         success: function (response) {
             console.log("sucess");
             getProfil();
+            getAll();
         },
         error: function (response) {
             console.log("error");
@@ -942,12 +959,19 @@ function renderOffersList(offerList) {
 }
 function card(ueberschrift, anz, datumEuropaFormat, menge, fahrzeugName, img) {
     var card;
+    var str = "";
+    if (anz.ang_ges == false) {
+        str = "Biete: ";
+    }
+    else if (anz.ang_ges == true) {
+        str = "Suche: ";
+    }
     if (ueberschrift === "Personenbeförderung") {
-        card = $("\n        <tr>\n            <td>\n                <div class=\"card\" style=\"background-color: #f5f6f6\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Personenanzahl: " + menge + "</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
+        card = $("\n        <tr>\n            <td>\n                <div class=\"card\" style=\"background-color: #f5f6f6\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + (str + ueberschrift) + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Personenanzahl: " + menge + "</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
         return card;
     }
     else {
-        card = $("\n        <tr>\n            <td>\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + ueberschrift + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Ladefl\u00E4che: " + anz.ladeflaeche + " m\u00B2</span></p>\n                                <p class=\"textListComponent\"><span>Ladeh\u00F6he: " + anz.ladehoehe + " cm</span></p>\n                                 <p class=\"textListComponent\"><span>Ladegewicht: " + anz.ladungsgewicht + " Kg</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
+        card = $("\n        <tr>\n            <td>\n                <div class=\"card\">\n                    <div class=\"card-body\">\n                        <h5 class=\"card-title\">" + (str + ueberschrift) + "</h5>\n                        <div class=\"row\">\n                            <div class=\"col-5\">\n                                <img src=" + img + " style=\"width: 200px; height: auto\" alt=\"Examplepicture\">\n                            </div>\n                            <div class=\"col-5\">\n                                <p class=\"textListComponent\"><span>Von: " + anz.start + "</span></p>\n                                <p class=\"textListComponent\"><span>Nach: " + anz.ziel + "</span></p>\n                                <p class=\"textListComponent\"><span>Wann: " + datumEuropaFormat + "</span></p>\n                                <p class=\"textListComponent\"><span>Ladefl\u00E4che: " + anz.ladeflaeche + " m\u00B2</span></p>\n                                <p class=\"textListComponent\"><span>Ladeh\u00F6he: " + anz.ladehoehe + " cm</span></p>\n                                 <p class=\"textListComponent\"><span>Ladegewicht: " + anz.ladungsgewicht + " Kg</span></p>\n                                <p class=\"textListComponent\"><span>Fahrzeug: " + fahrzeugName + "</span></p>\n                            </div>\n                            <div class=\"col-2\">\n                                <p class=\"card-text pricing\" style=\"margin-top: 90px\">" + anz.preis + "<span>\u20AC</span></p>\n                            </div>\n                        </div>\n                        <div class=\"alignRight\">\n                            <button class=\"btn niceButton testBTN\" form=\"offerTableForm\" data-offer-id=\"" + anz.id + "\">Zum Angebot</button>\n                        </div>\n                    </div>\n                </div>\n            </td>\n        </tr>\n    ");
         return card;
     }
 }
@@ -960,8 +984,8 @@ function openOwnProfile(user, cars, bewertung) {
     cars.forEach(function (car) {
         var renderCar = $("<tr>\n                                            <td>\n                                                <div class=\"card\">\n                                                    <div class=\"card-body\">\n                                                        <div class=\"row\">\n                                                          \n                                                            <div class=\"col-5\" style=\"text-align: center\">\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeModel\"><span>Modell: </span>" + car.name + "</span>\n                                                                </div>\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeYear\"><span>Baujahr: </span>" + car.jahr + "</span>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-6\" style=\"text-align: center\">\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeCargoArea\"><span>Ladefl\u00E4che/ Sitzpl\u00E4tze: </span>" + car.volumen + "</span>\n                                                                </div>\n                                                                <div class=\"carAttribute\">\n                                                                    <span class=\"carAttributeWeight\"><span>Gewicht: </span>" + car.gewicht + "</span>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-1\">\n                                                                <button class=\"btn btn-outline-dark btn-sm delete-user-button\" data-car-id=\"" + car.id + "\" onclick=\"deleteCar(" + car.id + ")\">\n                                                                  <i class=\"fa fa-trash\" aria-hidden=\"true\"></i>\n                                                                 <!--  <div class=\"w1-padding w1-xlarge w3-text-red\">           \n                                                                         <i class=\"material-icons\">delete</i>\n                                                                     </div>\n                                                                              -->    \n                                                                </button>\n                                                            </div>\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </td>\n                                        </tr>");
         carsTableBody.append(renderCar);
-        profileArea.show();
     });
+    profileArea.show();
 }
 function getFahrzeugDropTaxi() {
     var inputFahrzeug = String($('.custom-select').val()).trim();
@@ -1182,7 +1206,9 @@ function renderOfferPage(event) {
             pic = $(" <img id=\"offerPicture\" src=" + response.result.bild + " style=\"margin-top: 5%\"\n                                 alt=\"ExamplePicture\">");
             var buttons = $("<button data-user-id=\"" + response.result.user_id + "\" class=\"btn w-75 userProfil\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Zum Profil\n                            </button>\n                            <br>\n                            <button id=\"bookBTN\" class=\"btn w-75\" onclick=\"testFunction2(" + offerID + ")\"\n                                    style=\"background-color: #276678; color: white; margin-top: 5%\">Buchen\n                            </button>");
             offerPicture.append(pic);
-            offerPageButtons.append(buttons);
+            if (response.result.email != response.mail) {
+                offerPageButtons.append(buttons);
+            }
         },
         error: function (response) {
             console.log(response);
