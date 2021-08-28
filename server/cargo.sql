@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Aug 2021 um 12:46
+-- Erstellungszeit: 28. Aug 2021 um 14:42
 -- Server-Version: 10.4.18-MariaDB
 -- PHP-Version: 7.3.27
 
@@ -78,7 +78,8 @@ INSERT INTO `bewertung` (`id`, `id_verfasser`, `id_empfaenger`, `bewertung`, `ko
 (18, 3, 1, 3, 'Zu schnell gefahren'),
 (19, 2, 1, 1, 'ZU langsam !!!'),
 (20, 3, 5, 5, 'gut'),
-(21, 10, 1, 4, 'Test');
+(21, 10, 1, 4, 'Test'),
+(22, 1, 2, 4, 'dsfd');
 
 -- --------------------------------------------------------
 
@@ -100,9 +101,7 @@ CREATE TABLE `buchungen` (
 INSERT INTO `buchungen` (`id`, `id_kauefer`, `id_anz`, `datum`) VALUES
 (31, 9, 3, '2021-06-17 11:17:41'),
 (32, 9, 1, '2021-06-17 11:17:49'),
-(33, 1, 2, '2021-06-17 11:30:30'),
-(34, 10, 4, '2021-06-17 11:37:58'),
-(35, 1, 2, '2021-08-28 12:24:46');
+(34, 10, 4, '2021-06-17 11:37:58');
 
 -- --------------------------------------------------------
 
@@ -126,9 +125,9 @@ CREATE TABLE `fahrzeug` (
 
 INSERT INTO `fahrzeug` (`id`, `user_id`, `name`, `jahr`, `volumen`, `gewicht`, `bild_pfad`) VALUES
 (3, 2, 'Mercedes GLC', 2018, 350, 2500, 'bilder/img.png'),
-(7, 1, 'Mercedes S-Klasse', 2019, 200, 2000, 'bilder/img.png'),
 (9, 9, 'Mercedes Sprinter', 321, 34234, 23432, NULL),
-(10, 10, 'Mercedes Sprinter', 2017, 4000, 2000, NULL);
+(10, 10, 'Mercedes Sprinter', 2017, 4000, 2000, NULL),
+(11, 1, 'Porsche 911', 2020, 2, 1500, NULL);
 
 -- --------------------------------------------------------
 
@@ -237,7 +236,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `name`, `passwort`, `geburtsdatum`, `bild`) VALUES
-(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder\\IMG_11 (2).jpg'),
+(1, 'root@gmail.com', 'Admin', 'root', '1994-12-05', 'bilder\\gangster.png'),
 (2, 'fast-Driver@gmail.com', 'Thomas Müller', 'Blanco99', '1990-06-01', 'bilder/profil_default.png'),
 (3, 'Bandigo@gmail.com', 'Bernd Wender', 'bernd', '1990-09-09', 'bilder/profil_default.png'),
 (4, 'hyper@gmail.com', 'Lukas Hohl', 'lukas', '1994-12-19', 'bilder/profil_default.png'),
@@ -330,7 +329,7 @@ ALTER TABLE `anzeige`
 -- AUTO_INCREMENT für Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchungen`
@@ -342,7 +341,7 @@ ALTER TABLE `buchungen`
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT für Tabelle `nachricht`
