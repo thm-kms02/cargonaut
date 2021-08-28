@@ -95,7 +95,7 @@ app.get('/anzeige', function (req, res) {
     var offers;
     var taxi;
     var cargo;
-    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
+    var query = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name AS fzgname, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
     database.query(query, function (err, rows) {
         if (err) {
             res.status(500).send({
@@ -129,14 +129,15 @@ app.get('/anzeige', function (req, res) {
                     var offer = offers_1[_i];
                     var store = findbyId(offer.id, cargo);
                     if (store != false) {
-                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.name, offer.bild, offer.id));
+                        offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, null, store.ladeflaeche, store.ladungsgewicht, store.ladehoehe, offer.fzgname, offer.bild, offer.id));
                     }
                     else {
                         store = findbyId(offer.id, taxi);
                         if (store != false) {
-                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.name, offer.bild, offer.id));
+                            offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.fzgname, offer.bild, offer.id));
                         }
                     }
+                    console.log(offer);
                 }
                 res.status(200).send({
                     result: offerslist
@@ -290,7 +291,30 @@ app.post('/anzeige/filter', function (req, res) {
                 anzeigen.push(new anzeigeRender_1.AnzeigeRender(results[i].user_id, results[i].ang_ges, results[i].datum, results[i].preis, results[i].start, results[i].ziel, results[i].beschreibung, results[i].id_fahrzeug, results[i].personen, results[i].ladeflaeche, results[i].ladungsgewicht, results[i].ladehoehe, results[i].name, results[i].bild, results[i].id));
             }
             console.log(anzeigen.length);
-            res.send(anzeigen);
+            var query_1 = "SELECT * from buchungen";
+            database.query(query_1, function (err, rows) {
+                if (err == null) {
+                    var filteredOffers = [];
+                    for (var _i = 0, anzeigen_1 = anzeigen; _i < anzeigen_1.length; _i++) {
+                        var anz = anzeigen_1[_i];
+                        var flag = true;
+                        for (var _a = 0, rows_1 = rows; _a < rows_1.length; _a++) {
+                            var row = rows_1[_a];
+                            if (anz.id == row.id_anz) {
+                                flag = false;
+                            }
+                        }
+                        if (flag) {
+                            filteredOffers.push(anz);
+                        }
+                    }
+                    res.send(filteredOffers);
+                }
+                else {
+                    console.log(err);
+                    res.sendStatus(500);
+                }
+            });
         }
         else if (err.errno === 1062) {
             res.status(500);
@@ -531,9 +555,9 @@ app.post('/buchen', function (req, res) {
         if (err === null) {
             var buchungID_1 = results.insertId;
             var reader_1 = session.user_id;
-            var query_1 = "SELECT * FROM anzeige WHERE anzeige.id=?";
+            var query_2 = "SELECT * FROM anzeige WHERE anzeige.id=?";
             var data2 = [bookID];
-            database.query(query_1, data2, function (err, results) {
+            database.query(query_2, data2, function (err, results) {
                 if (err == null) {
                     var writer = results[0].user_id;
                     var query1 = "INSERT INTO tracking (id, reader, writer) VALUES (?, ?, ?)";
