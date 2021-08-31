@@ -201,7 +201,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
             res.status(500).send({err});
         } else {
             if(results[0].id_fahrzeug == null){
-                res.status(200).send({"result":results[0], "mail":session.email});
+                res.status(200).send({"result":results[0].user_id, "mail":session.email});
             } else {
                 const res1 = results[0];
                 const query1: string ='SELECT * FROM fahrzeug WHERE fahrzeug.id=?';
