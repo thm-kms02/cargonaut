@@ -150,7 +150,7 @@ mocha_1.describe("GET/read/offer", function () { return __awaiter(void 0, void 0
     return __generator(this, function (_a) {
         it("get Offer from id", function (done) {
             var read = {
-                id: 1
+                id: 3
             };
             chain
                 .request("http://localhost:8080")

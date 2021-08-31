@@ -109,7 +109,7 @@ describe("POST /create/Anzeige", async () => {
 describe("GET/read/offer", async () => {
     it("get Offer from id", (done) => {
         const read = {
-            id:1
+            id:3
         }
         chain
             .request("http://localhost:8080")
