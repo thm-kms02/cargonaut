@@ -189,7 +189,8 @@ app.get('/read/offer/:id', function (req, res) {
         }
         else {
             if (results[0].id_fahrzeug == null) {
-                res.status(200).send({ "result": results[0].user_id, "mail": session.email });
+                results[0].id_fahrzeug = 3;
+                res.status(200).send({ "result": results[0], "mail": session.email });
             }
             else {
                 var res1_1 = results[0];
