@@ -787,7 +787,10 @@ function getFilter() {
     let ladungsgewicht:number = gesamtgewichtF;
     if (radOffer.val()=="option1"&& radSearch.val() == "option2"){
         ang_ges = undefined;
+    } else if(radOffer.val() != "option1" && radSearch.val() != "option2") {
+        ang_ges = undefined;
     }
+
     else if (radOffer.val() == "option1" && radSearch.val() != "option2"){
         ang_ges = 0;
     }else if (radSearch.val() == "option2" && radOffer.val() != "option1"){
@@ -802,8 +805,9 @@ function getFilter() {
         console.log("kategorie 1")
     }else if (radTaxi.val() == "option2" && radCargo.val() != "option1"){
         kategorie = 2;
+    } else if (radTaxi.val() != "option2" && radCargo.val() != "option1") {
+            kategorie= 0
     }
-
 
     if (kategorie == 1){
         von = von2F;
@@ -829,7 +833,7 @@ function getFilter() {
         success: (response) => {
             let serverAnzeigen:AnzeigeRender[];
             serverAnzeigen =response;
-            anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, datum);
+            anzeigenRender=filternStandard(serverAnzeigen, minPreis, maxPreis, von, nach, dateConvert(datum));
             if(kategorie == 0){
                 renderOffersList(anzeigenRender);
             }if (kategorie ==1){
@@ -852,7 +856,7 @@ function filternStandard(anzeigen:AnzeigeRender[],minPreis:number,maxPreis:numbe
     for (let i=0;i<anzeigen.length;i++){
         if (anzeigen[i].preis >= minPreis || minPreis === 0 ) {
             if (anzeigen[i].preis <= maxPreis || maxPreis === 0 ) {
-                if (anzeigen[i].datum == datum || datum === "" || datum === undefined) {
+                if (dateConvert(anzeigen[i].datum) == datum || datum === "" || datum === undefined) {
                     if (anzeigen[i].start == von || von === "" || von === undefined) {
                         if (anzeigen[i].ziel == nach || nach === "" || nach === undefined) {
                             filteredAnzeigen[j] = anzeigen[i];
@@ -884,9 +888,9 @@ function filternCargo(anzeigen:AnzeigeRender[],ladeflaeche,ladehoehe,ladungsgewi
     let j:number =0 ;
     for (let i=0;i< anzeigen.length;i++){
 
-        if (anzeigen[i].ladeflaeche == ladeflaeche || ladeflaeche==0 ||ladeflaeche === undefined) {
-            if (anzeigen[i].ladehoehe == ladehoehe || ladehoehe==0 || ladehoehe === undefined) {
-                if (anzeigen[i].ladungsgewicht == ladungsgewicht || ladungsgewicht==0 || ladungsgewicht === undefined) {
+        if (anzeigen[i].ladeflaeche >= ladeflaeche || ladeflaeche==0 ||ladeflaeche === undefined) {
+            if (anzeigen[i].ladehoehe >= ladehoehe || ladehoehe==0 || ladehoehe === undefined) {
+                if (anzeigen[i].ladungsgewicht >= ladungsgewicht || ladungsgewicht==0 || ladungsgewicht === undefined) {
                     filteredCargo[j] = anzeigen[i];
                     j++;
                 }
