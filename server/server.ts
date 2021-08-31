@@ -200,7 +200,7 @@ app.get('/read/offer/:id', (req: Request, res: Response) => {
         if(err) {
             res.status(500).send({err});
         } else {
-            if( isNaN(results[0].id_fahrzeug)){
+            if(!results[0].id_fahrzeug){
                 res.status(200).send({"result":results[0], "mail":session.email});
             } else {
                 const res1 = results[0];

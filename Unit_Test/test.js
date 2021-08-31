@@ -146,25 +146,24 @@ describe("POST /create/Anzeige", async () => {
     });
 });
 */
-mocha_1.describe("GET/read/offer", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        it("get Offer from id", function (done) {
-            var read = {
-                id: 3
-            };
-            chain
-                .request("http://localhost:8080")
-                .get("/read/offer/:id")
-                .send(read)
-                .end(function (err, response) {
+/*
+describe("GET/read/offer", async () => {
+    it("get Offer from id", (done) => {
+        const read = {
+            id:2
+        }
+        chain
+            .request("http://localhost:8080")
+            .get("/read/offer/:id")
+            .send(read)
+            .end((err, response) => {
                 console.log(response.status);
                 response.should.have.status(200);
-                done();
+                done()
             });
-        });
-        return [2 /*return*/];
     });
-}); });
+});
+*/
 /*bug difUSer/:id
 describe("GET/user/profil", async () => {
     it("get user profil", (done) => {

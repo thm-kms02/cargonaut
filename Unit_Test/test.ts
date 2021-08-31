@@ -106,10 +106,11 @@ describe("POST /create/Anzeige", async () => {
     });
 });
 */
+/*
 describe("GET/read/offer", async () => {
     it("get Offer from id", (done) => {
         const read = {
-            id:3
+            id:2
         }
         chain
             .request("http://localhost:8080")
@@ -122,6 +123,7 @@ describe("GET/read/offer", async () => {
             });
     });
 });
+*/
 /*bug difUSer/:id
 describe("GET/user/profil", async () => {
     it("get user profil", (done) => {
