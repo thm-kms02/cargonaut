@@ -53,6 +53,10 @@ let toProfileBTN: JQuery;
 let sendOfferBTN: JQuery;
 let bookBTN: JQuery;
 let offerDescription: JQuery;
+let offerDeparture :JQuery;
+let offerDestination: JQuery;
+let offerDate: JQuery;
+let offerCar: JQuery;
 
 //Person-Transport-Modal-Page html-Elements:
 let fahrzeugDropTaxi: JQuery;
@@ -127,6 +131,7 @@ let renderComments: JQuery;
 ///OfferDetailPage
 let offerPageButtons: JQuery;
 let offerControlForm: JQuery;
+
 
 //Modals
 let modalPersonenbefoerderung: JQuery
@@ -1506,7 +1511,12 @@ function renderOfferPage(event) {
     countRating= $("#countRating");
     offerPicture= $("#offerPic");
     offerDescription = $('#offerDescription');
+    offerCar =$('#offerCar');
+    offerDeparture =$('#offerDeparture');
+    offerDestination = $('#offerDestination');
+    offerDate =$('#offerDate');
     offerPageButtons = $('#offerPageButton');
+
 
     $.ajax( {
         url: '/read/offer/' + id,
@@ -1519,11 +1529,21 @@ function renderOfferPage(event) {
             offerArea.show();
             console.log(response.result);
             companyName.text(response.result.email);
-            offerDescription.text("Von: " + response.result.start + "\n" + "Bis: " + response.result.ziel + "\n" + "Datum: " +
-                dateConvert(response.result.datum)+ "\n" +"Fahrzeug: "+ response.car.name + "\n \n" + "Beschreibung: " + response.result.beschreibung);
-
             offerPicture.empty();
             offerPageButtons.empty()
+            offerDeparture.empty();
+            offerDestination.empty();
+            offerDate.empty();
+            offerCar.empty();
+            offerDescription.empty();
+            offerDeparture.append($('<p>'+response.result.start+'</p>'));
+            offerDestination.append($('<p>'+response.result.ziel+'</p>'));
+            offerDate.append($('<p>'+dateConvert(response.result.datum)+'</p>'));
+            if(response.car) {
+                offerCar.append($('<p>'+response.car.name+'</p>'));
+            }
+            offerDescription.append($('<span>'+response.result.beschreibung+'</span>'));
+
             let pic: JQuery;
             pic= $(` <img id="offerPicture" src=${response.result.bild} style="margin-top: 5%"
                                  alt="ExamplePicture">`);
