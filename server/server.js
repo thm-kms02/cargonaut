@@ -188,7 +188,7 @@ app.get('/read/offer/:id', function (req, res) {
             res.status(500).send({ err: err });
         }
         else {
-            if (!results[0].id_fahrzeug) {
+            if (results[0].id_fahrzeug == null) {
                 res.status(200).send({ "result": results[0], "mail": session.email });
             }
             else {

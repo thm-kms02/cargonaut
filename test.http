@@ -38,3 +38,7 @@ Content-Type: application/json
 ####
 GET http://localhost:8080/anzeige
 Content-Type: application/json
+
+###
+GET http://localhost:8080/read/offer/3
+Content-Type:application/json
