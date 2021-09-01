@@ -1,40 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 //Navbar html-Elements:
 var homeButton;
@@ -46,23 +10,11 @@ var buchungbtn;
 //Login-Page html-Elements:
 var loginArea;
 var loginBTN;
-var inputLoginEmail;
-var inputLoginPassword;
 //Register-Page html-Elements
 var registryModal;
-var registryMail;
-var registryName;
-var registryPassword;
-var registryBirthday;
 var registryBTN;
 //Offers Page html-Elements:
 var mainarea;
-var filterForOfferRadio;
-var filterForSearchRadio;
-var filterForCargoRadio;
-var filterForTransportRadio;
-var filterPrizeMin;
-var filterPrizeMax;
 var filternBTN;
 var createOfferBTN;
 var offerTableForm;
@@ -72,11 +24,6 @@ var companyName;
 var rating;
 var countRating;
 var offerPicture;
-var contactBTN;
-var markBTN;
-var toProfileBTN;
-var sendOfferBTN;
-var bookBTN;
 var offerDescription;
 var offerDeparture;
 var offerDestination;
@@ -117,28 +64,15 @@ var inputLadehoeheF;
 var saveBTN2F;
 //Create-Offer-Page html-Elements:
 var addOfferArea;
-var createOfferRadio;
-var createSearchRadio;
-var createCargoRadio;
-var createTransportRadio;
 var inputDescription;
 var inputPrize;
-var inputPictures;
 var submitOfferBtn;
 //Tracking-Page html-Elements:
 var trackNumButton;
 var mapArea;
 //Profile-Page html-Elements:
 var profileArea;
-var profilePicture;
-var uploadProfilePicture;
-var profileName;
-var profileRating;
 var addCarBTN;
-var addCarAttributeModel;
-var addCarAttributeYear;
-var addCarAttributeCargoArea;
-var addCarAttributeWeight;
 var addCarForm;
 var ownBookingsBTN;
 var buttonFeedback;
@@ -174,7 +108,6 @@ var ladehoeheF;
 var offerslist;
 var id_empfaenger;
 var idBooking;
-var isLoggedIn2 = false;
 $(function () {
     mainarea = $("#mainArea");
     addOfferArea = $("#addOfferArea");
@@ -232,7 +165,6 @@ $(function () {
     addCarForm = $('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    var fremdnutzerBTN = $(".fremdnutzerBTN");
     getAll();
     mainarea.hide();
     loginArea.show();
@@ -315,11 +247,6 @@ $(function () {
     saveBTN2F.on('click', function () {
         saveValuesLieferungFilter();
     });
-    /*
-        addCarBTN.on('click', () => {
-            console.log("Add Car");
-            createCar;
-        });*/
     ownBookingsBTN.on('click', function () {
         renderOwnBookings();
     });
@@ -327,46 +254,6 @@ $(function () {
         postBewertung();
     });
 });
-function renderAreas() {
-    console.log("Nutzer angemeldet: " + isLoggedIn2);
-    if (isLoggedIn2 == true) {
-        logoutbtn.show();
-        profilbtn.show();
-        trackbutton.show();
-        addOfferArea.hide();
-        profileArea.hide();
-        mainarea.show();
-        offerArea.hide();
-        loginArea.hide();
-        registryBTN.hide();
-    }
-    else {
-        mainarea.hide();
-        loginArea.show();
-        addOfferArea.hide();
-        profileArea.hide();
-        offerArea.hide();
-        logoutbtn.hide();
-        registryBTN.show();
-    }
-}
-function isLoggedIn() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            $.ajax({
-                url: '/isLoggedIn',
-                type: 'GET',
-                success: function (response) {
-                    isLoggedIn2 = true;
-                },
-                error: function (jqXHR) {
-                    isLoggedIn2 = false;
-                }
-            });
-            return [2 /*return*/];
-        });
-    });
-}
 function testFunction() {
     id_empfaenger = $(event.currentTarget).data("user-id");
     var modal = $("#ownBookings");
@@ -403,10 +290,10 @@ function testFunction2(id) {
             idBooking: idBooking
         }),
         success: function () {
-            console.log("Error");
+            alert("Error");
         },
         error: function (response) {
-            console.log('Gebucht');
+            alert('Gebucht');
             alert("Anzeige wurde gebucht");
             mainarea.show();
             offerArea.hide();
@@ -423,7 +310,7 @@ function renderProfil(user, cars, bewertung) {
         durchschnitt = "Noch keine Bewertungen vorhanden";
     }
     profileArea.empty();
-    var newProfil = $("   \n        <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                    \n                        <table class=\"table table-borderless\" id=\"kommentare\">\n                            <tbody id=\"renderComments\">\n                                <!--Hier werden die kommentare des eigenen Profils angezeigt-->\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\">" + durchschnitt + "</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                \n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                                \n                                </tbody>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n   ");
+    var newProfil = $("   \n        <div class=\"row\">\n            <div class=\"col-2\"></div>\n            <div class=\"col-8\" style=\"background-color: #f6f5f5; border-radius: 10px; padding-top: 2%; padding-bottom: 2%\">\n                <div class=\"row\">\n                    <div class=\"col-3\">\n                        <!--Profilbildbereich-->\n                        <div>\n                            <img id=\"profilePicture\" src=" + user.profil_bild + " alt=\"ProfilePicture\">\n                        </div>\n                    \n                        <table class=\"table table-borderless\" id=\"kommentare\">\n                            <tbody id=\"renderComments\">\n                                <!--Hier werden die kommentare des eigenen Profils angezeigt-->\n                            </tbody>\n                        </table>\n                    </div>\n                    <div class=\"col-9\">\n                        <h1 id=\"profileName\">" + user.name + "</h1>\n                        <span id=\"profileRating\">" + durchschnitt + "</span>\n                        <div style=\"margin-top: 10%; margin-left: 30%\">\n                            <h3>Fahrzeuge</h3>\n                            <table class=\"table table-borderless\">\n                                <thead>\n                                \n                                </thead>\n                                <tbody id=\"carsTableBody\">\n                                <!--Hier wird die Liste reingerendert-->\n                                </tbody>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n   ");
     profileArea.append(newProfil);
     var carsTableBody = $('#carsTableBody');
     for (var _i = 0, cars_1 = cars; _i < cars_1.length; _i++) {
@@ -480,7 +367,6 @@ function sendLocation(tracknum) {
                 },
                 error: function (response) {
                     showLocation(lat, lng, "");
-                    alert("error");
                 },
             });
         });
@@ -512,16 +398,15 @@ function getBewertung(id) {
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            console.log(response);
             renderBewertungen(response);
         },
         error: function (response) {
+            alert(response);
         },
     });
 }
 function renderBewertungen(bewertungen) {
     renderComments = $("#renderComments");
-    console.log(bewertungen);
     bewertungen.forEach(function (comment) {
         var comments = $("<tr>    \n                                            <td>\n                                                <div style=\"border-style: solid; border-radius: 3px; border-width: 1px; background-color: white; border-color: lightgrey\">\n                                                    <div style=\"margin-left: 7%\">\n                                                        <span>" + comment.bewertung + "<span>/5</span></span><br>\n                                                        <span>" + comment.kommentar + "</span>\n                                                    </div>\n                                                   \n                                                </div>  \n                                            </td>\n                                        </tr>");
         renderComments.append(comments);
@@ -555,6 +440,7 @@ function getAll() {
             offerslist = response.result;
         },
         error: function (response) {
+            alert(response);
         },
     });
 }
@@ -567,7 +453,6 @@ function createCar() {
     var year = Number(yearin.val());
     var vol = Number(volin.val());
     var weight = Number(weightin.val());
-    console.log("Name: " + name, "Jahr: " + year, "Ladung: " + vol, "Gewicht: " + weight);
     $.ajax({
         url: '/create/fahrzeug',
         type: 'POST',
@@ -580,12 +465,11 @@ function createCar() {
             weight: weight
         }),
         success: function (response) {
-            console.log("sucess");
             getProfil();
             alert("Fahrzeug wurde hinzugefügt");
         },
         error: function (response) {
-            console.log("error");
+            alert("error");
             getProfil();
         },
     });
@@ -605,12 +489,11 @@ function deleteCar(id) {
         contentType: 'application/json',
         dataType: 'json',
         success: function (response) {
-            console.log("sucess");
             getProfil();
             alert(" Fahrzeug wurde entfernt");
         },
         error: function (response) {
-            console.log("error");
+            alert("error");
         },
     });
 }
@@ -689,11 +572,9 @@ function getFilter() {
     }
     if (radCargo.val() == "option1" && radTaxi.val() == "option2") {
         kategorie = 0;
-        console.log("kategorie 0");
     }
     else if (radCargo.val() == "option1" && radTaxi.val() != "option2") {
         kategorie = 1;
-        console.log("kategorie 1");
     }
     else if (radTaxi.val() == "option2" && radCargo.val() != "option1") {
         kategorie = 2;
@@ -739,6 +620,7 @@ function getFilter() {
             }
         },
         error: function (response) {
+            alert(response);
         },
     });
 }
@@ -851,44 +733,7 @@ function addAnzeige() {
             alert("Ihre Anzeige wurde erstellt!");
         },
         error: function (err) {
-            console.log(err);
-        },
-    });
-}
-function sendMessage() {
-    var message;
-    var absender;
-    var empfaenger;
-    $.ajax({
-        url: '/create/message',
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-            "absender": absender,
-            "empfaenger": empfaenger,
-            "inhalt": message,
-        }),
-        success: function (response) {
-            console.log("sucess");
-        },
-        error: function (response) {
-            console.log("error");
-        },
-    });
-}
-function getmyMessages() {
-    var id;
-    $.ajax({
-        url: '/messages',
-        type: 'GET',
-        contentType: 'application/json',
-        dataType: 'json',
-        success: function (response) {
-            console.log(response);
-        },
-        error: function (response) {
-            console.log("error");
+            alert(err);
         },
     });
 }
@@ -896,7 +741,7 @@ function updateUser() {
     var bildIN = $('#uploadProfilePicture');
     var bild = bildIN.val().toString();
     var bild2 = bild.replace("C:\\fakepath\\", "bilder\\");
-    console.log(bild2);
+    alert(bild2);
     $.ajax({
         url: '/update/user',
         type: 'PUT',
@@ -906,12 +751,11 @@ function updateUser() {
             bild2: bild2
         }),
         success: function (response) {
-            console.log("sucess");
             getProfil();
             getAll();
         },
         error: function (response) {
-            console.log("error");
+            alert(response);
         },
     });
 }
@@ -1150,7 +994,7 @@ function postBewertung() {
             kommentar: kommentar
         }),
         success: function (response) {
-            console.log("Bewertet");
+            alert("Bewertet");
         },
         error: function (response) {
             var modal = $("#feedback");
@@ -1196,7 +1040,6 @@ function renderOfferPage(event) {
     var id = $(event.currentTarget).data("offer-id");
     var offerID = id.toString();
     idBooking = id;
-    console.log(id);
     companyName = $("#companyName");
     rating = $("#rating");
     countRating = $("#countRating");
@@ -1216,7 +1059,6 @@ function renderOfferPage(event) {
             profileArea.hide();
             mainarea.hide();
             offerArea.show();
-            console.log(response.result);
             companyName.text(response.result.email);
             offerPicture.empty();
             offerPageButtons.empty();
@@ -1241,7 +1083,7 @@ function renderOfferPage(event) {
             }
         },
         error: function (response) {
-            console.log(response);
+            alert(response);
         }
     });
 }
@@ -1255,20 +1097,18 @@ function getProfil() {
             getBewertung(-1);
         },
         error: function (response) {
-            console.log(response);
+            alert(response);
         }
     });
 }
 function renderOwnBookings() {
     event.preventDefault();
     var bookingsTable = $("#bookingsTabelBody");
-    console.log("Hallo");
     $.ajax({
         url: '/bookings',
         type: 'GET',
         contentType: 'application/json',
         success: function (response) {
-            console.log(response);
             bookingsTable.empty();
             var header = $("<tr>\n                                                      <th scope=\"row\">Track.Nr.</th>\n                                                      <th scope=\"row\">Start</th>\n                                                      <th scope=\"row\">Ziel</th>\n                                                      <th scope=\"row\">Datum</th>\n                                                     \n                                                      <td>\n                                                       \n                                                    </tr>");
             bookingsTable.append(header);
@@ -1278,30 +1118,7 @@ function renderOwnBookings() {
             });
         },
         error: function (response) {
-            console.log(response);
-        }
-    });
-}
-function renderDifBookings() {
-    event.preventDefault();
-    var bookingsTable = $("#difbookingsTabelBody");
-    console.log("Hallo");
-    $.ajax({
-        url: '/difBookings',
-        type: 'GET',
-        contentType: 'application/json',
-        success: function (response) {
-            console.log(response);
-            bookingsTable.empty();
-            var header = $("<tr>\n                                                      <th scope=\"row\">Track.Nr.</th>\n                                                      <th scope=\"row\">Start</th>\n                                                      <th scope=\"row\">Ziel</th>\n                                                      <th scope=\"row\">Datum</th>\n                                                     \n                                                      <td>\n                                                       \n                                                    </tr>");
-            bookingsTable.append(header);
-            response.forEach(function (offer) {
-                var renderOffers = $("<tr>\n                                                      <th scope=\"row\">" + offer.trackID + "</th>\n                                                      <th scope=\"row\">" + offer.start + "</th>\n                                                      <th scope=\"row\">" + offer.ziel + "</th>\n                                                      <th scope=\"row\">" + dateConvert(offer.datum) + "</th>\n                                                    \n                                                    </tr>");
-                bookingsTable.append(renderOffers);
-            });
-        },
-        error: function (response) {
-            console.log(response);
+            alert(response);
         }
     });
 }

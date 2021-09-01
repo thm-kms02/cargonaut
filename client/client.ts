@@ -18,25 +18,13 @@ let buchungbtn:JQuery;
 //Login-Page html-Elements:
 let loginArea: JQuery;
 let loginBTN:JQuery;
-let inputLoginEmail: JQuery;
-let inputLoginPassword: JQuery;
 
 //Register-Page html-Elements
 let registryModal: JQuery;
-let registryMail: JQuery;
-let registryName: JQuery;
-let registryPassword: JQuery;
-let registryBirthday: JQuery;
 let registryBTN:JQuery;
 
 //Offers Page html-Elements:
 let mainarea: JQuery;
-let filterForOfferRadio: JQuery;
-let filterForSearchRadio: JQuery;
-let filterForCargoRadio: JQuery;
-let filterForTransportRadio: JQuery;
-let filterPrizeMin: JQuery;
-let filterPrizeMax: JQuery;
 let filternBTN:JQuery;
 let createOfferBTN: JQuery;
 let offerTableForm: JQuery;
@@ -47,11 +35,6 @@ let companyName: JQuery;
 let rating: JQuery;
 let countRating: JQuery;
 let offerPicture: JQuery;
-let contactBTN: JQuery
-let markBTN: JQuery;
-let toProfileBTN: JQuery;
-let sendOfferBTN: JQuery;
-let bookBTN: JQuery;
 let offerDescription: JQuery;
 let offerDeparture :JQuery;
 let offerDestination: JQuery;
@@ -99,13 +82,8 @@ let saveBTN2F: JQuery;
 
 //Create-Offer-Page html-Elements:
 let addOfferArea: JQuery;
-let createOfferRadio: JQuery;
-let createSearchRadio: JQuery;
-let createCargoRadio: JQuery;
-let createTransportRadio: JQuery;
 let inputDescription: JQuery;
 let inputPrize: JQuery;
-let inputPictures: JQuery;
 let submitOfferBtn: JQuery;
 
 //Tracking-Page html-Elements:
@@ -114,15 +92,7 @@ let mapArea: JQuery;
 
 //Profile-Page html-Elements:
 let profileArea: JQuery;
-let profilePicture: JQuery;
-let uploadProfilePicture: JQuery;
-let profileName: JQuery;
-let profileRating: JQuery;
 let addCarBTN: JQuery;
-let addCarAttributeModel: JQuery;
-let addCarAttributeYear: JQuery;
-let addCarAttributeCargoArea: JQuery;
-let addCarAttributeWeight: JQuery;
 let addCarForm: JQuery;
 let ownBookingsBTN: JQuery;
 let buttonFeedback: JQuery;
@@ -163,7 +133,6 @@ let ladehoeheF: number;
 let offerslist: Anzeige[];
 let id_empfaenger: number;
 let idBooking: number;
-let isLoggedIn2: boolean = false;
 
 
 
@@ -225,7 +194,6 @@ $(() => {
     addCarForm =$('#addCarForm');
     ownBookingsBTN = $("#ownBookingsBTN");
     buttonFeedback = $("#Buttonfeedback");
-    let fremdnutzerBTN: JQuery = $(".fremdnutzerBTN");
 
     getAll();
     mainarea.hide();
@@ -282,31 +250,36 @@ $(() => {
         mainarea.show();
         getAll();
     });
-    saveBTN.on('click', () => {
 
+    saveBTN.on('click', () => {
         saveValuesTaxi();
     });
+
     saveBTN2.on('click', () => {
         saveValuesLieferung();
     });
+
     fahrzeugDropTaxi.on('click', () => {
         getFahrzeugDropTaxi();
     });
+
     fahrzeugDropLieferung.on('click', () => {
         getFahrzeugDropLieferung();
     });
 
     loginBTN.on('click', () =>{
         login();
-
     });
+
     logoutbtn.on('click',()=>{
         logout();
     });
+
     profilbtn.on('click',()=>{
         mainarea.hide();
         getProfil();
     });
+
     filternBTN.on('click', () =>{
         getFilter();
     })
@@ -314,19 +287,15 @@ $(() => {
     registryBTN.on('click', () =>{
         registryModal.modal('hide');
         registry();
-
     });
+
     saveBTNF.on('click',()=>{
         saveValuesTaxiFilter();
     });
+
     saveBTN2F.on('click', () => {
         saveValuesLieferungFilter();
     });
-    /*
-        addCarBTN.on('click', () => {
-            console.log("Add Car");
-            createCar;
-        });*/
 
     ownBookingsBTN.on('click', ()=> {
         renderOwnBookings();
@@ -336,42 +305,6 @@ $(() => {
         postBewertung();
     });
 });
-
-function renderAreas() {
-    console.log("Nutzer angemeldet: " + isLoggedIn2);
-    if(isLoggedIn2 == true) {
-        logoutbtn.show();
-        profilbtn.show();
-        trackbutton.show();
-        addOfferArea.hide();
-        profileArea.hide();
-        mainarea.show();
-        offerArea.hide();
-        loginArea.hide();
-        registryBTN.hide();
-    } else{
-        mainarea.hide();
-        loginArea.show();
-        addOfferArea.hide();
-        profileArea.hide();
-        offerArea.hide();
-        logoutbtn.hide();
-        registryBTN.show();
-    }
-}
-
-async function isLoggedIn() {
-    $.ajax({
-        url: '/isLoggedIn',
-        type: 'GET',
-        success: (response) => {
-            isLoggedIn2 = true;
-        },
-        error: jqXHR => {
-            isLoggedIn2 =  false;
-        }
-    });
-}
 
 function testFunction() {
     id_empfaenger = $(event.currentTarget).data("user-id");
@@ -383,7 +316,9 @@ function testFunction() {
 
 function getDifUser(event){
     event.preventDefault();
+
     const id: any = $(event.currentTarget).data("user-id");
+
     $.ajax({
         url: '/difUser/'+id,
         type: 'GET',
@@ -402,7 +337,9 @@ function getDifUser(event){
 
 function testFunction2(id: string) {
     event.preventDefault();
+
     let idBooking: number= Number(id);
+
     $.ajax({
         url: '/buchen',
         type: 'POST',
@@ -411,12 +348,12 @@ function testFunction2(id: string) {
         data: JSON.stringify({
             idBooking
         }),
-        success: () => {
-            console.log("Error");
 
+        success: () => {
+            alert("Error");
         },
         error: (response) => {
-            console.log('Gebucht');
+            alert('Gebucht');
             alert("Anzeige wurde gebucht");
             mainarea.show()
             offerArea.hide();
@@ -462,7 +399,6 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                                 </thead>
                                 <tbody id="carsTableBody">
                                 <!--Hier wird die Liste reingerendert-->
-                                
                                 </tbody>
                             </table>
                         </div>
@@ -471,7 +407,9 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
             </div>
         </div>
    `);
+
     profileArea.append(newProfil);
+
     let carsTableBody: JQuery = $('#carsTableBody');
     for(let car of cars) {
         let elem: JQuery =$(` <tr>
@@ -503,6 +441,7 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
                                 </tr>`);
         carsTableBody.append(elem);
     }
+
     addOfferArea.hide();
     mainarea.hide();
     offerArea.hide();
@@ -511,8 +450,10 @@ function renderProfil(user: User, cars: Fahrzeug[], bewertung: number) {
 
 function getTrackingRole() {
     event.preventDefault();
+
     let trackNumIn: JQuery = $('#feld');
     let trackNum: number = Number(trackNumIn.val());
+
     $.ajax({
         url: '/trackingRole/'+trackNum,
         type: 'GET',
@@ -559,7 +500,6 @@ function sendLocation(tracknum: number) {
                     },
                     error: (response) => {
                         showLocation(lat, lng, "");
-                        alert("error");
                     },
                 });
             }
@@ -593,17 +533,17 @@ function getBewertung(id: number) {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-            console.log(response)
             renderBewertungen(response);
         },
         error: (response) => {
+            alert(response);
         },
     });
 }
 
 function renderBewertungen(bewertungen) {
     renderComments = $("#renderComments");
-    console.log(bewertungen);
+
     bewertungen.forEach((comment) => {
         let comments: JQuery = $(`<tr>    
                                             <td>
@@ -616,6 +556,7 @@ function renderBewertungen(bewertungen) {
                                                 </div>  
                                             </td>
                                         </tr>`);
+
         renderComments.append(comments);
         profileArea.show();
     });
@@ -624,10 +565,13 @@ function renderBewertungen(bewertungen) {
 function showLocation(lat: number, lng: number, date: string) {
     let mapArea: JQuery = $('#mapArea');
     mapArea.empty();
+
     let trackmodal: JQuery = $('#trackModal');
     trackmodal.show();
+
     let map: google.maps.Map;
     const center: google.maps.LatLngLiteral = {lat: lat, lng: lng};
+
     map = new google.maps.Map(document.getElementById("mapArea") as HTMLElement, {
         center,
         zoom: 11
@@ -637,7 +581,6 @@ function showLocation(lat: number, lng: number, date: string) {
         map,
         title: date,
     });
-
 }
 
 function getAll() {
@@ -647,13 +590,11 @@ function getAll() {
         type: 'GET',
         dataType: 'json',
         success: (response) => {
-
             renderOffersList(response.result);
             offerslist = response.result;
-
         },
         error: (response) => {
-
+            alert(response);
         },
     });
 }
@@ -670,7 +611,6 @@ function createCar() {
     let vol: number = Number(volin.val());
     let weight: number = Number(weightin.val());
 
-    console.log("Name: " + name, "Jahr: " + year, "Ladung: " + vol, "Gewicht: " + weight);
 
 
     $.ajax({
@@ -685,12 +625,11 @@ function createCar() {
             weight
         }),
         success: (response) => {
-            console.log("sucess");
             getProfil();
             alert("Fahrzeug wurde hinzugefügt")
         },
         error: (response) => {
-            console.log("error");
+            alert("error");
             getProfil();
         },
     });
@@ -713,12 +652,11 @@ function deleteCar(id: number) {
         contentType: 'application/json',
         dataType: 'json',
         success: (response) => {
-            console.log("sucess");
             getProfil();
             alert(" Fahrzeug wurde entfernt")
         },
         error: (response) => {
-            console.log("error");
+            alert("error");
         },
     });
 }
@@ -798,17 +736,14 @@ function getFilter() {
     }
     if(radCargo.val() == "option1" && radTaxi.val() == "option2"){
         kategorie = 0
-        console.log("kategorie 0")
     }
     else if(radCargo.val() == "option1" && radTaxi.val() != "option2"){
         kategorie = 1;
-        console.log("kategorie 1")
     }else if (radTaxi.val() == "option2" && radCargo.val() != "option1"){
         kategorie = 2;
     } else if (radTaxi.val() != "option2" && radCargo.val() != "option1") {
             kategorie= 0
     }
-
     if (kategorie == 1){
         von = von2F;
         nach = nach2F;
@@ -845,7 +780,7 @@ function getFilter() {
             }
         },
         error: (response) => {
-
+            alert(response);
         },
     });
 }
@@ -963,56 +898,17 @@ function addAnzeige() {
             alert("Ihre Anzeige wurde erstellt!");
         },
         error: (err) => {
-            console.log(err);
+            alert(err);
         },
     });
 }
 
-function sendMessage() {
-    let message: string;
-    let absender: number;
-    let empfaenger: number;
-    $.ajax({
-        url: '/create/message',
-        type: 'POST',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-            "absender": absender,
-            "empfaenger": empfaenger,
-            "inhalt": message,
-        }),
-        success: (response) => {
-            console.log("sucess");
-        },
-        error: (response) => {
-            console.log("error");
-        },
-    });
-}
-
-function getmyMessages() {
-    let id: number;
-    $.ajax({
-        url: '/messages',
-        type: 'GET',
-        contentType: 'application/json',
-        dataType: 'json',
-
-        success: (response) => {
-            console.log(response);
-        },
-        error: (response) => {
-            console.log("error");
-        },
-    });
-}
 
 function updateUser() {
     let bildIN: JQuery = $('#uploadProfilePicture');
     let bild: string=bildIN.val().toString();
     let bild2 = bild.replace("C:\\fakepath\\", "bilder\\");
-    console.log(bild2);
+    alert(bild2);
     $.ajax({
         url: '/update/user',
         type: 'PUT',
@@ -1022,12 +918,11 @@ function updateUser() {
             bild2
         }),
         success: (response) => {
-            console.log("sucess");
             getProfil();
             getAll();
         },
         error: (response) => {
-            console.log("error");
+            alert(response);
         },
     });
 }
@@ -1459,7 +1354,7 @@ function postBewertung(){
             kommentar
         }),
         success: (response) => {
-            console.log("Bewertet");
+            alert("Bewertet");
 
         },
         error: (response) => {
@@ -1509,7 +1404,6 @@ function renderOfferPage(event) {
     const id: number = $(event.currentTarget).data("offer-id");
     const offerID: string = id.toString();
     idBooking = id;
-    console.log(id);
     companyName = $("#companyName");
     rating= $("#rating");
     countRating= $("#countRating");
@@ -1531,7 +1425,6 @@ function renderOfferPage(event) {
             profileArea.hide();
             mainarea.hide();
             offerArea.show();
-            console.log(response.result);
             companyName.text(response.result.email);
             offerPicture.empty();
             offerPageButtons.empty()
@@ -1563,12 +1456,9 @@ function renderOfferPage(event) {
             if(response.result.email!=response.mail) {
                 offerPageButtons.append(buttons);
             }
-
-
-
         },
         error: (response) => {
-            console.log(response);
+            alert(response);
         }
     })
 }
@@ -1582,7 +1472,7 @@ function getProfil(){
             getBewertung(-1);
         },
         error: (response) => {
-            console.log(response);
+            alert(response);
         }
     })
 }
@@ -1590,14 +1480,11 @@ function getProfil(){
 function renderOwnBookings() {
     event.preventDefault();
     let bookingsTable: JQuery = $("#bookingsTabelBody");
-    console.log("Hallo");
-
     $.ajax({
         url: '/bookings',
         type: 'GET',
         contentType: 'application/json',
         success: (response) => {
-            console.log(response);
             bookingsTable.empty();
             let header: JQuery = $(`<tr>
                                                       <th scope="row">Track.Nr.</th>
@@ -1625,47 +1512,7 @@ function renderOwnBookings() {
             })
         },
         error: (response) => {
-            console.log(response);
+            alert(response);
         }
     })
 }
-function renderDifBookings() {
-    event.preventDefault();
-    let bookingsTable: JQuery = $("#difbookingsTabelBody");
-    console.log("Hallo");
-
-    $.ajax({
-        url: '/difBookings',
-        type: 'GET',
-        contentType: 'application/json',
-        success: (response) => {
-            console.log(response);
-            bookingsTable.empty();
-            let header: JQuery = $(`<tr>
-                                                      <th scope="row">Track.Nr.</th>
-                                                      <th scope="row">Start</th>
-                                                      <th scope="row">Ziel</th>
-                                                      <th scope="row">Datum</th>
-                                                     
-                                                      <td>
-                                                       
-                                                    </tr>`);
-            bookingsTable.append(header);
-            response.forEach((offer)=> {
-
-                let renderOffers: JQuery = $(`<tr>
-                                                      <th scope="row">${offer.trackID}</th>
-                                                      <th scope="row">${offer.start}</th>
-                                                      <th scope="row">${offer.ziel}</th>
-                                                      <th scope="row">${dateConvert(offer.datum)}</th>
-                                                    
-                                                    </tr>`);
-                bookingsTable.append(renderOffers)
-            })
-        },
-        error: (response) => {
-            console.log(response);
-        }
-    })
-}
-

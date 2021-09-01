@@ -71,7 +71,6 @@ app.post('/login', function (req, res) {
             if (passwort === rows[0].passwort) {
                 session.email = email;
                 session.user_id = rows[0].user_id;
-                console.log("UserID: " + session.user_id);
                 res.status(200).send({
                     message: 'Anmeldung war erfolgreich'
                 });
@@ -137,7 +136,6 @@ app.get('/anzeige', function (req, res) {
                             offerslist.push(new anzeigeRender_1.AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.fzgname, offer.bild, offer.id));
                         }
                     }
-                    console.log(offer);
                 }
                 res.status(200).send({
                     result: offerslist

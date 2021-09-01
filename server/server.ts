@@ -47,16 +47,21 @@ database.connect((err: MysqlError) => {
 // routs for sign up, login and logout
 
 app.post('/create/account', (req: Request, res: Response) => {
+
     const user: User = new User(req.body.email, req.body.name, req.body.password, req.body.birthday, req.body.img);
+
     let data = [user.email, user.name, user.passwort, user.geburtsdatum, user.profil_bild]
     let cQuery: string = "INSERT INTO user (email, name, passwort, geburtsdatum, bild) VALUES (?, ?, ?, ?, ?);";
+
     database.query(cQuery, data, (err, results: any) => {
         if (err === null) {
             res.status(201);
             res.send(" anzeige wurde erstellt");
+
         } else if (err.errno === 1062) {
             res.status(500);
             res.send("Fehler");
+
         } else {
             console.log(err);
             res.sendStatus(500);
@@ -68,27 +73,29 @@ app.post('/login', (req: express.Request, res: express.Response) => {
     let email: string = req.body.email;
     let passwort: string = req.body.passwort;
 
-    const query: string = 'SELECT user_id, passwort FROM user WHERE user.email = ?'
+    const query: string = 'SELECT user_id, passwort FROM user WHERE user.email = ?';
     const data = [email];
+
     database.query(query, data, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Diese Emailadresse ist nicht registriert',
                 result: false
-            })
+            });
+
         } else {
             if (passwort === rows[0].passwort) {
                 session.email = email;
                 session.user_id = rows[0].user_id;
-                console.log("UserID: " + session.user_id);
                 res.status(200).send({
-
                     message: 'Anmeldung war erfolgreich'
-                })
+                });
+
             } else {
                 res.status(400).send({
                     message: 'Passwort ist falsch'
-                })
+                });
+
             }
         }
 
@@ -108,23 +115,29 @@ app.get('/anzeige', (req: Request, res: Response) => {
     let offers: any[];
     let taxi: any[];
     let cargo: any[];
+
     const query: string = 'SELECT anzeige.id, anzeige.user_id, ang_ges, datum, preis, start, ziel, beschreibung, fahrzeug.name AS fzgname, user.bild FROM anzeige left join fahrzeug on anzeige.id_fahrzeug = fahrzeug.id left join user on user.user_id = anzeige.user_id where anzeige.id not in (SELECT buchungen.id_anz FROM buchungen ) ';
+
     database.query(query, (err: MysqlError, rows: any) => {
         if (err) {
             res.status(500).send({
                 message: 'Database request failed: ' + err
             });
+
         } else {
             offers = rows;
             const query2 = 'SELECT * FROM personenbefoerderung';
             const query3 = 'SELECT * FROM lieferung';
+
             database.query(query2, (err: MysqlError, rows: any) => {
                 if (err) {
                     res.status(500).send({
                         message: 'Database request failed: ' + err
                     });
+
                 } else {
                     taxi = rows;
+
                 }
             });
             database.query(query3, (err: MysqlError, rows: any) => {
@@ -145,10 +158,8 @@ app.get('/anzeige', (req: Request, res: Response) => {
                             offerslist.push(new AnzeigeRender(offer.user_id, offer.ang_ges, offer.datum, offer.preis, offer.start, offer.ziel, offer.beschreibung, offer.id_fahrzeug, store.personen, 0, 0, 0, offer.fzgname, offer.bild,offer.id));
                         }
                     }
-                    console.log(offer);
                 }
                 res.status(200).send({
-
                     result: offerslist
                 });
             });
